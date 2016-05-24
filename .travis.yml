@@ -1,0 +1,17 @@
+language: c
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      sudo: false
+      addons:
+        apt:
+          packages:
+            - nasm
+            - qemu
+    - os: osx
+      compiler: gcc
+      sudo: required
+install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./Scripts/install-osx.sh; fi
+script: make build

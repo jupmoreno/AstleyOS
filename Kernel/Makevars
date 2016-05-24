@@ -1,0 +1,13 @@
+SRC_C = src
+SRC_ASM = asm
+SRC_HEADERS = include
+
+SOURCE_LOADER = $(SRC_ASM)/loader.asm
+
+LINKER_SCRIPT = kernel.ld
+
+LIB_DEPS = api
+
+GCC_FLAGS = $(GCC_WARNINGS) $(GCC_FLAGS_G)
+ASM_FLAGS = $(ASM_FLAGS_G)
+LD_FLAGS = $(LD_FLAGS_G)

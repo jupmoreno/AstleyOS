@@ -1,0 +1,57 @@
+#ifndef _SYSVIDEO_H_
+#define _SYSVIDEO_H_
+
+#include <define.h>
+
+#define _VIDEO_ERROR_CURSOR_INVALID -1
+#define _VIDEO_ERROR_CURSOR_SHAPE_INVALID -2
+#define _VIDEO_ERROR_RANGE_INVALID -3
+
+#define _VIDEO_ROWS 25
+#define _VIDEO_COLUMNS 80
+#define _VIDEO_SIZE (_VIDEO_ROWS * _VIDEO_COLUMNS)
+
+typedef struct { // TODO: Sacar cuando pueda alocar memoria
+    uint8_t character;
+    uint8_t style;
+} pixel_st;
+
+typedef pixel_st screen_st[_VIDEO_SIZE]; // TODO: Sacar cuando pueda alocar memoria
+
+#define _VIDEO_CURSOR_LAST_POSITION (_VIDEO_SIZE - 1)
+#define _VIDEO_CURSOR_TO_POSITION(x,y) (((x) * _VIDEO_COLUMNS) + (y))
+
+#define _VIDEO_COLOR_BITS 4
+#define _VIDEO_COLOR_GETTER(x) ((x) & 0x0F)
+#define _VIDEO_BG_GETTER(x) ((x) & 0xF0)
+#define _VIDEO_STYLE_GETTER(x) ((x) & 0xFF)
+#define _VIDEO_COLOR_TO_BG(x) (_VIDEO_COLOR_GETTER(x) << _VIDEO_COLOR_BITS)
+#define _VIDEO_BG_TO_COLOR(x) (_VIDEO_BG_GETTER(x) >> _VIDEO_COLOR_BITS)
+#define _VIDEO_STYLER_COLOR(x, y) (_VIDEO_BG_GETTER(x) +  _VIDEO_COLOR_GETTER(y))
+#define _VIDEO_STYLER_BG(x, y) (_VIDEO_COLOR_GETTER(x) + _VIDEO_COLOR_TO_BG(y))
+#define _VIDEO_STYLER(x, y) (_VIDEO_COLOR_GETTER(x) + _VIDEO_COLOR_TO_BG(y))
+
+#define _VIDEO_COLOR_BRIGHTTEN(x) (_VIDEO_COLOR_GETTER(x) + 0x08)
+enum video_color_st {
+	_VIDEO_COLOR_BLACK = 0x00,
+	_VIDEO_COLOR_BLUE,
+	_VIDEO_COLOR_GREEN,
+	_VIDEO_COLOR_CYAN,
+	_VIDEO_COLOR_RED,
+	_VIDEO_COLOR_PURPLE,
+	_VIDEO_COLOR_BROWN,
+	_VIDEO_COLOR_WHITE
+};
+
+#define _VIDEO_BG_DEFAULT _VIDEO_COLOR_BLACK
+#define _VIDEO_COLOR_DEFAULT _VIDEO_COLOR_BRIGHTTEN(_VIDEO_COLOR_WHITE)
+#define _VIDEO_STYLE_DEFAULT _VIDEO_STYLER(_VIDEO_COLOR_DEFAULT, _VIDEO_BG_DEFAULT)
+
+typedef uint8_t style_st;
+
+typedef enum {
+	_VIDEO_CURSOR_SQUARE, _VIDEO_CURSOR_UNDERSCORE, _VIDEO_CURSOR_DOT
+} cursor_st;
+#define _VIDEO_CURSOR_DEFAULT _VIDEO_CURSOR_SQUARE
+
+#endif

@@ -1,0 +1,4 @@
+SRC_C = src
+SRC_HEADERS = include
+
+GCC_FLAGS = -ansi -std=c99 -Wall -pedantic

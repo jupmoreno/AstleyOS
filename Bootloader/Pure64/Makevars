@@ -1,0 +1,8 @@
+SRC_PATH = src
+BOOTSECTORS_PATH = $(SRC_PATH)/bootsectors
+
+SOURCE_PXESTART = pxestart.asm
+SOURCE_MBR = bmfs_mbr.asm
+SOURCE_BOOTLOADER = pure64.asm
+
+ASM_FLAGS = 

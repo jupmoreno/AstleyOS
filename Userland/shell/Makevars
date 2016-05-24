@@ -1,0 +1,11 @@
+# Change name for new module
+MODULE_NAME = shell
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+SRC_C = src
+SRC_ASM = asm
+SRC_HEADERS = include
+
+SOURCE_LOADER = $(SRC_C)/loader.c
+
+LINKER_SCRIPT = $(MODULE_NAME).ld

@@ -1,0 +1,78 @@
+###### GENERAL ######
+SO_NAME = Scylla
+###### ^^^^^^^ ######
+
+###### VARS ######
+# Global
+SYS_GCC = gcc
+
+# Per system
+ifeq ($(shell uname), Darwin)
+  # Mac OS
+  CC_PATH = /usr/local/gcc-4.8.1-for-linux64/bin
+  GCC = $(CC_PATH)/x86_64-pc-linux-gcc
+  GPP = $(CC_PATH)/x86_64-pc-linux-g++
+  LD = $(CC_PATH)/x86_64-pc-linux-ld
+  AR = $(CC_PATH)/x86_64-pc-linux-ar
+  ASM = nasm
+  ifneq (, $(shell which gmake))
+    MAKE = gmake
+  endif
+else
+  # Linux
+  GCC = gcc
+  GPP = g++
+  LD = ld
+  AR = ar
+  ASM = nasm
+endif
+
+QEMU = qemu-system-x86_64
+#QEMU_DEBUG = -s -S -monitor stdio
+# [QEMU LOGS] ->  -serial stdio  //  -serial file:log.md  //  -serial /dev/tty
+QEMU_LOG = -serial stdio
+QEMU_SOUND = -soundhw pcspk
+QEMU_FLAGS = -m 512 $(QEMU_DEBUG) $(QEMU_LOG)
+
+GCC_WARNINGS = -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes -Werror -Wfatal-errors -Wno-error=pedantic -Wno-unused-parameter -Wno-error=strict-prototypes -Wno-error=sign-conversion -Wno-error=conversion
+
+GCC_FLAGS_G = -m64 -fno-exceptions -fno-asynchronous-unwind-tables -mno-mmx -mno-sse -mno-sse2 -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc -mno-red-zone -ffreestanding -nostdlib -fno-common -std=c99
+ASM_FLAGS_G = -felf64
+LD_FLAGS_G = --warn-common -z max-page-size=0x1000
+AR_FLAGS_G = rvs
+###### ^^^^ ######
+
+###### TOOLCHAIN ######
+TOOLCHAIN_PATH = Toolchain
+MODULE_PACKER = $(TOOLCHAIN_PATH)/mp
+SYSTEM_PACKED = $(SO_NAME).bin
+###### ^^^^^^^^^ ######
+
+###### BOOTLOADER ######
+BOOTLOADER_PATH = Bootloader
+FILESYSTEM_MBR_NAME = bmfs_mbr.sys
+BOOTLOADER_NAME = pure64.sys
+BOOTLOADER_PXESTART_NAME = pxestart.sys
+FILESYSTEM = $(BOOTLOADER_PATH)/fs
+FILESYSTEM_MBR = $(BOOTLOADER_PATH)/$(FILESYSTEM_MBR_NAME)
+BOOTLOADER = $(BOOTLOADER_PATH)/$(BOOTLOADER_NAME)
+###### ^^^^^^^^^^ ######
+
+###### IMAGE ######
+IMAGE_PATH = Image
+SOURCE_IMAGE = $(IMAGE_PATH)/$(SO_NAME).qcow2
+###### ^^^^^ ######
+
+###### LIBS ######
+LIBS_PATH = Libs
+LIBS_HEADERS = $(LIBS_PATH)/include
+###### ^^^^ ######
+
+###### KERNEL ######
+KERNEL_PATH = Kernel
+KERNEL = $(KERNEL_PATH)/kernel.bin
+###### ^^^^^^ ######
+
+###### USERLAND ######
+USERLAND_PATH = Userland
+###### ^^^^^^^^ ######

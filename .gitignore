@@ -1,0 +1,25 @@
+# Executables
+mp
+fs
+
+# Binary files
+*.bin
+*.sys
+
+# Object files
+*.o
+
+# Library files
+*.a
+
+# Images
+*.img
+*.qcow2
+*.vmdk
+
+# Logs
+log*.md
+*.log
+
+# Vagrant
+.vagrant

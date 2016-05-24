@@ -1,0 +1,4 @@
+SRC_C = .
+SRC_HEADERS = .
+
+GCC_FLAGS = -Wall -pedantic

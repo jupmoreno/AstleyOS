@@ -1,4 +1,5 @@
 # Scylla
+[![Build Status](https://travis-ci.com/jpmrno/Scylla.svg?token=rrzVPFKtpAUUPF2Pp1UE&branch=master)](https://travis-ci.com/jpmrno/Scylla)
 
 > This project was made for our Operating Systems subject at ITBA University (Buenos Aires, Argentina).
 

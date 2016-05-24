@@ -19,7 +19,7 @@ static char sleep_text[_VIDEO_SIZE + 1];
 static int sleep_loop = TRUE;
 // ^^^ Sleep vars ^^^
 
-void out_init() {
+void out_init(void) {
 	int i;
 
 	for(i = _OUTPUT_TERMINAL_MIN; i < _OUTPUT_TERMINAL_SIZE; i++) {
@@ -43,7 +43,7 @@ int out_select(int terminal_desired) {
 	return OK;
 }
 
-void out_clear() {
+void out_clear(void) {
 	terminal_clear(&terminals[terminal_active]);
 }
 
@@ -96,11 +96,11 @@ int out_vprintf(const char * fmt, va_list arg) { // TODO: How to set styles
 	return printed;
 }
 
-void out_box_top() {
+void out_box_top(void) {
 	out_printf("\n ------------------------------------------------------------------------------ ");
 }
 
-void out_box_bottom() {
+void out_box_bottom(void) {
 	out_printf(" ------------------------------------------------------------------------------ ");
 }
 
@@ -143,11 +143,11 @@ int out_cursor(cursor_st cursor) {
 	return terminal_cursor(&terminals[terminal_active], cursor);
 }
 
-void out_cursor_lock() { // TODO: 
+void out_cursor_lock(void) { // TODO: 
 	terminal_cursor_lock(&terminals[terminal_active]);
 }
 
-// int out_sleep_isEnabled() { // TODO: En manager
+// int out_sleep_isEnabled(void) { // TODO: En manager
 // 	return sleep_enabled;
 // }
 
@@ -173,7 +173,7 @@ void out_cursor_lock() { // TODO:
 // 	return OK;
 // }
 
-int out_sleep_init() { // TODO: Screen Saver
+int out_sleep_init(void) { // TODO: Screen Saver
 	if(sleep_active) {
 		return _OUTPUT_ERROR_SLEEP_ACTIVE;
 	}
@@ -186,7 +186,7 @@ int out_sleep_init() { // TODO: Screen Saver
 	return OK;
 }
 
-int out_sleep_step() {
+int out_sleep_step(void) {
 	if(!sleep_active) {
 		return _OUTPUT_ERROR_SLEEP_NOT_ACTIVE;
 	}
@@ -198,7 +198,7 @@ int out_sleep_step() {
 	return OK;
 }
 
-int out_sleep_stop() {
+int out_sleep_stop(void) {
 	if(!sleep_active) {
 		return _OUTPUT_ERROR_SLEEP_NOT_ACTIVE;
 	}
@@ -208,7 +208,7 @@ int out_sleep_stop() {
 	return OK;
 }
 
-int out_sleep_isActive() {
+int out_sleep_isActive(void) {
 	return sleep_active;
 }
 
@@ -223,7 +223,7 @@ int out_sleep_set(char * text, int boolean) { // TODO:
 	return OK;
 }
 
-int out_sleep_reset() {
+int out_sleep_reset(void) {
 	if(sleep_active) {
 		return _OUTPUT_ERROR_SLEEP_ACTIVE;
 	}

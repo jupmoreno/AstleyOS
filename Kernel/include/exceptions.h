@@ -3,7 +3,7 @@
 
 #include <define.h>
 
-#define _EXCEPTION_DECLARE(NUMBER) void exception_ ## NUMBER ()
+#define _EXCEPTION_DECLARE(NUMBER) void exception_ ## NUMBER (void)
 
 _EXCEPTION_DECLARE(00);
 _EXCEPTION_DECLARE(02);

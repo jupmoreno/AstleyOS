@@ -4,12 +4,12 @@
 #include <define.h>
 #include <sysvideo.h>
 
-void video_init();
-void video_clear();
+void video_init(void);
+void video_clear(void);
 
 void video_cursor_show(int boolean);
 int video_cursor_put(unsigned int position);
-int video_cursor_get();
+int video_cursor_get(void);
 
 int video_cursor_shape(cursor_st shape);
 int video_cursor_shape_isValid(cursor_st shape);

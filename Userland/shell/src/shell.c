@@ -8,13 +8,15 @@
 
 #define MAX_BUFFER_LENGTH 128
 
+int main(void);
+
 static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
 
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
 
-int main() {
+int main(void) {
 	static args_t noargs = {NULL, 0};
 	int ret, should_clear;
 	char buffer[MAX_BUFFER_LENGTH];

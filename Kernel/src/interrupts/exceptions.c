@@ -95,76 +95,76 @@
 											_EXCEPTION_ ## NUMBER ## _DESC, \
 											_EXCEPTION_ ## NUMBER ## _SOURCE, \
 											_EXCEPTION_ ## NUMBER ## _HALT)
-#define _EXCEPTION_DEFINE(NUMBER) void exception_ ## NUMBER() { _EXCEPTION_THROW(NUMBER); } // TODO: 
+#define _EXCEPTION_DEFINE(NUMBER) void exception_ ## NUMBER(void) { _EXCEPTION_THROW(NUMBER); } // TODO:
 
-void exception_00() { // Divide Error: division by zero
+void exception_00(void) { // Divide Error: division by zero
 	_EXCEPTION_THROW(00);
 }
 
-void exception_02() { // Non-maskable interrupt
+void exception_02(void) { // Non-maskable interrupt
 	_EXCEPTION_THROW(02);
 }
 
-void exception_03() { // Breakpoint
+void exception_03(void) { // Breakpoint
 	_EXCEPTION_THROW(03);
 }
 
-void exception_04() { // Overflow
+void exception_04(void) { // Overflow
 	_EXCEPTION_THROW(04);
 }
 
-void exception_05() { // Bounds
+void exception_05(void) { // Bounds
 	_EXCEPTION_THROW(05);
 }
 
-void exception_06() { // Invalid Opcode
+void exception_06(void) { // Invalid Opcode
 	_EXCEPTION_THROW(06);
 }
 
-void exception_07() { // Coprocessor not available
+void exception_07(void) { // Coprocessor not available
 	_EXCEPTION_THROW(07);
 }
 
-void exception_08() { // Double fault
+void exception_08(void) { // Double fault
 	_EXCEPTION_THROW(08);
 }
 
-void exception_09() { // Coprocessor Segment Overrun (386 or earlier only)
+void exception_09(void) { // Coprocessor Segment Overrun (386 or earlier only)
 	_EXCEPTION_THROW(09);
 }
 
-void exception_0A() { // Invalid Task State Segment
+void exception_0A(void) { // Invalid Task State Segment
 	_EXCEPTION_THROW(0A);
 }
 
-void exception_0B() { // Segment not present
+void exception_0B(void) { // Segment not present
 	_EXCEPTION_THROW(0B);
 }
 
-void exception_0C() { // Stack Fault
+void exception_0C(void) { // Stack Fault
 	_EXCEPTION_THROW(0C);
 }
 
-void exception_0D() { // General protection fault
+void exception_0D(void) { // General protection fault
 	_EXCEPTION_THROW(0D);
 }
 
-void exception_0E() { // Page fault
+void exception_0E(void) { // Page fault
 	_EXCEPTION_THROW(0E);
 }
 
-void exception_10() { // Math Fault
+void exception_10(void) { // Math Fault
 	_EXCEPTION_THROW(10);
 }
 
-void exception_11() { // Alignment Check
+void exception_11(void) { // Alignment Check
 	_EXCEPTION_THROW(11);
 }
 
-void exception_12() { // Machine Check
+void exception_12(void) { // Machine Check
 	_EXCEPTION_THROW(12);
 }
 
-void exception_13() { // SIMD Floating-Point Exception
+void exception_13(void) { // SIMD Floating-Point Exception
 	_EXCEPTION_THROW(13);
 }

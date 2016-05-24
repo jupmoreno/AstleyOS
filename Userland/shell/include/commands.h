@@ -18,7 +18,7 @@
 #define ARGS_FOR_SUBCOMMAND(args) if(args.argc != 0) { args.argc--; args.argv++; }
 
 typedef struct {
-	char * name;
+	const char * name;
 	int (*run)(args_t args);
 	int (*help)(args_t args);
 } command_t;

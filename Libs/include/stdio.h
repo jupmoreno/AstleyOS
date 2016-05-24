@@ -6,7 +6,7 @@
 
 #define CLEAR_SCAN_BUFFER while(scanc() != '\n')
 
-int scanc();
+int scanc(void);
 int scant(char * buffer, int size, const char end[], int endc);
 int scanw(char * buffer, int size);
 int scanl(char * buffer, int size);

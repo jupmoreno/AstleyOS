@@ -6,6 +6,8 @@
 #define KEYBOARD_BUFFER_SIZE 256
 #define BUFFER_NEXT(x) (((x) + 1) >= KEYBOARD_BUFFER_SIZE) ? 0 : ((x) + 1);
 
+void keyboard_trigger(unsigned char scancode);
+
 static int keyboard_current = _KEYBOARD_ENGLISH;
 
 static key_st keyboard_buffer[KEYBOARD_BUFFER_SIZE];
@@ -93,11 +95,11 @@ int keyboard_write(key_st * key) {
 	return OK;
 }
 
-int keyboard_canRead() {
+int keyboard_canRead(void) {
 	return enters > 0;
 }
 
-char keyboard_read() { // TODO: Unsigned?
+char keyboard_read(void) { // TODO: Unsigned?
 	int character = 0;
 	int nextReturn = BUFFER_NEXT(buffer_lastReturn);
 
@@ -115,7 +117,7 @@ char keyboard_read() { // TODO: Unsigned?
 	return character;
 }
 
-int keyboard_delete() {
+int keyboard_delete(void) {
 	/*
 	 * Simulates the erasure of the previous key so as not to left the
 	 * buffer inconsistent in case an interrupt changes the buffer state.

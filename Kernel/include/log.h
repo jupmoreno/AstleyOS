@@ -1,8 +1,8 @@
 #ifndef _LOG_H_
 #define _LOG_H_
 
-void log_init();
+void log_init(void);
 
-int log(char * fmt, ...);
+int log(const char * fmt, ...);
 
 #endif

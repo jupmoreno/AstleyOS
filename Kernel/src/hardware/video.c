@@ -28,7 +28,7 @@
 
 #define GET_LAST_5BITS(x) ((x) & 0x01F)
 // ^^^ DEFINES ^^^
- 
+
 // LOCAL FUNCTIONS
 /**
  * TODO: Docs
@@ -49,15 +49,15 @@ static int cursor = 0;
 static int cursor_shown = TRUE;
 // ^^^ VARIABLES ^^^
 
-void video_init() {
+void video_init(void) {
 	cursor_shown = TRUE;
 	video_cursor_shape(_VIDEO_CURSOR_DEFAULT);
 	video_clear();
 }
 
-void video_clear() {
+void video_clear(void) {
 	int i;
-	
+
 	for(i = 0; i < _VIDEO_SIZE; i++) {
 		video[i].character = ' ';
 		video[i].style = _VIDEO_STYLE_DEFAULT;
@@ -80,7 +80,7 @@ int video_cursor_put(unsigned int position) {
 	if(position >= _VIDEO_SIZE) {
 		return _VIDEO_ERROR_CURSOR_INVALID;
 	}
-	
+
 	cursor = position;
 
 	if(cursor_shown) {
@@ -90,7 +90,7 @@ int video_cursor_put(unsigned int position) {
 	return OK;
 }
 
-int video_cursor_get() {
+int video_cursor_get(void) {
 	return cursor;
 }
 
@@ -187,7 +187,7 @@ int video_style_range(unsigned int from, unsigned int to, style_st style) {
 	if(from > to || from >= _VIDEO_SIZE || to >= _VIDEO_SIZE) {
 		return _VIDEO_ERROR_RANGE_INVALID;
 	}
-	
+
 	for(i = from; i <= to; i++) {
 		video[i].style = style;
 	}
@@ -224,7 +224,7 @@ int video_color_range(unsigned int from, unsigned int to, style_st color) {
 	if(from > to || from >= _VIDEO_SIZE || to >= _VIDEO_SIZE) {
 		return _VIDEO_ERROR_RANGE_INVALID;
 	}
-	
+
 	for(i = from; i <= to; i++) {
 		video[i].style = _VIDEO_STYLER_COLOR(video[i].style, color);
 	}
@@ -261,7 +261,7 @@ int video_bg_range(unsigned int from, unsigned int to, style_st bg) {
 	if(from > to || from >= _VIDEO_SIZE || to >= _VIDEO_SIZE) {
 		return _VIDEO_ERROR_RANGE_INVALID;
 	}
-	
+
 	for(i = from; i <= to; i++) {
 		video[i].style = _VIDEO_STYLER_BG(video[i].style, bg);
 	}

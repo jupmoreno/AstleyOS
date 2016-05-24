@@ -4,15 +4,15 @@
 /**
  * Enables INTR hardware interrupts
  */
-void interrupt_set();
+void interrupt_set(void);
 
 /**
  * Disables INTR hardware interrupts
  */
-void interrupt_clear();
+void interrupt_clear(void);
 
-extern void _interrupt_20();
-extern void _interrupt_21();
-extern void _interrupt_80();
+extern void _interrupt_20(void);
+extern void _interrupt_21(void);
+extern void _interrupt_80(void);
 
 #endif

@@ -8,11 +8,18 @@
 #include <sysio.h>
 #include <systime.h>
 
+void manage_time(void);
+void manage_key(key_st * key);
+unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
+unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);
+int manage_rtc(int operation, time_st * time);
+int manage_terminal(int operation, int value);
+
 static unsigned int manage_read_stdin(char * buffer, unsigned int length);
 static unsigned int manage_write_stdout(const char * string, unsigned int length);
 
 static int manage_terminal_select(int index);
-static int manage_terminal_clear();
+static int manage_terminal_clear(void);
 static int manage_terminal_color(int operation, style_st color);
 static int manage_terminal_cursor(cursor_st cursor);
 
@@ -20,7 +27,7 @@ static int key_print_enabled = TRUE;
 static int key_buffer_enabled = TRUE;
 static int terminal_isWriting = FALSE;
 
-void manage_time() {
+void manage_time(void) {
 
 }
 
@@ -37,7 +44,7 @@ void manage_key(key_st * key) {
 		}
 
 		if(key_print_enabled) {
-			out_printf("%c", key->value);				
+			out_printf("%c", key->value);
 		}
 	}
 }
@@ -128,7 +135,7 @@ static int manage_terminal_select(int index) {
 	return out_select(index);
 }
 
-static int manage_terminal_clear() {
+static int manage_terminal_clear(void) {
 	out_clear();
 
 	return OK;

@@ -10,9 +10,11 @@ extern uint8_t shell_binary;
 extern uint8_t shell_end;
 // ^^ Module setup ^^
 
-extern int main();
+extern int main(void);
 
-void init() {
+void init(void);
+
+void init(void) {
 	// Clear BSS
 	memset(&shell_bss, 0, &shell_end - &shell_bss);
 

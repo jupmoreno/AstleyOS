@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <strings.h>
 
+COMMAND_FUNCTION(help);
 COMMAND_HELP(help);
 
 COMMAND_FUNCTION(help) {

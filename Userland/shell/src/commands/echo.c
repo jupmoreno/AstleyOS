@@ -1,6 +1,7 @@
 #include <commands.h>
 #include <stdio.h>
 
+COMMAND_FUNCTION(echo);
 COMMAND_HELP(echo);
 
 COMMAND_FUNCTION(echo) {

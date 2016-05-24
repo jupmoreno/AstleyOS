@@ -13,7 +13,7 @@
 // int systime(int operation, time_st * time);
 
 // int systerminal_select(int index);
-// void systerminal_clear();
+// void systerminal_clear(void);
 // void systerminal_color(int operation, style_st color);
 // int systerminal_cursor(cursor_st cursor);
 

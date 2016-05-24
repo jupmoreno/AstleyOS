@@ -26,7 +26,7 @@ typedef struct {
 	dword_t	zero_h;		// High
 } __attribute__((packed)) interrupt_st;
 
-// IDTR // TODO: 
+// IDTR // TODO:
 typedef struct {
 	word_t	limit;
 	qword_t	base;
@@ -36,7 +36,7 @@ static interrupt_st * idt = (interrupt_st *) IDT_BASE_ADDRESS;
 //static interrupt_st idt[_IDT_ENTRIES];
 static idtr_st idtr;
 
-void idt_init() {
+void idt_init(void) {
 	idtr.limit = _IDT_ENTRIES * sizeof(interrupt_st) - 1; // TODO: Preguntar
 	idtr.base = (qword_t) idt;
 

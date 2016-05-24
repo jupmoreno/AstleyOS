@@ -4,7 +4,7 @@
 #include <define.h>
 #include <sysconsole.h>
 
-void clear();
+void clear(void);
 
 int sterminal(int index);
 

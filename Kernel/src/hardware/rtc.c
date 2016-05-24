@@ -29,7 +29,7 @@
 #define HOUR_ADD_PM_INFORMATION(x,pm)     ((x) | (pm))
 #define HOUR_TO_24_FORMAT(x)		  (((x)+12) % 24)
 #define FULL_YEAR(x,y)			  ((x)+(y)*100)
- 
+
 uint8_t second;
 uint8_t minute;
 uint8_t hour;
@@ -40,7 +40,7 @@ uint8_t century;
 uint8_t centuryChange = FALSE;
 
 /**
- * Writes the given value at the desired CMOS address  
+ * Writes the given value at the desired CMOS address
  * @param port  - the address to be written
  * @param value - the value to be written
  */
@@ -48,15 +48,15 @@ void _cmos_write(int port, int value);
 
 /**
  * Reads from the CMOS address
- * @param  port - the address to be read  
- * @return	- the read value    
+ * @param  port - the address to be read
+ * @return	- the read value
  */
 int _cmos_read(int port);
 
 /**
  * @return 1 if the RTC is currently updating. 0 otherwise.
  */
-static int isUpdating(); 
+static int isUpdating(void);
 
 int rtc_read(time_st * t) {
 	uint8_t lastSecond;
@@ -82,7 +82,7 @@ int rtc_read(time_st * t) {
 	day = _cmos_read(DAY);
 	month = _cmos_read(MONTH);
 	year = _cmos_read(YEAR);
- 
+
 	do {
 		lastSecond = second;
 		lastMinute = minute;
@@ -91,7 +91,7 @@ int rtc_read(time_st * t) {
 		lastMonth = month;
 		lastYear = year;
 		lastCentury = century;
- 
+
 		while (isUpdating()); // Makes sure an update isn't in progress
 
 		second = _cmos_read(SECONDS);
@@ -101,11 +101,11 @@ int rtc_read(time_st * t) {
 		month = _cmos_read(MONTH);
 		year = _cmos_read(YEAR);
 		century = _cmos_read(CENTURY);
-	} while(    (lastSecond != second) || (lastMinute != minute) 
-			|| (lastHour != hour) || (lastDay != day) 
-			|| (lastMonth != month) || (lastYear != year) 
+	} while(    (lastSecond != second) || (lastMinute != minute)
+			|| (lastHour != hour) || (lastDay != day)
+			|| (lastMonth != month) || (lastYear != year)
 			|| (lastCentury != century) );
- 
+
 	registerB = _cmos_read(STATUS_REGISTER_B);
 	binaryMode = registerB & BINARY_MODE_MASK;
 
@@ -122,7 +122,7 @@ int rtc_read(time_st * t) {
 		year = BCD_TO_BINARY(year);
 		century = BCD_TO_BINARY(century);
 	}
- 
+
 	// Converts 12 hour clock to 24 hour clock if necessary
 	hours24Mode = registerB & HOUR_24_MODE_MASK;
 	if (!(hours24Mode) && hourPM) {
@@ -130,19 +130,19 @@ int rtc_read(time_st * t) {
 		hour = HOUR_TO_24_FORMAT(hour);
 	}
 
-	// Century adaptation: 
+	// Century adaptation:
 	// there virtual machines were the century updating works fine (qemu)
 	// and some others where don't (VirtualBox).
 	// This adaptation was made to work OK at VirtualBox.
 	if (!centuryChange && year == 99) {
 		centuryChange = TRUE;
-	} 
+	}
 
 	if (centuryChange && year == 00) {
 		centuryChange = FALSE;
 		century++;
 		uint8_t aux = century;
-		if (!binaryMode) { // bcdMode = TRUE 
+		if (!binaryMode) { // bcdMode = TRUE
 			aux = BINARY_TO_BCD(aux);
 		}
 		_cmos_write(CENTURY, aux);
@@ -175,7 +175,7 @@ int rtc_write(time_st* t) {
 	century = t->year/100;
 	t->year -= (century*100);
 
-	// Century adaptation: 
+	// Century adaptation:
 	// there virtual machines were the century updating works fine (qemu)
 	// and some others where don't (VirtualBox).
 	// This adaptation was made to work OK at VirtualBox.
@@ -191,10 +191,10 @@ int rtc_write(time_st* t) {
 	if (!hours24Mode) {
 		if (t->hour > 12) {
 			t->hour -= 12;
-		} 
+		}
 		else if (t->hour == 0) {
 			t->hour = 12;
-		} 
+		}
 	}
 
 	binaryMode = registerB & BINARY_MODE_MASK;
@@ -206,7 +206,7 @@ int rtc_write(time_st* t) {
 		month = BINARY_TO_BCD(t->month);
 		year = BINARY_TO_BCD(t->year);
 		century = BINARY_TO_BCD(century);
-	} 
+	}
 	else {
 		second = t->second;
 		minute = t->minute;
@@ -227,7 +227,7 @@ int rtc_write(time_st* t) {
 	return OK;
 }
 
-static int isUpdating() {
+static int isUpdating(void) {
 	int statusRegisterA;
 
 	statusRegisterA = _cmos_read(STATUS_REGISTER_A);

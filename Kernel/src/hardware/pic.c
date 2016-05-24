@@ -22,7 +22,7 @@
 static uint16_t pic_reg(int ocw3);
 
 // TODO: PIC Remap
-void pic_init() {
+void pic_init(void) {
 	#ifdef _DEGUB_ENABLED
 	log("<PIC> Inited.\n");
 	#endif
@@ -36,7 +36,7 @@ void pic_mask(uint8_t mask) {
 	#endif
 }
 
-void pic_mask_all() {
+void pic_mask_all(void) {
 	pic_mask(_PIC_MASK_ALL);
 }
 
@@ -108,12 +108,12 @@ int pic_irq_eoi(uint8_t irq) {
 }
 
 /* Returns the combined value of the cascaded PICs irq request register */
-uint16_t pic_irr() {
+uint16_t pic_irr(void) {
     return pic_reg(_PIC_IRR_READ);
 }
  
 /* Returns the combined value of the cascaded PICs in-service register */
-uint16_t pic_isr() {
+uint16_t pic_isr(void) {
     return pic_reg(_PIC_ISR_READ);
 }
 

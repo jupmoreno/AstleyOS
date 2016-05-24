@@ -4,17 +4,25 @@
 #include <sysconsole.h>
 #include <systime.h>
 
+unsigned int sysread(char * buffer, unsigned int length);
+unsigned int syswrite(char * string, unsigned int length);
+int systime(int operation, time_st * time);
+int systerminal_select(int index);
+void systerminal_clear(void);
+void systerminal_color(int operation, style_st color);
+int systerminal_cursor(cursor_st cursor);
+
 /**
  * Syscall caller or wrapper
  * Makes the real assembly int 80h call
- * @param  rdi		|	
- * @param  rsi		| |	
- * @param  rdx 		| | | Syscalls 
+ * @param  rdi		|
+ * @param  rsi		| |
+ * @param  rdx 		| | | Syscalls
  * @param  r10 		| | | Parameters
- * @param  r8  		| |	
+ * @param  r8  		| |
  * @param  r9  		|
  * @param  rax		the syscall # to execute
- * @return     
+ * @return
  */
 uint64_t _syscall(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9, uint64_t rax);
 
@@ -34,7 +42,7 @@ int systerminal_select(int index) {
 	return (int) _syscall(index, 0, 0, 0, 0, 0, _SYSCALL_TERMINAL_SELECT);
 }
 
-void systerminal_clear() {
+void systerminal_clear(void) {
 	_syscall(0, 0, 0, 0, 0, 0, _SYSCALL_TERMINAL_CLEAR);
 }
 

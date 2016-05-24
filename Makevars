@@ -34,7 +34,7 @@ QEMU_LOG = -serial stdio
 QEMU_SOUND = -soundhw pcspk
 QEMU_FLAGS = -m 512 $(QEMU_DEBUG) $(QEMU_LOG)
 
-GCC_WARNINGS = -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes -Werror -Wfatal-errors -Wno-error=pedantic -Wno-unused-parameter -Wno-error=strict-prototypes -Wno-error=sign-conversion -Wno-error=conversion
+GCC_WARNINGS = -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes -Werror -Wfatal-errors -Wno-error=pedantic -Wno-unused-parameter -Wno-error=sign-conversion -Wno-error=conversion
 
 GCC_FLAGS_G = -m64 -fno-exceptions -fno-asynchronous-unwind-tables -mno-mmx -mno-sse -mno-sse2 -fno-builtin-malloc -fno-builtin-free -fno-builtin-realloc -mno-red-zone -ffreestanding -nostdlib -fno-common -std=c99
 ASM_FLAGS_G = -felf64

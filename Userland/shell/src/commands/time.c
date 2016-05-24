@@ -4,6 +4,7 @@
 #include <numbers.h>
 #include <time.h>
 
+COMMAND_FUNCTION(time);
 COMMAND_HELP(time);
 
 SUBCOMMAND_FUNCTION(set);

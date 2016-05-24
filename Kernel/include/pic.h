@@ -7,14 +7,14 @@
 
 #define _PIC_MASK_ALL 0xFF
 
-void pic_init();
+void pic_init(void);
 
 /**
  * Applies the given mask to the PIC to enable/disable interrupts
- * @param i - the mask to be applied to the PIC    
+ * @param i - the mask to be applied to the PIC
  */
 void pic_mask(uint8_t mask);
-void pic_mask_all();
+void pic_mask_all(void);
 
 int pic_irq_mask(uint8_t irq);
 int pic_irq_clear(uint8_t irq);
@@ -23,11 +23,11 @@ int pic_irq_eoi(uint8_t irq);
 /**
  * Returns the combined value of the cascaded PICs irq request register
  */
-uint16_t pic_irr();
+uint16_t pic_irr(void);
 
 /**
  * Returns the combined value of the cascaded PICs in-service register
  */
-uint16_t pic_isr();
+uint16_t pic_isr(void);
 
 #endif

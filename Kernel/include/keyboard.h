@@ -34,9 +34,9 @@ typedef struct {
 int keyboard_set(int keyboard);
 
 int keyboard_write(key_st * key);
-int keyboard_canRead();
-char keyboard_read();
+int keyboard_canRead(void);
+char keyboard_read(void);
 
-int keyboard_delete();
+int keyboard_delete(void);
 
 #endif

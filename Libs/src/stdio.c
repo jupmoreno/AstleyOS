@@ -12,7 +12,7 @@ extern unsigned int syswrite(char * string, unsigned int length);
 
 static int matches(char c, const char chars[], int charc);
 
-int scanc() {
+int scanc(void) {
 	char c;
 	int ret = sysread(&c, 1);
 

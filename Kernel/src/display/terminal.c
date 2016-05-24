@@ -49,7 +49,7 @@ void terminal_show(terminal_st * terminal) {
 	terminal_active = terminal;
 }
 
-void terminal_hide() {
+void terminal_hide(void) {
 	video_clear();
 	video_cursor_show(FALSE);
 }

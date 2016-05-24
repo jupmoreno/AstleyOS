@@ -25,26 +25,32 @@ extern uint8_t kernel_bss;
 extern uint8_t kernel_binary;
 extern uint8_t kernel_end;
 
-typedef int (* EntryPoint)();
+typedef int (* EntryPoint)(void);
 
-static void * kernel_stack_base();
-static void kernel_bss_clear();
+void * kernel_init(void);
+int kernel_main(void);
 
-static void kernel_idt_load();
+static void loadIDT(void);
 
 static void * module_addresses[] = {
 	(void *) MODULE_SHELL_ADDRESS // Shell address
 };
 
-void * kernel_init() {	
+void * kernel_init(void) {
 	module_load(&kernel_binary, module_addresses);
 
-	kernel_bss_clear();
+	// Clear BSS
+	memset(&kernel_bss, 0, &kernel_end - &kernel_bss);
 
-	return kernel_stack_base();
+	// Return stack's base
+	return (void *) (
+		(uint64_t) &kernel_end			// End of kernel address
+		+ ((uint64_t) PAGE_SIZE) * 8	// The size of the stack itself, 32KiB
+		- sizeof(uint64_t)				// Begin at the top of the stack
+	);
 }
 
-int kernel_main() {
+int kernel_main(void) {
 	video_init();
 	out_init();
 	out_printf("Initializing video driver... [Done]\n");
@@ -77,13 +83,13 @@ int kernel_main() {
 	pit_init();
 	out_printf("[Done]\n");
 
-	kernel_idt_load();
+	loadIDT();
 
 	out_printf("Enabling interrupts... ");
 	interrupt_set();
-	pic_mask(0xFC); // TODO: 
+	pic_mask(0xFC); // TODO:
 	out_printf("[Done]\n");
-	
+
 	out_clear();
 
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
@@ -103,7 +109,7 @@ void kernel_panic(const char * code, const char * desc, const char * source, con
 	out_box_line("HALT SYSTEM? %s", STRINGNIFY_BOOL_YESNO(halt));
 	out_box_bottom();
 	out_printf("\n");
-	
+
 	if(halt) {
 		out_printf("Disabling interrupts... ");
 		interrupt_clear();
@@ -115,24 +121,12 @@ void kernel_panic(const char * code, const char * desc, const char * source, con
 	}
 }
 
-static void * kernel_stack_base() {
-	return (void *) (
-		(uint64_t) &kernel_end			// End of kernel address
-		+ ((uint64_t) PAGE_SIZE) * 8	// The size of the stack itself, 32KiB
-		- sizeof(uint64_t)				// Begin at the top of the stack
-	);
-}
-
-static void kernel_bss_clear() {
-	memset(&kernel_bss, 0, &kernel_end - &kernel_bss);
-}
-
-static void kernel_idt_load() {
+static void loadIDT(void) {
 	out_printf("Initializing IDT... ");
 	idt_init();
 	out_printf("[Done]\n");
 
-	// Exceptions 
+	// Exceptions
 	out_printf("Loading exceptions... ");
 	_IDT_ENTRY_EXCEPTION(00);
 	_IDT_ENTRY_EXCEPTION(02);

@@ -11,13 +11,13 @@ static void log_write(char character);
 static int log_print(char * string);
 static void log_digit(int number, unsigned int base);
 
-void log_init() {
+void log_init(void) {
 	if(!serial_isInit()) {
 		serial_init();
 	}
 }
 
-int log(char * fmt, ...) { // TODO: How to set styles
+int log(const char * fmt, ...) { // TODO: How to set styles
     char symbol;
     int i = 0;
     va_list arg;

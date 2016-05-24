@@ -59,15 +59,17 @@ typedef struct {
 	unsigned int time;
 } timer_t;
 
+void pit_trigger(void);
+
 static timer_t timers[TIMERS];
 static int booleans[TIMERS];
 static unsigned int time;
 
 static int * pit_sleep_asign(unsigned int seconds);
 
-extern void manage_time();
+extern void manage_time(void);
 
-void pit_init() {
+void pit_init(void) {
 	int i;
 
 	for(i = 0; i < TIMERS; i++) {
@@ -76,17 +78,17 @@ void pit_init() {
 	}
 }
 
-void pit_set(unsigned int miliseconds) { // TODO: 
+// void pit_set(unsigned int miliseconds) { // TODO:
 
-}
+// }
 
-uint32_t pit_get() { // TODO: 
-	return 1;
-}
+// uint32_t pit_get(void) { // TODO:
+// 	return 1;
+// }
 
-void pit_trigger() {
+void pit_trigger(void) {
 	int i;
-	
+
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time > 0) {
 			timers[i].time--;
@@ -98,7 +100,7 @@ void pit_trigger() {
 
 	manage_time();
 }
- 
+
 void pit_wait(unsigned int seconds) {
 	int * waiting = pit_sleep_asign(seconds);
 

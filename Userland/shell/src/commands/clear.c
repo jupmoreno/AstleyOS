@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <console.h>
 
+COMMAND_FUNCTION(clear);
 COMMAND_HELP(clear);
 
 COMMAND_FUNCTION(clear) {

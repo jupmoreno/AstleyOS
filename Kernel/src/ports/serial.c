@@ -16,13 +16,13 @@ Offset	DLAB	Register mapped to this port
 +7		-		Scratch Register.
 */
 
-static int serial_transmit_isEmpty();
-static int serial_received();
+static int serial_transmit_isEmpty(void);
+static int serial_received(void);
 
 static int serial_initialized = FALSE;
 
 // Original: http://wiki.osdev.org/Serial_Ports
-void serial_init() {
+void serial_init(void) {
 	/* Notice that the initialization code writes to [PORT + 1] twice with different values. This is once to write to the Divisor register along with [PORT + 0] and once to write to the Interrupt register. The second write to the Line Control register [PORT + 3] clears the DLAB again as well as setting various other bits. */
 
 	_port_write_byte(_PORT_COM1 + 1, 0x00);    // Disable all interrupts
@@ -36,7 +36,7 @@ void serial_init() {
 	serial_initialized = TRUE;
 }
 
-int serial_isInit() {
+int serial_isInit(void) {
 	return serial_initialized;
 }
 
@@ -54,16 +54,16 @@ void serial_print(char * string) {
 	}
 }
 
-char serial_read() {
+char serial_read(void) {
 	while (serial_received() == 0);
- 
+
 	return _port_read_byte(_PORT_COM1);
 }
 
-static int serial_transmit_isEmpty() {
+static int serial_transmit_isEmpty(void) {
 	return _port_read_byte(_PORT_COM1 + 5) & 0x20;
 }
 
-static int serial_received() {
+static int serial_received(void) {
 	return _port_read_byte(_PORT_COM1 + 5) & 1;
 }

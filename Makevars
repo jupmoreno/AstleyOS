@@ -5,6 +5,9 @@ SO_NAME = Scylla
 ###### VARS ######
 # Global
 SYS_GCC = gcc
+ifneq (, $(shell which gcc-5))
+  SYS_GCC = gcc-5
+endif
 
 # Per system
 ifeq ($(shell uname), Darwin)
@@ -21,6 +24,9 @@ ifeq ($(shell uname), Darwin)
 else
   # Linux
   GCC = gcc
+  ifneq (, $(shell which gcc-5))
+    GCC = gcc-5
+  endif
   GPP = g++
   LD = ld
   AR = ar

@@ -17,8 +17,9 @@ This will install `make`, `build-essential`, `nasm` and `qemu` into your system.
 
 From the project's directory, run:
 
+	sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 	sudo apt-get update
-	sudo apt-get install make build-essential nasm qemu
+	sudo apt-get install make gcc-5 build-essential nasm qemu
 
 Or simply run the installation script: `./Scripts/install-linux.sh`.
 

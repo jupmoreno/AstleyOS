@@ -4,17 +4,18 @@ matrix:
     - os: linux
       compiler: gcc
       sudo: required
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-5
-            - nasm
-            - qemu
+      # addons:
+      #   apt:
+      #     sources:
+      #       - ubuntu-toolchain-r-test
+      #     packages:
+      #       - gcc-5
+      #       - nasm
+      #       - qemu
     - os: osx
       compiler: gcc
       sudo: required
 install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./Scripts/install-osx.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then ./Scripts/install-linux.sh; fi
 script: make build

@@ -127,7 +127,7 @@ void terminal_shift(terminal_st * terminal, int lines) { // TODO: Por ahora no v
 
 	pixel_st pixel;
 	//int actual, next; // TODO: Choice
-	
+
 	// Move each row to the previous, the first one disappears
 	for(i = 1; i < _VIDEO_ROWS; i++) {
 		for(j = 0; j < _VIDEO_COLUMNS; j++) {
@@ -155,7 +155,7 @@ void terminal_shift(terminal_st * terminal, int lines) { // TODO: Por ahora no v
 
 	// Update cursor position
 	terminal->cursor -= _VIDEO_COLUMNS;
-	
+
 	if(terminal == terminal_active) {
 		video_cursor_put(terminal->cursor);
 	}

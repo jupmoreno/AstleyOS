@@ -13,7 +13,9 @@ This project needs the following packages: `nasm gcc binutils make qemu`.
 
 ### Linux
 
-This will install `make`, `build-essential`, `nasm` and `qemu` into your system.
+- GCC's version > 4.9 required.
+
+This will install `make`, `gcc-5`, `build-essential`, `nasm` and `qemu` into your system.
 
 From the project's directory, run:
 

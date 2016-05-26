@@ -77,7 +77,7 @@ SUBCOMMAND_FUNCTION(set) {
 	if(ERROR_OCCURRED(stime(&t))) {
 		printf("<time:set> Error: can't set time.\n");
 	}
-	
+
 	return OK;
 }
 

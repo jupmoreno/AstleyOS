@@ -53,7 +53,7 @@ _syscall:
 
 	xor rax, rax
 	mov rax, [rbp+16] 		; first stack argument == syscall number
-	
+
 	int 0x80
 
 	popfq

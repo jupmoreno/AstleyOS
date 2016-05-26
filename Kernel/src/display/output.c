@@ -190,7 +190,7 @@ int out_sleep_step(void) {
 	if(!sleep_active) {
 		return _OUTPUT_ERROR_SLEEP_NOT_ACTIVE;
 	}
-	
+
 	if(sleep_loop) {
 		terminal_print(&terminals[terminal_active], sleep_text);
 	}

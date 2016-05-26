@@ -31,11 +31,11 @@ int vtime(time_st * time) {
 
 	leap = lyear(time->year);
 	maxDays = days[leap][time->month];
-	
+
 	if(time->day > maxDays) {
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 

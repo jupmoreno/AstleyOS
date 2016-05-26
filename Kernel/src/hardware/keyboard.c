@@ -132,7 +132,7 @@ int keyboard_delete(void) {
 		buffer_nextInsert = prevInsert;
 		return OK;
 	}
-	
+
 	return _ERROR_KEYBOARD_OPERATION;
 }
 
@@ -153,7 +153,7 @@ static key_st key_process(unsigned char scancode) {
 
 	// Checks if it is a press or a release
 	press = scancode <= SCANCODE_PRESS_MAX;
-	
+
 	if(!press) {
 		c -= SCANCODE_PRESS_MAX;
 	}

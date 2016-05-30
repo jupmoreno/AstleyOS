@@ -65,7 +65,7 @@ static timer_t timers[TIMERS];
 static int booleans[TIMERS];
 static unsigned int time;
 
-static int * pit_sleep_asign(unsigned int seconds);
+static int * pit_sleep_asign(double seconds);
 
 extern void manage_time(void);
 
@@ -76,6 +76,8 @@ void pit_init(void) {
 		timers[i].time = 0;
 		booleans[i] = TRUE;
 	}
+
+	time = 55;
 }
 
 // void pit_set(unsigned int miliseconds) { // TODO:
@@ -101,8 +103,10 @@ void pit_trigger(void) {
 	manage_time();
 }
 
-void pit_wait(unsigned int seconds) {
-	int * waiting = pit_sleep_asign(seconds);
+void pit_wait(double seconds) {
+	int * waiting;
+
+	waiting = pit_sleep_asign(seconds);
 
 	if(waiting == NULL) {
 		return;
@@ -112,8 +116,12 @@ void pit_wait(unsigned int seconds) {
 	*waiting = TRUE;
 }
 
-static int * pit_sleep_asign(unsigned int seconds) {
+static int * pit_sleep_asign(double seconds) {
 	int i;
+
+	if(seconds <= 0) {
+		return NULL;
+	}
 
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time == 0) {

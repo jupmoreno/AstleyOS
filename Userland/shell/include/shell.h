@@ -1,7 +1,7 @@
 #ifndef _SHELL_H_
 #define _SHELL_H_
 
-// TODO: 
+// TODO:
 // #define OK 0
 // #define ERROR -1
 // #define ERROR_CMD_EMPTY -2

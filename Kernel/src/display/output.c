@@ -212,7 +212,7 @@ int out_sleep_isActive(void) {
 	return sleep_active;
 }
 
-int out_sleep_set(char * text, int boolean) { // TODO: 
+int out_sleep_set(char * text, int boolean) { // TODO:
 	if(sleep_active) {
 		return _OUTPUT_ERROR_SLEEP_ACTIVE;
 	}

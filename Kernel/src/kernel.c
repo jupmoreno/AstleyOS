@@ -12,6 +12,7 @@
 #include <pic.h>
 #include <pit.h>
 #include <serial.h>
+#include <sound.h>
 
 #define PAGE_SIZE 0x1000
 
@@ -91,6 +92,8 @@ int kernel_main(void) {
 	out_printf("[Done]\n");
 
 	out_clear();
+
+	sound_beep(440, 1);
 
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 	shell();

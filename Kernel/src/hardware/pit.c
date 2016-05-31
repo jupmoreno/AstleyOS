@@ -125,7 +125,7 @@ static int * pit_sleep_asign(double seconds) {
 
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time == 0) {
-			timers[i].time = SECONDS_TO_PIT_CYCLES(seconds);
+			timers[i].time = (int) SECONDS_TO_PIT_CYCLES(seconds);
 			#ifdef _DEGUB_ENABLED
 			log("<PIT> Assigned timer: %d\n", i);
 			#endif

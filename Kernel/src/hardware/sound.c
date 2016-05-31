@@ -3,9 +3,9 @@
 #include <pit.h>
 
 typedef struct {
-	uint32_t frequency;
+	unsigned int frequency;
 	int time;
-} sound_st;
+} beep_st;
 
 static void sound_play(unsigned int frequency);
 static void sound_stop(void);

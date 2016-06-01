@@ -77,7 +77,7 @@ void * heap_alloc(unsigned int size) {
 		return NULL;
 	}
 
-	return (void *) (HEAP_ALLOC_BASE + offset * HEAP_STRUCT_LEAF);
+	return (void *) ((intptr_t) (HEAP_ALLOC_BASE + offset * HEAP_STRUCT_LEAF));
 }
 
 void * head_zalloc(unsigned int size) {
@@ -93,7 +93,7 @@ void * head_zalloc(unsigned int size) {
 }
 
 void heap_free(void * adrr) {
-	buddy_free((int)(adrr - HEAP_ALLOC_BASE)/HEAP_STRUCT_LEAF);
+	buddy_free(((intptr_t) adrr - HEAP_ALLOC_BASE) / HEAP_STRUCT_LEAF);
 }
 
 static int buddy_alloc(unsigned int size) {

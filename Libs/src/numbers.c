@@ -73,18 +73,16 @@ int numisPow2(unsigned int x) {
  * @param  x
  * @return      next highest power of 2 of 32-bit x
  */
-int numnextPow2(unsigned int x) {
-    if(numisPow2(x)) { // TODO: Neccesary?
-        return x;
+unsigned int numnextPow2(unsigned int x) {
+    if(x != 0) {
+        x--;
     }
 
-    x--;
     x |= x >> 1;
     x |= x >> 2;
     x |= x >> 4;
     x |= x >> 8;
     x |= x >> 16;
-    x++;
 
-    return x;
+    return x + 1;
 }

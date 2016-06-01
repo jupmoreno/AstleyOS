@@ -38,6 +38,6 @@ int numisPow2(unsigned int x);
  * @param  x
  * @return      next highest power of 2 of 32-bit x
  */
-int numnextPow2(unsigned int x);
+unsigned int numnextPow2(unsigned int x);
 
 #endif

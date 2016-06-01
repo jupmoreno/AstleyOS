@@ -2,6 +2,7 @@
 #define _DEFINE_H_
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define _DEGUB_ENABLED
 
@@ -13,7 +14,7 @@
 #define WORD_FIRST_HALF(x) (((x) & 0x0FF00) >> 8)
 #define WORD_LAST_HALF(x) ((x) & 0x0FF)
 
-#define NULL ((void *) 0)
+// #define NULL ((void *) 0)
 
 #define TRUE 1
 #define FALSE !TRUE

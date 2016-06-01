@@ -13,11 +13,12 @@
 #include <pit.h>
 #include <serial.h>
 #include <sound.h>
+#include <heap.h>
 
 #define PAGE_SIZE 0x1000
 
 #define MODULE_SHELL_INDEX 0
-#define MODULE_SHELL_ADDRESS 0x400000
+#define MODULE_SHELL_ADDRESS 0x0000000020440358
 
 extern uint8_t kernel_text;
 extern uint8_t kernel_rodata;
@@ -56,6 +57,10 @@ int kernel_main(void) {
 	out_init();
 	out_printf("Initializing video driver... [Done]\n");
 	out_printf("Loading modules... [Done]\n");
+
+	out_printf("Initializing heap... ");
+	heap_init();
+	out_printf("[Done]\n");
 
 	out_printf("Initializing serial port... ");
 	serial_init();

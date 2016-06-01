@@ -4,8 +4,8 @@
 
 # Memory Allocation
 
- - https://github.com/angrave/SystemProgramming/wiki/Memory,-Part-2:-Implementing-a-Memory-Allocator
- - http://www.memorymanagement.org/mmref/alloc.html
+- https://github.com/angrave/SystemProgramming/wiki/Memory,-Part-2:-Implementing-a-Memory-Allocator
+- http://www.memorymanagement.org/mmref/alloc.html
 
 ## Buddy
 
@@ -15,6 +15,7 @@
 - https://www.cs.fsu.edu/~engelen/courses/COP402003/p827.pdf
 - http://www.cs.uml.edu/~jsmith/OSReport/frames.html
 - http://www.eecs.harvard.edu/~mdw/course/cs61/mediawiki/images/5/51/Malloc3.pdf
+- http://dysphoria.net/OperatingSystems1/4_allocation_buddy_system.html
 
 ### Implementation
 

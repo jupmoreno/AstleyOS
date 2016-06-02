@@ -2,7 +2,6 @@
 #define _LIB_STRINGS_H_
 
 #include <define.h>
-#include <stdlib.h>
 
 #define _CHAR_ISALPHA(x) (((x) >= 'a' && (x) <= 'z') || ((x) >= 'A' && (x) <= 'Z')) ? TRUE : FALSE
 #define _CHAR_ISNUMBER(x) ((x) >= '0' && (x) <= '9') ? TRUE : FALSE

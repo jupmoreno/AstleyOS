@@ -7,6 +7,9 @@
 #include <syscalls.h>
 #include <sysio.h>
 #include <systime.h>
+#include <stdarg.h>
+#include <heap.h>
+#include <sysalloc.h>
 
 void manage_time(void);
 void manage_key(key_st * key);
@@ -14,6 +17,7 @@ unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);
 int manage_rtc(int operation, time_st * time);
 int manage_terminal(int operation, int value);
+void * manage_alloc(int op, ...);
 
 static unsigned int manage_read_stdin(char * buffer, unsigned int length);
 static unsigned int manage_write_stdout(const char * string, unsigned int length);
@@ -97,6 +101,36 @@ int manage_terminal(int operation, int value) {
 	}
 
 	return _SYSCALL_ERROR_SCREEN_OPERATION_INVALID;
+}
+
+void * manage_alloc(int op, ...) {
+	unsigned int size;
+	void * addr;
+	va_list arg;
+
+	va_start(arg, op);
+
+	switch(op) {
+		case _ALLOC_NEW: {
+			size = va_arg(arg, unsigned int);
+			addr = heap_alloc(size);
+		} break;
+
+		case _ALLOC_FREE: {
+			addr = va_arg(arg, void *);
+			heap_free(addr);
+		} break;
+
+		// case _ALLOC_RENEW: {
+		// 	addr = va_arg(arg, void *);
+		// 	size = va_arg(arg, unsigned int);
+		// 	addr = heap_realloc(addr, size);
+		// } break;
+	}
+
+	va_end(arg);
+
+	return addr;
 }
 
 static unsigned int manage_read_stdin(char * buffer, unsigned int length) {

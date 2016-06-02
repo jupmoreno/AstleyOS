@@ -13,6 +13,7 @@ syscall_st syscall_terminal_select;
 syscall_st syscall_terminal_clear;
 syscall_st syscall_terminal_color;
 syscall_st syscall_terminal_cursor;
+syscall_st syscall_alloc;
 // (2) FUTURE SYSCALL HERE !!
 
 extern syscall_st * syscalls_table[_SYSCALLS_SIZE];

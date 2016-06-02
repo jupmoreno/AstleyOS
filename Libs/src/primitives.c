@@ -3,6 +3,7 @@
 #include <sysio.h>
 #include <sysconsole.h>
 #include <systime.h>
+#include <sysalloc.h>
 
 unsigned int sysread(char * buffer, unsigned int length);
 unsigned int syswrite(char * string, unsigned int length);
@@ -11,6 +12,8 @@ int systerminal_select(int index);
 void systerminal_clear(void);
 void systerminal_color(int operation, style_st color);
 int systerminal_cursor(cursor_st cursor);
+void * sysalloc_new(unsigned int size);
+void sysalloc_free(void * addr);
 
 /**
  * Syscall caller or wrapper
@@ -53,3 +56,15 @@ void systerminal_color(int operation, style_st color) {
 int systerminal_cursor(cursor_st cursor) {
 	return (int) _syscall((uint64_t) cursor, 0, 0, 0, 0, 0, _SYSCALL_TERMINAL_CURSOR);
 }
+
+void * sysalloc_new(unsigned int size) {
+	return (void *) _syscall(_ALLOC_NEW, size, 0, 0, 0, 0, _SYSCALL_ALLOC);
+}
+
+void sysalloc_free(void * addr) {
+	_syscall(_ALLOC_FREE, (uint64_t) addr, 0, 0, 0, 0, _SYSCALL_ALLOC);
+}
+
+// void * sysalloc_renew(void * addr, unsigned int size) {
+// 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);
+// }

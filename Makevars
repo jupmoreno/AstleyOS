@@ -38,7 +38,7 @@ QEMU = qemu-system-x86_64
 # [QEMU LOGS] ->  -serial stdio  //  -serial file:log.md  //  -serial /dev/tty
 QEMU_LOG = -serial stdio
 QEMU_SOUND = -soundhw pcspk
-QEMU_FLAGS = -m 1G,slots=3,maxmem=4G $(QEMU_DEBUG) $(QEMU_LOG) $(QEMU_SOUND)
+QEMU_FLAGS = -m 1024 $(QEMU_DEBUG) $(QEMU_LOG) $(QEMU_SOUND)
 
 GCC_WARNINGS_PRODUCTION = -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes -Werror -Wfatal-errors -Wno-error=pedantic -Wno-unused-parameter -Wno-error=sign-conversion -Wno-error=conversion
 

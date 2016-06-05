@@ -153,7 +153,7 @@ static args_t * getArgs(char * buffer) {
 // };
 
 // void shell_printe(int error) {
-// 	error = ABS(error);
+// 	error = numabs(error);
 
 // 	if(error >= _SHELL_ERRORS) {
 // 		error = 0;

@@ -5,7 +5,7 @@
 #define _NUMBERS_BASE_DEC 10
 #define _NUMBERS_BASE_HEX 16
 
-#define ABS(x) ((x) < 0) ? (-(x)) : (x)
+#define numabs(x) ((x) < 0) ? (-(x)) : (x)
 
 int numstr(const char * string);
 int numstrl(const char * string, int * value);

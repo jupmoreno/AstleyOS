@@ -36,10 +36,10 @@
 #define HEAP_STRUCT_LEAF	_MEMORY_PAGE_SIZE
 #define HEAP_STRUCT_TREE	(HEAP_ALLOC_SIZE / HEAP_STRUCT_LEAF) * 2 - 1
 
-#define NODE_UNUSED 		0
-#define NODE_USED 			1
-#define NODE_SPLIT 			2
-#define NODE_FULL 			3
+#define BUDDY_UNUSED		0
+#define BUDDY_USED			1
+#define BUDDY_SPLITTED		2
+#define BUDDY_FULL			3
 
 typedef struct {
 	unsigned int size;
@@ -53,7 +53,7 @@ static int buddy_offset(int index, int level);
 static void buddy_markParent(int index);
 static void buddy_combine(int index);
 
-static allocator_st * allocator; // = {(1 << 17), 17, {NODE_UNUSED}}; // TODO: Calcular el 17 & Inicializar en 0 tree
+static allocator_st * allocator; // = {(1 << 17), 17, {BUDDY_UNUSED}}; // TODO: Calcular el 17 & Inicializar en 0 tree
 
 void heap_init(void) {
 	// memset(HEAP_ALLOC_BASE, 0, HEAP_ALLOC_SIZE);
@@ -61,7 +61,7 @@ void heap_init(void) {
 
 	allocator->size = (1 << 17); 	// TODO: Calcular el 17 y define
 	allocator->levels = 17;			// TODO: Calcular el 17 y define
-	memset(allocator->tree, NODE_UNUSED, HEAP_STRUCT_TREE);
+	memset(allocator->tree, BUDDY_UNUSED, HEAP_STRUCT_TREE);
 }
 
 void * heap_alloc(unsigned int size) {
@@ -112,23 +112,23 @@ static int buddy_alloc(unsigned int size) {
 
 	while(index >= 0) {
 		if(size == length) {
-			if(allocator->tree[index] == NODE_UNUSED) {
-				allocator->tree[index] = NODE_USED;
+			if(allocator->tree[index] == BUDDY_UNUSED) {
+				allocator->tree[index] = BUDDY_USED;
 				buddy_markParent(index);
 				return buddy_offset(index, level);
 			}
 		} else {
 			// size < length
 			switch(allocator->tree[index]) {
-				case NODE_USED:
-				case NODE_FULL:
+				case BUDDY_USED:
+				case BUDDY_FULL:
 					break;
 
-				case NODE_UNUSED:
+				case BUDDY_UNUSED:
 					// split first
-					allocator->tree[index] = NODE_SPLIT;
-					allocator->tree[index * 2 + 1] = NODE_UNUSED;
-					allocator->tree[index * 2 + 2] = NODE_UNUSED;
+					allocator->tree[index] = BUDDY_SPLITTED;
+					allocator->tree[index * 2 + 1] = BUDDY_UNUSED;
+					allocator->tree[index * 2 + 2] = BUDDY_UNUSED;
 
 				default:
 					index = index * 2 + 1;
@@ -173,7 +173,7 @@ static void buddy_free(unsigned int offset) {
 
 	for(;;) {
 		switch(allocator->tree[index]) {
-			case NODE_USED:
+			case BUDDY_USED:
 				if(offset != left) {
 					// TODO: This should never happend
 					return;
@@ -181,7 +181,7 @@ static void buddy_free(unsigned int offset) {
 				buddy_combine(index);
 				return;
 
-			case NODE_UNUSED:
+			case BUDDY_UNUSED:
 				// TODO: This should never happend
 				return;
 
@@ -208,9 +208,9 @@ static void buddy_markParent(int index) {
 	for(;;) {
 		buddy = index - 1 + (index & 1) * 2;
 
-		if(buddy > 0 && (allocator->tree[buddy] == NODE_USED ||	allocator->tree[buddy] == NODE_FULL)) {
+		if(buddy > 0 && (allocator->tree[buddy] == BUDDY_USED || allocator->tree[buddy] == BUDDY_FULL)) {
 			index = (index + 1) / 2 - 1;
-			allocator->tree[index] = NODE_FULL;
+			allocator->tree[index] = BUDDY_FULL;
 		} else {
 			return;
 		}
@@ -223,11 +223,11 @@ static void buddy_combine(int index) {
 	for(;;) {
 		buddy = index - 1 + (index & 1) * 2;
 
-		if(buddy < 0 || allocator->tree[buddy] != NODE_UNUSED) {
-			allocator->tree[index] = NODE_UNUSED;
+		if(buddy < 0 || allocator->tree[buddy] != BUDDY_UNUSED) {
+			allocator->tree[index] = BUDDY_UNUSED;
 
-			while(((index = (index + 1) / 2 - 1) >= 0) &&  allocator->tree[index] == NODE_FULL) {
-				allocator->tree[index] = NODE_SPLIT;
+			while(((index = (index + 1) / 2 - 1) >= 0) &&  allocator->tree[index] == BUDDY_FULL) {
+				allocator->tree[index] = BUDDY_SPLITTED;
 			}
 
 			return;

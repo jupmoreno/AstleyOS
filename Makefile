@@ -37,6 +37,6 @@ reset: clean
 	$(MAKE) -C $(BOOTLOADER_PATH) clean
 
 run: image
-	$(QEMU) $(QEMU_FLAGS) -hda $(SOURCE_IMAGE) $(QEMU_SOUND)
+	$(QEMU) $(QEMU_FLAGS) -hda $(SOURCE_IMAGE)
 
 .PHONY: help all build toolchain bootloader libs kernel userland image clean reset run

@@ -14,6 +14,7 @@
 #include <serial.h>
 #include <sound.h>
 #include <heap.h>
+#include <paging.h>
 
 #define PAGE_SIZE 0x1000
 
@@ -58,6 +59,10 @@ int kernel_main(void) {
 	out_printf("Initializing video driver... [Done]\n");
 	out_printf("Loading modules... [Done]\n");
 
+	out_printf("Enabling paging... ");
+	paging_init();
+	out_printf("[Done]\n");
+
 	out_printf("Initializing heap... ");
 	heap_init();
 	out_printf("[Done]\n");
@@ -96,12 +101,12 @@ int kernel_main(void) {
 	pic_mask(0xFC); // TODO:
 	out_printf("[Done]\n");
 
-	out_clear();
+	// out_clear();
 
-	sound_beep(440, 1);
+	sound_beep(440, 0.3);
 
-	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
-	shell();
+	// EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
+	// shell();
 
 	while(1);
 

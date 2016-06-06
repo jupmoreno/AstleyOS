@@ -2,6 +2,8 @@ GLOBAL _cr0_read:
 GLOBAL _cr0_write:
 GLOBAL _cr3_read:
 GLOBAL _cr3_write:
+GLOBAL _cr4_read
+GLOBAL _cr4_write
 
 section .text
 
@@ -66,5 +68,17 @@ _cr3_read:
 align 16
 _cr3_write:
 	mov cr3, rdi
+
+	ret
+
+align 16
+_cr4_read:
+	mov rax, cr4
+
+	ret
+
+align 16
+_cr4_write:
+	mov cr4, rdi
 
 	ret

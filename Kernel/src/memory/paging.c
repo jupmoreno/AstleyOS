@@ -98,95 +98,138 @@ extern cr0_t _cr0_read(void);
 extern void _cr0_write(cr0_t cr0);
 extern cr3_t _cr3_read(void);
 extern void _cr3_write(cr3_t cr3);
+extern cr3_t _cr4_read(void);
+// extern void _cr4_write(cr4_t cr4);
 
+static void pdpt_init(void);
+static void pdt_init(pdte_st ** table, pte_st ** page_table, uint64_t * page);
+static void pt_init(pte_st ** page_table, uint64_t * page);
 static void paging_enable(void);
 
-#define PDPT_SIZE	4
-static pdpte_st directory_pointers[PDPT_SIZE];
-#define PDT_SIZE	512
-static pdte_st directory_1[PDT_SIZE];
-#define PT_SIZE		512
-static pte_st table_1[PT_SIZE];
+#define KILOBYTE 			1024				// TODO: En otro lado todos
+#define KILOBYTES(x) 		((x) * KILOBYTE)
+#define MEGABYTE 			1048576
+#define MEGABYTES(x) 		((x) * MEGABYTE)
+
+#define _MEMORY_PAGE_SIZE	KILOBYTES(4) // TODO: En otro lado
+
+#define PDPT_BASE		0x0000000020740358
+#define PDPT_ENTRIES	4
+#define PDPT_SIZE		(PDPT_ENTRIES * sizeof(pdpte_st))
+static pdpte_st * directory_pointers;
+#define PDT_BASE		(PDPT_BASE + PDPT_SIZE)
+#define PDT_ENTRIES		512
+#define PDT_SIZE		(PDPT_ENTRIES * sizeof(pdte_st))
+static pdte_st * page_directories;
+#define PT_BASE			(PDT_BASE + PDT_SIZE)
+#define PT_ENTRIES		512
+#define PT_SIZE			(PDT_ENTRIES * sizeof(pte_st))
+static pte_st * page_tables;
 
 void paging_init(void) {
 	log("<MEMORY> CR0: %h\n", _cr0_read());
 	log("<MEMORY> CR3: %h\n", _cr3_read());
-	// paging_identify();
+	log("<MEMORY> CR4: %h\n", _cr4_read());
+
+	directory_pointers = (pdpte_st *) PDPT_BASE;
+	page_directories = (pdte_st *) PDT_BASE;
+	page_tables = (pte_st *) PT_BASE;
+
+	pdpt_init();
+
 	// paging_enable();
 }
 
-static void pdpt_init(pdpte_st * table[PDPT_SIZE]) {
+static void pdpt_init(void) {
 	int i;
-	pdpte_st * entry;
+	uint64_t page = 0;
+	pdte_st * directories = page_directories;
+	pte_st * tables = page_tables;
 
-	entry = table[0];
-	entry->p = 1;
-	entry->zero_1 = 0;
-	entry->pwt = 0;
-	entry->pcd = 1;
-	entry->zero_2 = 0;
-	entry->zero_3 = 0;
-	entry->base = (uint64_t) &directory_1;
-	entry->zero_4 = 0;
+	for(i = 0; i < PDPT_ENTRIES; i++) {
+		pdt_init(&directories, &tables, &page);
 
-	for(i = 1; i < PDPT_SIZE; i++) {
-		entry = table[i];
-		entry->p = 0;
+		directory_pointers[i].p 		= 1;
+		directory_pointers[i].zero_1 	= 0;
+		directory_pointers[i].pwt 		= 0;
+		directory_pointers[i].pcd 		= 1;
+		directory_pointers[i].zero_2 	= 0;
+		directory_pointers[i].zero_3 	= 0;
+		directory_pointers[i].base 		= (uint64_t) directories;
+		directory_pointers[i].zero_4 	= 0;
 	}
 }
 
-static void pdt_init(pdte_st * table[PDT_SIZE]) {
+static void pdt_init(pdte_st ** table, pte_st ** page_table, uint64_t * page) {
 	int i;
-	pdte_st * entry;
+	pdte_st * entry = *table;
 
-	entry = table[0];
-	entry->p = 1;
-	entry->rw = 1;
-	entry->us = 1;
-	entry->pwt = 0;
-	entry->pcd = 1;
-	entry->a = 1;
-	entry->zero_1 = 0;
-	entry->ps = 0;
-	entry->zero_2 = 0;
-	entry->base = (uint64_t) &table_1;
-	entry->zero_3 = 0;
-	entry->xd = 0;
+	for(i = 0; i < PDT_ENTRIES; i++) {
+		pt_init(page_table, page);
 
-	for(i = 1; i < PDT_SIZE; i++) {
-		entry = table[i];
-		entry->p = 0;
+		entry->p		= 1;
+		entry->rw		= 1;
+		entry->us		= 1;
+		entry->pwt		= 0;
+		entry->pcd		= 1;
+		entry->a 		= 1;
+		entry->zero_1 	= 0;
+		entry->ps 		= 0;
+		entry->zero_2 	= 0;
+		entry->base 	= (uint64_t) *page_table;
+		entry->zero_3 	= 0;
+		entry->xd 		= 0;
+
+		entry += sizeof(pdte_st);
 	}
+
+	*table = entry;
 }
 
-static void pt_init(pte_st * table[PT_SIZE]) {
+static void pt_init(pte_st ** page_table, uint64_t * page) {
 	int i;
-	pte_st * entry;
+	pte_st * entry = *page_table;
 
-	entry = table[0];
-	entry->p = 1;
-	entry->rw = 1;
-	entry->us = 1;
-	entry->pwt = 0;
-	entry->pcd = 1;
-	entry->a = 1;
-	entry->d = 0;
-	entry->pat = 0;
-	entry->g = 0;
-	entry->zero_1 = 0;
-	entry->base = (uint64_t) &table_1; // TODO: Change
-	entry->zero_2 = 0;
-	entry->xd = 0;
+	for(i = 0; i < PT_ENTRIES; i++) {
+		entry->p 		= 1;
+		entry->rw 		= 1;
+		entry->us 		= 1;
+		entry->pwt 		= 0;
+		entry->pcd 		= 1;
+		entry->a 		= 1;
+		entry->d 		= 0;
+		entry->pat 		= 0;
+		entry->g 		= 0;
+		entry->zero_1 	= 0;
+		entry->base 	= *page;
+		entry->zero_2 	= 0;
+		entry->xd 		= 0;
 
-	for(i = 1; i < PT_SIZE; i++) {
-		entry = table[i];
-		entry->p = 0;
+		(*page) += _MEMORY_PAGE_SIZE;
+		entry += sizeof(pte_st);
 	}
+
+	*page_table = entry;
 }
 
 static void paging_enable(void) {
-	// _cr0_write((uint64_t) page_directory);
-	// _cr3_write((uint64_t) (_cr3_read() | 0x80000000)); // Set the paging bit in CR0 to 1
+	cr0_t cr0;
+	cr3_t cr3;
+	// cr4_t cr4;
+
+	// cr4 = _cr4_read();
+	// cr4.pae = 1;
+	// _cr4_write(cr4);
+
+	cr3 = _cr3_read();
+	cr3.zero_1 = 0;
+	cr3.base = (uint64_t) directory_pointers;
+	cr3.zero_2 = 0;
+	_cr3_write(cr3);
+
+	cr0 = _cr0_read();
+	// cr0.pg = 1;
+	_cr0_write(cr0);
 }
 
 // uint64_t directory[1024] __attribute__((aligned(4096)));

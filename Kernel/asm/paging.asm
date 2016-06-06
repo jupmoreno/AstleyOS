@@ -1,7 +1,7 @@
-GLOBAL _cr0_read:
-GLOBAL _cr0_write:
-GLOBAL _cr3_read:
-GLOBAL _cr3_write:
+GLOBAL _cr0_read
+GLOBAL _cr0_write
+GLOBAL _cr3_read
+GLOBAL _cr3_write
 GLOBAL _cr4_read
 GLOBAL _cr4_write
 

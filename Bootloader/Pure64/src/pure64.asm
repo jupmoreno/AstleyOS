@@ -576,7 +576,7 @@ nextIOAPIC:
 
 ; Move the trailing binary to its final location
 	mov rsi, 0x60000+6144		; Memory offset to end of pure64.sys
-	mov rdi, 0x0000000020140358		; Destination address at the 1MiB mark
+	mov rdi, 0x100000		; Destination address at the 1MiB mark
 	mov rcx, 0x8000			; For up to 256KiB kernel (262144 / 8)
 	rep movsq			; Copy 8 bytes at a time
 
@@ -641,7 +641,7 @@ normal_start:
 	xor eax, eax			; Clear registers used earlier
 	xor ebx, ebx
 	xor ecx, ecx
-	jmp 0x0000000020140358
+	jmp 0x100000
 
 %include "init/acpi.asm"
 %include "init/cpu.asm"

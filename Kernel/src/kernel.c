@@ -63,9 +63,9 @@ int kernel_main(void) {
 	paging_init();
 	out_printf("[Done]\n");
 
-	out_printf("Initializing heap... ");
-	heap_init();
-	out_printf("[Done]\n");
+	// out_printf("Initializing heap... ");
+	// heap_init();
+	// out_printf("[Done]\n");
 
 	out_printf("Initializing serial port... ");
 	serial_init();

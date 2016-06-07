@@ -98,7 +98,7 @@ int kernel_main(void) {
 	out_printf("[Done]\n");
 
 	out_printf("Enabling paging... ");
-	paging_init();
+	// paging_init();
 	out_printf("[Done]\n");
 
 	// out_clear();

@@ -1,6 +1,5 @@
 #include <keyboard.h>
 #include <keys.h>
-#include <define.h>
 #include <strings.h>
 
 #define KEYBOARD_BUFFER_SIZE 256

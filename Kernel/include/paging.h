@@ -1,7 +1,7 @@
 #ifndef _PAGING_H_
 #define _PAGING_H_
 
-#include <define.h>
+#include <kdefine.h>
 
 void paging_init(void);
 

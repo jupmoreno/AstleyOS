@@ -1,5 +1,4 @@
 #include <manager.h>
-#include <define.h>
 #include <limits.h>
 #include <output.h>
 #include <keyboard.h>

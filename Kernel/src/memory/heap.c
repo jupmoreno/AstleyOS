@@ -1,7 +1,6 @@
 #include <heap.h>
 #include <numbers.h>
 #include <memory.h>
-#include <log.h>
 
 /**
  * Buddy implementation from: https://github.com/cloudwu/buddy
@@ -9,13 +8,6 @@
  * MORE INFO:
  * http://bitsquid.blogspot.com.ar/2015/08/allocation-adventures-3-buddy-allocator.html
  */
-
-#define _MEMORY_PAGE_SIZE	KILOBYTES(4) // TODO: En otro lado
-
-#define KILOBYTE 			1024				// TODO: En otro lado todos
-#define KILOBYTES(x) 		((x) * KILOBYTE)
-#define MEGABYTE 			1048576
-#define MEGABYTES(x) 		((x) * MEGABYTE)
 
 // To change heap size, change:
 #define HEAP_ALLOC_SIZE		MEGABYTES(512)

@@ -1,7 +1,7 @@
 #ifndef _PORTS_H_
 #define _PORTS_H_
 
-#include <define.h>
+#include <kdefine.h>
 
 #define _PORT_COM1 0x3F8
 #define _PORT_COM2 0x2F8

@@ -1,5 +1,4 @@
 #include <modules.h>
-#include <define.h>
 #include <memory.h>
 
 static void module_loadder(uint8_t ** module, void * targetModuleAddress);

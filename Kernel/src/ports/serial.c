@@ -1,5 +1,4 @@
 #include <serial.h>
-#include <define.h>
 #include <ports.h>
 
 /*

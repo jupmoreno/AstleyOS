@@ -1,7 +1,5 @@
-#include <define.h>
 #include <pit.h>
 #include <interrupts.h>
-#include <log.h>
 
 #define SECONDS_TO_PIT_CYCLES(x) (((x) * 1000) / time)
 

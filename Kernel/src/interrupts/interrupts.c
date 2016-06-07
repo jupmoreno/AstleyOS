@@ -1,8 +1,6 @@
 #include <interrupts.h>
-#include <define.h>
 #include <pic.h>
 #include <ksyscalls.h>
-#include <log.h>
 #include <output.h>
 
 extern void _interrupt_set(void);

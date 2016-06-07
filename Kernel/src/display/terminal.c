@@ -1,5 +1,4 @@
 #include <terminal.h>
-#include <define.h>
 #include <video.h>
 #include <stdarg.h>
 #include <numbers.h>

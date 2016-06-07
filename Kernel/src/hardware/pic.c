@@ -1,6 +1,5 @@
 #include <pic.h>
 #include <ports.h>
-#include <log.h>
 
 /**
  * Some (if not all) code was adapted from: http://wiki.osdev.org/8259_PIC

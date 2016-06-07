@@ -1,7 +1,7 @@
 #ifndef _HEAP_H_
 #define _HEAP_H_
 
-#include <define.h>
+#include <kdefine.h>
 
 void heap_init(void);
 

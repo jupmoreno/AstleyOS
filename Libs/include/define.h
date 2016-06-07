@@ -25,6 +25,11 @@
 #define ERROR 				-1
 #define ERROR_OCCURRED(x) 	((x) < OK)
 
+#define KILOBYTE 			0x400
+#define KILOBYTES(x) 		((x) * KILOBYTE)
+#define MEGABYTE 			0x100000
+#define MEGABYTES(x) 		((x) * MEGABYTE)
+
 typedef uint8_t byte_t;
 typedef uint16_t word_t;
 typedef uint32_t dword_t;

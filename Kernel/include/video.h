@@ -1,7 +1,7 @@
 #ifndef _VIDEO_H_
 #define _VIDEO_H_
 
-#include <define.h>
+#include <kdefine.h>
 #include <sysvideo.h>
 
 void video_init(void);

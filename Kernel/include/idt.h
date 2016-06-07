@@ -1,7 +1,7 @@
 #ifndef _IDT_H_
 #define _IDT_H_
 
-#include <define.h>
+#include <kdefine.h>
 
 #define _IDT_ENTRIES 256
 #define _GDT_CODE_SEGMENT 0x08

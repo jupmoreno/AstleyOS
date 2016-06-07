@@ -1,5 +1,4 @@
 #include <paging.h>
-#include <log.h>
 #include <heap.h>
 
 // http://www.tutorialspoint.com/cprogramming/c_bit_fields.htm
@@ -132,8 +131,6 @@ static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
 
 #define BASE_MASK(x) (((uint64_t)(x))>>12)
 
-#define _MEMORY_PAGE_SIZE	0x1000 // TODO: En otro lado
-
 #define LVL4_ENTRIES	512
 #define LVL4_SIZE		(LVL4_ENTRIES * sizeof(lvl4e_st))
 
@@ -197,7 +194,7 @@ static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 			entry->zero_3	= 0;
 			entry->xd		= 0;
 
-			log("<PAGING> (LVL4) Entry #%d: %h:%h\n", i, lvl3_table, entry->base);
+			// log("<PAGING> (LVL4) Entry #%d: %h:%h\n", i, lvl3_table, entry->base);
 		} else {
 			entry->p		= 0;
 		}
@@ -240,7 +237,7 @@ static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 			entry->zero_3	= 0;
 			entry->xd		= 0;
 
-			log("<PAGING> (LVL3) Entry #%d: %h:%h\n", i, lvl2_table, entry->base);
+			// log("<PAGING> (LVL3) Entry #%d: %h:%h\n", i, lvl2_table, entry->base);
 		} else {
 			entry->p		= 0;
 		}
@@ -283,7 +280,7 @@ static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 			entry->zero_3	= 0;
 			entry->xd		= 0;
 
-			log("<PAGING> (LVL2) Entry #%d: %h:%h\n", i, lvl1_table, entry->base);
+			// log("<PAGING> (LVL2) Entry #%d: %h:%h\n", i, lvl1_table, entry->base);
 		} else {
 			entry->p		= 0;
 		}
@@ -344,6 +341,6 @@ static void paging_enable(void * table) {
 	cr3.zero_2 = 0;
 	cr3.base = BASE_MASK(table);
 	cr3.zero_3 = 0;
-	log("<PAGING> NEW CR3: %d\n", cr3);
+	log("<PAGING> NEW CR3: %h\n", cr3);
 	_cr3_write(cr3);
 }

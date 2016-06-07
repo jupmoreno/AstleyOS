@@ -1,6 +1,8 @@
 #ifndef _INTERRUPTS_H_
 #define _INTERRUPTS_H_
 
+#include <kdefine.h>
+
 /**
  * Enables INTR hardware interrupts
  */

@@ -1,6 +1,8 @@
 #ifndef _KEYBOARD_H_
 #define _KEYBOARD_H_
 
+#include <kdefine.h>
+
 #define _ERROR_KEYBOARD_INVALID -1
 #define _ERROR_KEYBOARD_BUFFER_EMPTY -2
 #define _ERROR_KEYBOARD_BUFFER_FULL -3

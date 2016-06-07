@@ -1,6 +1,8 @@
 #ifndef _KEYS_H_
 #define _KEYS_H_
 
+#include <kdefine.h>
+
 #define NUMPAD_FIRST 0x47
 #define NUMPAD_LAST 0x53
 #define KEY_ISNUMPAD(x) ((x) >= NUMPAD_FIRST && (x) <= NUMPAD_LAST)

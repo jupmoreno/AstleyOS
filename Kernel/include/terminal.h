@@ -1,6 +1,7 @@
 #ifndef _TERMINAL_H_
 #define _TERMINAL_H_
 
+#include <kdefine.h>
 #include <sysvideo.h>
 
 typedef struct {

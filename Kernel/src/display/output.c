@@ -1,5 +1,4 @@
 #include <output.h>
-#include <define.h>
 #include <strings.h>
 #include <numbers.h>
 #include <terminal.h>

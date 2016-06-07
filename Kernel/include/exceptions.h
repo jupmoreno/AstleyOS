@@ -1,7 +1,7 @@
 #ifndef _EXCEPTIONS_H_
 #define _EXCEPTIONS_H_
 
-#include <define.h>
+#include <kdefine.h>
 
 #define _EXCEPTION_DECLARE(NUMBER) void exception_ ## NUMBER (void)
 

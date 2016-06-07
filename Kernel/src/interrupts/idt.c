@@ -2,8 +2,8 @@
 
 #define IDT_BASE_ADDRESS 0x0000000000000000
 
-#define WORD_GET(x) ((x) & 0xFFFF) // TODO: En define.h?
-#define WORD_BITS 16 // TODO: En define.h?
+#define WORD_GET(x) ((x) & 0xFFFF) // TODO: En kdefine.h?
+#define WORD_BITS 16 // TODO: En kdefine.h?
 
 // Segment Descriptor // TODO: Remove?
 typedef struct {

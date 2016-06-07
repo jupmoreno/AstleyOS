@@ -1,6 +1,7 @@
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
 
+#include <kdefine.h>
 #include <sysconsole.h>
 
 enum terminal_ops {

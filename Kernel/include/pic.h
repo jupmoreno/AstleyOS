@@ -1,7 +1,7 @@
 #ifndef _PIC_H_
 #define _PIC_H_
 
-#include <define.h>
+#include <kdefine.h>
 
 #define _PIC_ERROR_IRQ_INVALID -1
 

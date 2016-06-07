@@ -1,5 +1,5 @@
 #include <kernel.h>
-#include <define.h>
+#include <assert.h>
 #include <system.h>
 #include <modules.h>
 #include <memory.h>
@@ -14,6 +14,7 @@
 #include <serial.h>
 #include <sound.h>
 #include <heap.h>
+#include <paging.h>
 
 #define PAGE_SIZE 0x1000
 
@@ -96,9 +97,17 @@ int kernel_main(void) {
 	pic_mask(0xFC); // TODO:
 	out_printf("[Done]\n");
 
-	out_clear();
+	out_printf("Enabling paging... ");
+	// paging_init();
+	out_printf("[Done]\n");
 
-	sound_beep(440, 1);
+	// out_clear();
+
+	sound_beep(100, 0.2);
+	sound_beep(200, 0.2);
+	sound_beep(300, 0.2);
+	sound_beep(400, 0.2);
+	sound_beep(500, 0.2);
 
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 	shell();
@@ -136,32 +145,32 @@ static void loadIDT(void) {
 
 	// Exceptions
 	out_printf("Loading exceptions... ");
-	_IDT_ENTRY_EXCEPTION(00);
-	_IDT_ENTRY_EXCEPTION(02);
-	_IDT_ENTRY_EXCEPTION(03);
-	_IDT_ENTRY_EXCEPTION(04);
-	_IDT_ENTRY_EXCEPTION(05);
-	_IDT_ENTRY_EXCEPTION(06);
-	_IDT_ENTRY_EXCEPTION(07);
-	_IDT_ENTRY_EXCEPTION(08);
-	_IDT_ENTRY_EXCEPTION(09);
-	_IDT_ENTRY_EXCEPTION(0A);
-	_IDT_ENTRY_EXCEPTION(0B);
-	_IDT_ENTRY_EXCEPTION(0C);
-	_IDT_ENTRY_EXCEPTION(0D);
-	_IDT_ENTRY_EXCEPTION(0E);
-	_IDT_ENTRY_EXCEPTION(10);
-	_IDT_ENTRY_EXCEPTION(11);
-	_IDT_ENTRY_EXCEPTION(12);
-	_IDT_ENTRY_EXCEPTION(13);
+	_IDT_ENTRY_EXCEPTION(00, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(02, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(03, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(04, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(05, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(06, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(07, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(08, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(09, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(0A, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(0B, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(0C, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(0D, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(0E, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(10, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(11, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(12, _IDT_ACCESS_INT);
+	_IDT_ENTRY_EXCEPTION(13, _IDT_ACCESS_INT);
 	out_printf("[Done]\n");
 	// ^^ Exceptions ^^
 
 	// Interrupts
 	out_printf("Loading interrupts... ");
-	_IDT_ENTRY_INTERRUPT(20);
-	_IDT_ENTRY_INTERRUPT(21);
-	_IDT_ENTRY_INTERRUPT(80);
+	_IDT_ENTRY_INTERRUPT(20, _IDT_ACCESS_INT);
+	_IDT_ENTRY_INTERRUPT(21, _IDT_ACCESS_INT);
+	_IDT_ENTRY_INTERRUPT(80, _IDT_ACCESS_INT);
 	out_printf("[Done]\n");
 	// ^^ Interrupts ^^
 }

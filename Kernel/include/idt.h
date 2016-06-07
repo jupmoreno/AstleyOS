@@ -6,8 +6,6 @@
 #define _IDT_ENTRIES 256
 #define _GDT_CODE_SEGMENT 0x08
 
-#define _IDT_ERROR_INDEX_INVALID -1
-
 // Modified from: Arquitectura de las Computadoras - TP6 @ ITBA
 #define _IDT_ACCESS_PRESENT     	0x80            // present segment at memory
 #define _IDT_ACCESS_CODE_SEGMENT    0x18            // code segment
@@ -22,8 +20,8 @@
 #define _IDT_ACCESS_DATA        	(_IDT_ACCESS_PRESENT | _IDT_ACCESS_DATA_SEGMENT | _IDT_ACCESS_WRITE)
 #define _IDT_ACCESS_STACK       	(_IDT_ACCESS_PRESENT | _IDT_ACCESS_DATA_SEGMENT | _IDT_ACCESS_WRITE)
 
-#define _IDT_ENTRY_EXCEPTION(NUMBER) idt_entry(0x ## NUMBER, (qword_t) &exception_ ## NUMBER, _IDT_ACCESS_INT)
-#define _IDT_ENTRY_INTERRUPT(NUMBER) idt_entry(0x ## NUMBER, (qword_t) &_interrupt_ ## NUMBER, _IDT_ACCESS_INT)
+#define _IDT_ENTRY_EXCEPTION(NUMBER, PERMISSION) idt_entry(0x ## NUMBER, (qword_t) &exception_ ## NUMBER, PERMISSION)
+#define _IDT_ENTRY_INTERRUPT(NUMBER, PERMISSION) idt_entry(0x ## NUMBER, (qword_t) &_interrupt_ ## NUMBER, PERMISSION)
 
 void idt_init(void);
 

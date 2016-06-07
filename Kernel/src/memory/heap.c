@@ -1,6 +1,7 @@
 #include <heap.h>
 #include <numbers.h>
 #include <memory.h>
+#include <log.h>
 
 /**
  * Buddy implementation from: https://github.com/cloudwu/buddy
@@ -71,16 +72,18 @@ void * heap_alloc(unsigned int size) {
 		return NULL;
 	}
 
-	size = size / HEAP_STRUCT_LEAF + 1;
+	size = size / HEAP_STRUCT_LEAF;
 	offset = buddy_alloc(size);
 	if(offset == -1) {
 		return NULL;
 	}
 
+	log("<HEAP> Alloc: %d -> %h\n", size, HEAP_ALLOC_BASE + offset * HEAP_STRUCT_LEAF);
+
 	return (void *) ((intptr_t) (HEAP_ALLOC_BASE + offset * HEAP_STRUCT_LEAF));
 }
 
-void * head_zalloc(unsigned int size) {
+void * heap_zalloc(unsigned int size) {
 	void * addr;
 
 	addr = heap_alloc(size);

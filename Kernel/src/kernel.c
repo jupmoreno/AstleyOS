@@ -59,13 +59,9 @@ int kernel_main(void) {
 	out_printf("Initializing video driver... [Done]\n");
 	out_printf("Loading modules... [Done]\n");
 
-	out_printf("Enabling paging... ");
-	paging_init();
+	out_printf("Initializing heap... ");
+	heap_init();
 	out_printf("[Done]\n");
-
-	// out_printf("Initializing heap... ");
-	// heap_init();
-	// out_printf("[Done]\n");
 
 	out_printf("Initializing serial port... ");
 	serial_init();
@@ -101,12 +97,20 @@ int kernel_main(void) {
 	pic_mask(0xFC); // TODO:
 	out_printf("[Done]\n");
 
+	out_printf("Enabling paging... ");
+	paging_init();
+	out_printf("[Done]\n");
+
 	// out_clear();
 
-	sound_beep(440, 0.3);
+	sound_beep(100, 0.2);
+	sound_beep(200, 0.2);
+	sound_beep(300, 0.2);
+	sound_beep(400, 0.2);
+	sound_beep(500, 0.2);
 
-	// EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
-	// shell();
+	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
+	shell();
 
 	while(1);
 

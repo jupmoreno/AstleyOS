@@ -122,6 +122,7 @@ _interrupt_80:
 interrupt_80_ret:
     mov rsp, rbp
 	pop rbp
+
     iretq
 
 interrupt_80_error:

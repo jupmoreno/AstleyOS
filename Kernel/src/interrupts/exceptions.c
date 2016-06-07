@@ -1,5 +1,6 @@
 #include <exceptions.h>
 #include <kernel.h>
+#include <paging.h>
 
 #define _EXCEPTION_00_CODE "DE"
 #define _EXCEPTION_00_DESC "Divide Error"
@@ -149,8 +150,9 @@ void exception_0D(void) { // General protection fault
 	_EXCEPTION_THROW(0D);
 }
 
-void exception_0E(void) { // Page fault
-	_EXCEPTION_THROW(0E);
+void exception_0E(uint64_t code, uint64_t fault_address) { // Page fault
+	pferror_handler(code, fault_address);
+	// _EXCEPTION_THROW(0E);
 }
 
 void exception_10(void) { // Math Fault

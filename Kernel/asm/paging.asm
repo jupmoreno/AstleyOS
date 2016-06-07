@@ -1,5 +1,7 @@
 GLOBAL _cr0_read
 GLOBAL _cr0_write
+GLOBAL _cr2_read
+GLOBAL _cr2_write
 GLOBAL _cr3_read
 GLOBAL _cr3_write
 GLOBAL _cr4_read
@@ -56,6 +58,18 @@ _cr0_read:
 align 16
 _cr0_write:
 	mov cr0, rdi
+
+	ret
+
+align 16
+_cr2_read:
+	mov rax, cr2
+
+	ret
+
+align 16
+_cr2_write:
+	mov cr2, rdi
 
 	ret
 

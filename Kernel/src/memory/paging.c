@@ -1,7 +1,7 @@
 #include <paging.h>
-#include <define.h>
 #include <log.h>
-#include <pit.h>
+#include <heap.h>
+#include <pit.h> // TODO: Remove
 
 // http://www.tutorialspoint.com/cprogramming/c_bit_fields.htm
 typedef struct {
@@ -101,12 +101,22 @@ typedef struct {
 typedef struct {
 	uint64_t
 		offset		: 12,	// Offset
-		table		: 9,	// Page table
-		directory	: 9,	// Page Directory
-		pointer 	: 9,	// Directory Pointer
-		pml4 		: 9,	// Directory Pointer
-		zero_1 		: 16;	// Directory Pointer
+		lvl1_entry	: 9,	// Page table
+		lvl2_entry	: 9,	// Page Directory
+		lvl3_entry	: 9,	// Directory Pointer
+		lvl4_entry	: 9,	// Directory Pointer
+		zero_1		: 16;	// Reserved (must be 0)
 } address_st;
+
+typedef struct {
+	uint32_t
+		p			: 1,
+		rw			: 1,
+		us			: 1,
+		rsvd		: 1,
+		id			: 1,
+		zero_1		: 27;
+} pferror_st;
 
 extern cr0_t _cr0_read(void);
 extern void _cr0_write(cr0_t cr0);
@@ -115,19 +125,13 @@ extern void _cr3_write(cr3_t cr3);
 extern cr3_t _cr4_read(void);
 // extern void _cr4_write(cr4_t cr4);
 
-static void paging_enable(void);
-static void lvl4t_init(uint64_t total);
-static void lvl3t_init(uint64_t * base, uint64_t * size, uint64_t total, uint64_t * page_pointer);
-static void lvl2t_init(uint64_t * base, uint64_t * size, uint64_t total, uint64_t * page_pointer);
-static void lvl1t_init(uint64_t * base, uint64_t * size, uint64_t total, uint64_t * page_pointer);
+static void paging_enable(void * addr);
+static lvl4e_st * lvl4t_init(uint64_t pages_total);
+static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total);
+static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total);
+static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
 
-#define KILOBYTE 		1024				// TODO: En otro lado todos
-#define KILOBYTES(x) 	((x) * KILOBYTE)
-
-#define _MEMORY_PAGE_SIZE_BYTES 4
-#define _MEMORY_PAGE_SIZE		KILOBYTES(_MEMORY_PAGE_SIZE_BYTES) // TODO: En otro lado
-
-#define TABLES_BASE		0x0000000020800000
+#define _MEMORY_PAGE_SIZE	0x1000 // TODO: En otro lado
 
 #define LVL4_ENTRIES	512
 #define LVL4_SIZE		(LVL4_ENTRIES * sizeof(lvl4e_st))
@@ -142,183 +146,187 @@ static void lvl1t_init(uint64_t * base, uint64_t * size, uint64_t total, uint64_
 #define LVL1_SIZE		(LVL1_ENTRIES * sizeof(lvl1e_st))
 
 void paging_init(void) {
+	lvl4e_st * lvl4_table;
+
 	log("<MEMORY> CR0: %h\n", _cr0_read());
 	log("<MEMORY> CR3: %h\n", _cr3_read());
-	log("<MEMORY> CR4: %h\n", _cr4_read());
 
-	lvl4t_init(250000); // TODO: Define 512000
+	lvl4_table = lvl4t_init(1073741824 / _MEMORY_PAGE_SIZE); // TODO: Define
+	if(lvl4_table == NULL) {
+		return; // TODO: Handle errors
+	}
 
-	paging_enable();
+	// paging_enable(lvl4_table);
 }
 
-static void lvl4t_init(uint64_t total) {
+void pferror_handler(uint64_t code, uint64_t fault_address) {
+	log("-----------------------> ERROR");
+}
+
+static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 	int i;
-	lvl4e_st * entry = (lvl4e_st *) TABLES_BASE;
-	uint64_t base = TABLES_BASE + LVL4_SIZE;
-	uint64_t page_pointer = 0, size = 0;
+	uint64_t pages_done = 0;
+	lvl4e_st * entry, * lvl4_table;
+	lvl3e_st * lvl3_table;
+
+	lvl4_table = heap_alloc(LVL4_SIZE);
+	if(lvl4_table == NULL) {
+		return NULL;
+	}
+
+	entry = lvl4_table;
 
 	for(i = 0; i < LVL4_ENTRIES; i++) {
-		if(size < total) {
-			log("Creo tabla lvl3 (%d)\n", i);
-			// pit_wait(0.5);
+		if(pages_done < pages_total) {
+			lvl3_table = lvl3t_init(&pages_done, pages_total);
+			if(lvl3_table == NULL) {
+				return NULL; // TODO: Free old elements
+			}
+
 			entry->p		= 1;
 			entry->rw		= 1;
 			entry->us		= 1;
 			entry->pwt		= 0;
-			entry->pcd		= 1;
-			entry->a		= 1;
+			entry->pcd		= 0;
+			entry->a		= 0;
 			entry->zero_1	= 0;
 			entry->ps		= 0;
 			entry->zero_2	= 0;
-			entry->base		= (uint64_t)(base);
+			entry->base		= (uint64_t) lvl3_table;
 			entry->zero_3	= 0;
 			entry->xd		= 0;
-
-			lvl3t_init(&base, &size, total, &page_pointer);
 		} else {
 			entry->p		= 0;
 		}
+
 		entry += sizeof(lvl4e_st);
 	}
 
-	log("SIZE: %d\n", size);
+	return lvl4_table;
 }
 
-static void lvl3t_init(uint64_t * base, uint64_t * size, uint64_t total, uint64_t * page_pointer) {
+static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl3e_st * entry = (lvl3e_st *) *base;
-	*base += LVL3_SIZE;
+	lvl3e_st * entry, * lvl3_table;
+	lvl2e_st * lvl2_table;
+
+	lvl3_table = heap_alloc(LVL3_SIZE);
+	if(lvl3_table == NULL) {
+		return NULL;
+	}
+
+	entry = lvl3_table;
 
 	for(i = 0; i < LVL3_ENTRIES; i++) {
-		if(*size < total) {
-			log("Creo tabla lvl2 (%d)\n", i);
-			// pit_wait(0.5);
+		if(*pages_done < pages_total) {
+			lvl2_table = lvl2t_init(pages_done, pages_total);
+			if(lvl2_table == NULL) {
+				return NULL; // TODO: Free old elements
+			}
+
 			entry->p		= 1;
 			entry->rw		= 1;
 			entry->us		= 1;
 			entry->pwt		= 0;
-			entry->pcd		= 1;
-			entry->a		= 1;
+			entry->pcd		= 0;
+			entry->a		= 0;
 			entry->zero_1	= 0;
 			entry->ps		= 0;
 			entry->zero_2	= 0;
-			entry->base		= (uint64_t)(*base);
+			entry->base		= (uint64_t) lvl2_table;
 			entry->zero_3	= 0;
 			entry->xd		= 0;
-
-			lvl2t_init(base, size, total, page_pointer);
 		} else {
 			entry->p		= 0;
 		}
 
 		entry += sizeof(lvl3e_st);
 	}
+
+	return lvl3_table;
 }
 
-static void lvl2t_init(uint64_t * base, uint64_t * size, uint64_t total, uint64_t * page_pointer) {
+static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl2e_st * entry = (lvl2e_st *) *base;
-	*base += LVL2_SIZE;
+	lvl2e_st * entry, * lvl2_table;
+	lvl1e_st * lvl1_table;
+
+	lvl2_table = heap_alloc(LVL2_SIZE);
+	if(lvl2_table == NULL) {
+		return NULL;
+	}
+
+	entry = lvl2_table;
 
 	for(i = 0; i < LVL2_ENTRIES; i++) {
-		if(*size < total) {
-			log("Creo tabla lvl1 (%d)\n", i);
-			// pit_wait(0.5);
+		if(*pages_done < pages_total) {
+			lvl1_table = lvl1t_init(pages_done, pages_total);
+			if(lvl1_table == NULL) {
+				return NULL; // TODO: Free old elements
+			}
+
 			entry->p		= 1;
-			entry->rw		= 0;
-			entry->us		= 0;
+			entry->rw		= 1;
+			entry->us		= 1;
 			entry->pwt		= 0;
-			entry->pcd		= 1;
+			entry->pcd		= 0;
 			entry->a		= 0;
 			entry->zero_1	= 0;
 			entry->ps		= 0;
 			entry->zero_2	= 0;
-			entry->base		= (uint64_t)(*base);
+			entry->base		= (uint64_t) lvl1_table;
 			entry->zero_3	= 0;
 			entry->xd		= 0;
-
-			lvl1t_init(base, size, total, page_pointer);
 		} else {
 			entry->p		= 0;
 		}
 
 		entry += sizeof(lvl2e_st);
 	}
+
+	return lvl2_table;
 }
 
-static void lvl1t_init(uint64_t * base, uint64_t * size, uint64_t total, uint64_t * page_pointer) {
+static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl1e_st * entry = (lvl1e_st *) *base;
-	*base += LVL1_SIZE;
+	lvl1e_st * entry, * lvl1_table;
+
+	lvl1_table = heap_alloc(LVL1_SIZE);
+	if(lvl1_table == NULL) {
+		return NULL;
+	}
+
+	entry = lvl1_table;
 
 	for(i = 0; i < LVL1_ENTRIES; i++) {
-		if(*size < total) {
-			log("Mapeo pagina: %h\n", *page_pointer);
-			// pit_wait(0.5);
+		if(*pages_done < pages_total) {
 			entry->p		= 1;
 			entry->rw		= 1;
 			entry->us		= 1;
 			entry->pwt		= 0;
-			entry->pcd		= 1;
-			entry->a		= 1;
+			entry->pcd		= 0;
+			entry->a		= 0;
 			entry->d		= 0;
 			entry->pat		= 0;
 			entry->g		= 0;
 			entry->zero_1	= 0;
-			entry->base		= *page_pointer;
+			entry->base		= (*pages_done)++ * _MEMORY_PAGE_SIZE;
 			entry->zero_2	= 0;
 			entry->xd		= 0;
-
-			(*page_pointer) += (_MEMORY_PAGE_SIZE);
-			(*size)++;
 		} else {
 			entry->p		= 0;
 		}
+
 		entry += sizeof(lvl1e_st);
 	}
+
+	return lvl1_table;
 }
 
-static void paging_enable(void) {
-	// cr0_t cr0;
+static void paging_enable(void * table) {
 	cr3_t cr3;
-	// cr4_t cr4;
-
-	// cr4 = _cr4_read();
-	// cr4.pae = 1;
-	// _cr4_write(cr4);
 
 	cr3 = _cr3_read();
-	cr3.zero_1	= 0;
-	// cr3.pwt		= 0;
-	// cr3.pcd		= 1;
-	cr3.zero_2	= 0;
-	cr3.base	= TABLES_BASE;
-	cr3.zero_3	= 0;
+	cr3.base = (uint64_t) table;
 	_cr3_write(cr3);
-
-	// cr0 = _cr0_read();
-	// cr0.pg = 1;
-	// _cr0_write(cr0);
 }
-
-// uint64_t directory[1024] __attribute__((aligned(4096)));
-// uint64_t first_table[1024] __attribute__((aligned(4096)));
-
-// void paging_init() {
-// 	unsigned int i;
-
-// 	for(i = 0; i < 1024; i++) {
-// 		// This sets the following flags to the pages:
-// 		//   Supervisor: Only kernel-mode can access them
-// 		//   Write Enabled: It can be both read from and written to
-// 		//   Not Present: The page table is not present
-// 		directory[i] = 0x0000000000000002;
-// 	}
-// }
-
-// void idpaging(uint32_t *first_pte, vaddr from, int size) {
-// 	from = from & 0xfffff000; // discard bits we don't want
-// 	for(;size>0;from+=4096,size-=4096,first_pte++){
-// 		*first_pte=from|1;     // mark page present.
-// 	}
-// }

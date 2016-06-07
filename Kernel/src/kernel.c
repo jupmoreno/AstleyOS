@@ -1,5 +1,5 @@
 #include <kernel.h>
-#include <define.h>
+#include <assert.h>
 #include <system.h>
 #include <modules.h>
 #include <memory.h>

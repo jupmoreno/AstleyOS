@@ -1,6 +1,6 @@
 #include <idt.h>
 
-#define IDT_BASE_ADDRESS 0x0
+#define IDT_BASE_ADDRESS 0x0000000000000000
 
 #define WORD_GET(x) ((x) & 0xFFFF) // TODO: En define.h?
 #define WORD_BITS 16 // TODO: En define.h?
@@ -33,11 +33,15 @@ typedef struct {
 } __attribute__((packed)) idtr_st;
 
 static interrupt_st * idt = (interrupt_st *) IDT_BASE_ADDRESS;
-//static interrupt_st idt[_IDT_ENTRIES];
 static idtr_st idtr;
 
 void idt_init(void) {
-	idtr.limit = _IDT_ENTRIES * sizeof(interrupt_st) - 1; // TODO: Preguntar
+	// idt = heap_alloc(_IDT_ENTRIES * sizeof(interrupt_st));
+	// if(idt == NULL) {
+	// 	return; // TODO: Handle errors
+	// }
+
+	idtr.limit = _IDT_ENTRIES * sizeof(interrupt_st) - 1;
 	idtr.base = (qword_t) idt;
 
 	// TODO: Set idtr
@@ -45,7 +49,7 @@ void idt_init(void) {
 
 int idt_entry(unsigned int index, qword_t offset, byte_t access) {
 	if(index >= _IDT_ENTRIES) {
-		return _IDT_ERROR_INDEX_INVALID;
+		return FALSE;
 	}
 
 	idt[index].selector = _GDT_CODE_SEGMENT;
@@ -57,5 +61,5 @@ int idt_entry(unsigned int index, qword_t offset, byte_t access) {
 	idt[index].access = access;
 	idt[index].zero_l = idt[index].zero_h = 0;
 
-	return OK;
+	return TRUE;
 }

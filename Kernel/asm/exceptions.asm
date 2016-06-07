@@ -46,16 +46,15 @@ align 16
 ; -----------------------------------------------------------------------------
 ; // TODO:
 ; -----------------------------------------------------------------------------
-
 _exception_0E:	; Stack Fault
 	pushaq
 
-	mov eax, [rsp+136] ; error code
+	mov eax, [rsp+136] 	; error code
 	mov rdi, rax
 	mov rsi, cr2
 	call exception_0E
 
 	popaq
+	add esp, 8 			; error code
 	iretq
-
 ; -----------------------------------------------------------------------------

@@ -42,7 +42,7 @@ QEMU_FLAGS = -m 1024 $(QEMU_DEBUG) $(QEMU_LOG) $(QEMU_SOUND)
 
 GCC_WARNINGS_PRODUCTION = -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes -Werror -Wfatal-errors -Wno-error=pedantic -Wno-unused-parameter -Wno-error=sign-conversion -Wno-error=conversion
 
-GCC_WARNINGS_DEV = -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes -Werror -Wfatal-errors -Wno-error=pedantic -Wno-unused-parameter -Wno-error=sign-conversion -Wno-error=conversion -Wno-error=strict-prototypes -Wno-error=unused-function -Wno-error=unused-variable
+GCC_WARNINGS_DEV = -pedantic -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wredundant-decls -Wnested-externs -Winline -Wno-long-long -Wuninitialized -Wconversion -Wstrict-prototypes -Werror -Wfatal-errors -Wno-error=pedantic -Wno-unused-parameter -Wno-error=sign-conversion -Wno-error=conversion -Wno-error=strict-prototypes -Wno-error=unused-function -Wno-error=unused-variable -Wno-error=unused-but-set-variable
 
 # TODO: Change to production
 GCC_WARNINGS = $(GCC_WARNINGS_DEV)

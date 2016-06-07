@@ -152,7 +152,7 @@ void exception_0D(void) { // General protection fault
 
 void exception_0E(uint64_t code, uint64_t fault_address) { // Page fault
 	pferror_handler(code, fault_address);
-	// _EXCEPTION_THROW(0E);
+	_EXCEPTION_THROW(0E);
 }
 
 void exception_10(void) { // Math Fault

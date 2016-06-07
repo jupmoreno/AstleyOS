@@ -1,7 +1,6 @@
 #include <paging.h>
 #include <log.h>
 #include <heap.h>
-#include <pit.h> // TODO: Remove
 
 // http://www.tutorialspoint.com/cprogramming/c_bit_fields.htm
 typedef struct {
@@ -131,6 +130,8 @@ static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total);
 static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total);
 static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
 
+#define BASE_MASK(x) (((uint64_t)(x))>>12)
+
 #define _MEMORY_PAGE_SIZE	0x1000 // TODO: En otro lado
 
 #define LVL4_ENTRIES	512
@@ -148,15 +149,15 @@ static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
 void paging_init(void) {
 	lvl4e_st * lvl4_table;
 
-	log("<MEMORY> CR0: %h\n", _cr0_read());
-	log("<MEMORY> CR3: %h\n", _cr3_read());
+	log("<PAGING> CR0: %h\n", _cr0_read());
+	log("<PAGING> CR3: %h\n", _cr3_read());
 
-	lvl4_table = lvl4t_init(1073741824 / _MEMORY_PAGE_SIZE); // TODO: Define
+	lvl4_table = lvl4t_init(262144); // TODO: Define
 	if(lvl4_table == NULL) {
 		return; // TODO: Handle errors
 	}
 
-	// paging_enable(lvl4_table);
+	paging_enable(lvl4_table);
 }
 
 void pferror_handler(uint64_t code, uint64_t fault_address) {
@@ -188,13 +189,15 @@ static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 			entry->us		= 1;
 			entry->pwt		= 0;
 			entry->pcd		= 0;
-			entry->a		= 0;
+			entry->a		= 1;
 			entry->zero_1	= 0;
 			entry->ps		= 0;
 			entry->zero_2	= 0;
-			entry->base		= (uint64_t) lvl3_table;
+			entry->base		= BASE_MASK(lvl3_table);
 			entry->zero_3	= 0;
 			entry->xd		= 0;
+
+			log("<PAGING> (LVL4) Entry #%d: %h:%h\n", i, lvl3_table, entry->base);
 		} else {
 			entry->p		= 0;
 		}
@@ -229,13 +232,15 @@ static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 			entry->us		= 1;
 			entry->pwt		= 0;
 			entry->pcd		= 0;
-			entry->a		= 0;
+			entry->a		= 1;
 			entry->zero_1	= 0;
 			entry->ps		= 0;
 			entry->zero_2	= 0;
-			entry->base		= (uint64_t) lvl2_table;
+			entry->base		= BASE_MASK(lvl2_table);
 			entry->zero_3	= 0;
 			entry->xd		= 0;
+
+			log("<PAGING> (LVL3) Entry #%d: %h:%h\n", i, lvl2_table, entry->base);
 		} else {
 			entry->p		= 0;
 		}
@@ -270,13 +275,15 @@ static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 			entry->us		= 1;
 			entry->pwt		= 0;
 			entry->pcd		= 0;
-			entry->a		= 0;
+			entry->a		= 1;
 			entry->zero_1	= 0;
 			entry->ps		= 0;
 			entry->zero_2	= 0;
-			entry->base		= (uint64_t) lvl1_table;
+			entry->base		= BASE_MASK(lvl1_table);
 			entry->zero_3	= 0;
 			entry->xd		= 0;
+
+			log("<PAGING> (LVL2) Entry #%d: %h:%h\n", i, lvl1_table, entry->base);
 		} else {
 			entry->p		= 0;
 		}
@@ -303,16 +310,20 @@ static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total) {
 			entry->p		= 1;
 			entry->rw		= 1;
 			entry->us		= 1;
-			entry->pwt		= 0;
+			entry->pwt		= 1;
 			entry->pcd		= 0;
-			entry->a		= 0;
-			entry->d		= 0;
+			entry->a		= 1;
+			entry->d		= 1;
 			entry->pat		= 0;
 			entry->g		= 0;
 			entry->zero_1	= 0;
-			entry->base		= (*pages_done)++ * _MEMORY_PAGE_SIZE;
+			entry->base		= (*pages_done);
 			entry->zero_2	= 0;
 			entry->xd		= 0;
+
+			// log("<PAGING> (LVL1) Entry #%d: %h:%h\n", i, (*pages_done), entry->base);
+
+			(*pages_done) = (*pages_done) + 1;
 		} else {
 			entry->p		= 0;
 		}
@@ -327,6 +338,12 @@ static void paging_enable(void * table) {
 	cr3_t cr3;
 
 	cr3 = _cr3_read();
-	cr3.base = (uint64_t) table;
+	cr3.zero_1 = 0;
+	// cr3.pwt = 1;
+	// cr3.pcd = 0;
+	cr3.zero_2 = 0;
+	cr3.base = BASE_MASK(table);
+	cr3.zero_3 = 0;
+	log("<PAGING> NEW CR3: %d\n", cr3);
 	_cr3_write(cr3);
 }

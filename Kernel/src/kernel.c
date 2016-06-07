@@ -11,6 +11,7 @@
 #include <pit.h>
 #include <serial.h>
 #include <sound.h>
+#include <kalloc.h>
 #include <heap.h>
 #include <paging.h>
 
@@ -57,10 +58,6 @@ int kernel_main(void) {
 	out_printf("Initializing video driver... [Done]\n");
 	out_printf("Loading modules... [Done]\n");
 
-	out_printf("Initializing heap... ");
-	heap_init();
-	out_printf("[Done]\n");
-
 	out_printf("Initializing serial port... ");
 	serial_init();
 	out_printf("[Done]\n");
@@ -74,6 +71,14 @@ int kernel_main(void) {
 	log("\tdata: %h\n", (uint64_t) &kernel_data);
 	log("\tbss: %h\n\n", (uint64_t) &kernel_bss);
 	#endif
+
+	out_printf("Initializing heap... ");
+	// heap_init();
+	out_printf("[Done]\n");
+
+	out_printf("Enabling paging... ");
+	paging_init();
+	out_printf("[Done]\n");
 
 	out_printf("Initializing & configuring PIC... ");
 	pic_init();
@@ -95,9 +100,13 @@ int kernel_main(void) {
 	pic_mask(0xFC); // TODO:
 	out_printf("[Done]\n");
 
-	out_printf("Enabling paging... ");
-	paging_init();
-	out_printf("[Done]\n");
+	// void * addr = kmalloc(0x1000);
+	// out_printf("ALLOC EN: %h", addr == NULL ? 1 : 0);
+	// void * addr2 = kmalloc(0x500);
+	// out_printf("ALLOC EN: %h", addr2 == NULL ? 1 : 0);
+	// void * addr3 = kmalloc(2 * 0x1000);
+	// out_printf("ALLOC EN: %h", addr3 == NULL ? 1 : 0);
+
 
 	// out_clear();
 

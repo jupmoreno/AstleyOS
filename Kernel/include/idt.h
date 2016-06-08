@@ -23,7 +23,7 @@
 #define _IDT_ENTRY_EXCEPTION(NUMBER, PERMISSION) idt_entry(0x ## NUMBER, (qword_t) &exception_ ## NUMBER, PERMISSION)
 #define _IDT_ENTRY_INTERRUPT(NUMBER, PERMISSION) idt_entry(0x ## NUMBER, (qword_t) &_interrupt_ ## NUMBER, PERMISSION)
 
-void idt_init(void);
+int idt_init(void);
 
 /**
  * Sets a new IDT entry at the given index, with the corresponding pointer to

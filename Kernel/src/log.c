@@ -17,7 +17,7 @@ void log_init(void) {
 	}
 }
 
-int log(const char * fmt, ...) { // TODO: How to set styles
+int log(const char * fmt, ...) {
 	#ifdef _DEBUG_ENABLED
     char symbol;
     int i = 0;

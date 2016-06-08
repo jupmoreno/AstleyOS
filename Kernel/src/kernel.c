@@ -66,7 +66,7 @@ int kernel_main(void) {
 	log("<KERNEL> text: %h\n", (uint64_t) &kernel_text);
 	log("<KERNEL> rodata: %h\n", (uint64_t) &kernel_rodata);
 	log("<KERNEL> data: %h\n", (uint64_t) &kernel_data);
-	log("<KERNEL> bss: %h\n\n", (uint64_t) &kernel_bss);
+	log("<KERNEL> bss: %h\n", (uint64_t) &kernel_bss);
 
 	out_printf("Initializing heap... ");
 	heap_init();
@@ -87,6 +87,10 @@ int kernel_main(void) {
 
 	out_printf("Initializing PIT... ");
 	pit_init();
+	out_printf("[Done]\n");
+
+	out_printf("Initializing IDT... ");
+	assert(idt_init());
 	out_printf("[Done]\n");
 
 	loadIDT();
@@ -134,10 +138,6 @@ void kernel_panic(const char * code, const char * desc, const char * source, con
 }
 
 static void loadIDT(void) {
-	out_printf("Initializing IDT... ");
-	idt_init();
-	out_printf("[Done]\n");
-
 	// Exceptions
 	out_printf("Loading exceptions... ");
 	_IDT_ENTRY_EXCEPTION(00, _IDT_ACCESS_INT);

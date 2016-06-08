@@ -12,7 +12,7 @@ static void sound_stop(void);
 
 void sound_beep(unsigned int frequency, double time) {
 	sound_play(frequency);
-	pit_wait(time);
+	pit_wait(time); // TODO: pit_later(time)
 	sound_stop();
 }
 

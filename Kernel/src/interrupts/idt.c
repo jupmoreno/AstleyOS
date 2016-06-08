@@ -35,16 +35,18 @@ typedef struct {
 static interrupt_st * idt = (interrupt_st *) IDT_BASE_ADDRESS;
 static idtr_st idtr;
 
-void idt_init(void) {
-	// idt = heap_alloc(_IDT_ENTRIES * sizeof(interrupt_st));
+int idt_init(void) {
+	// idt = kmalloc(_IDT_ENTRIES * sizeof(interrupt_st));
 	// if(idt == NULL) {
-	// 	return; // TODO: Handle errors
+	// 	return FALSE; // TODO: Handle errors
 	// }
 
 	idtr.limit = _IDT_ENTRIES * sizeof(interrupt_st) - 1;
 	idtr.base = (qword_t) idt;
 
 	// TODO: Set idtr
+
+	return TRUE;
 }
 
 int idt_entry(unsigned int index, qword_t offset, byte_t access) {

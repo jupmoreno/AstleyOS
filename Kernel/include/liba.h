@@ -10,6 +10,6 @@
  */
 // char * cpuVendor(char * result); // TODO:
 
-unsigned int ram_amount();
+unsigned int ram_amount(void);
 
 #endif

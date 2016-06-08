@@ -1,6 +1,7 @@
 #ifndef _LIB_MEMORY_H_
 #define _LIB_MEMORY_H_
 
+#include <define.h>
 #include <stdint.h>
 #include <stddef.h>
 

@@ -1,6 +1,7 @@
 #ifndef _SYSCONSOLE_H_
 #define _SYSCONSOLE_H_
 
+#include <define.h>
 #include <sysvideo.h>
 
 #define _OUTPUT_ERROR_TERMINAL_INVALID -1

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#define _DEGUB_ENABLED
+#define _MEMORY_PAGE_SIZE	0x1000
 
 #define STRINGNIFY_MACRO(x) 		#x
 #define STRINGNIFY_VALUE(x) 		STRINGNIFY_MACRO(x)

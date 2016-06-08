@@ -48,37 +48,18 @@ typedef struct {
 		xd			: 1;	// Reserved (must be 0)
 } lvl4e_st;
 
-// typedef struct {
-// 	uint64_t
-// 		p			: 1,	// Present; must be 1 to reference a page table
-// 		rw			: 1,	// Read/write
-// 		us			: 1,	// User/supervisor
-// 		pwt			: 1,	// Page-level write-through
-// 		pcd			: 1,	// Page-level cache disable
-// 		a			: 1,	// Accessed
-// 		zero_1		: 1,	// Ignored
-// 		ps			: 1,	// Page size; must be 0 (otherwise, this entry maps a 1-GByte page)
-// 		zero_2		: 4,	// Ignored
-// 		base		: 40,	// Physical address of 4-KByte aligned page table
-// 		zero_3		: 11,	// Ignored
-// 		xd			: 1;	// Reserved (must be 0)
-// } lvl3e_st;
-
 typedef struct {
 	uint64_t
-		p			: 1,	// Present; must be 1 to map a 4-KByte page
+		p			: 1,	// Present; must be 1 to reference a page table
 		rw			: 1,	// Read/write
 		us			: 1,	// User/supervisor
 		pwt			: 1,	// Page-level write-through
 		pcd			: 1,	// Page-level cache disable
 		a			: 1,	// Accessed
-		d			: 1,	// Dirty
-		ps			: 1,	// Page size; must be 1
-		g			: 1,	// Global
-		zero_1		: 3,	// Ignored
-		pat			: 1,	// If PAT supported, indirectly determines mem. type used to access the page
-		zero_2		: 17,	// Reserved (must be 0)
-		base		: 22,	// Physical address of 4-KByte aligned page table
+		zero_1		: 1,	// Ignored
+		ps			: 1,	// Page size; must be 0 (otherwise, this entry maps a 1-GByte page)
+		zero_2		: 4,	// Ignored
+		base		: 40,	// Physical address of 4-KByte aligned page table
 		zero_3		: 11,	// Ignored
 		xd			: 1;	// Reserved (must be 0)
 } lvl3e_st;
@@ -143,11 +124,11 @@ extern void _cr3_write(cr3_t cr3);
 extern cr3_t _cr4_read(void);
 // extern void _cr4_write(cr4_t cr4);
 
-static void paging_enable(void * addr);
 static lvl4e_st * lvl4t_init(uint64_t pages_total);
 static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total);
 static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total);
 static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
+static void paging_enable(void * addr);
 
 #define BASE_MASK(x) (((uint64_t)(x))>>12)
 
@@ -163,91 +144,20 @@ static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
 #define LVL1_ENTRIES	512
 #define LVL1_SIZE		(LVL1_ENTRIES * sizeof(lvl1e_st))
 
-static lvl4e_st lvl4g_table[LVL4_ENTRIES];
-static lvl3e_st lvl3g_table[LVL3_ENTRIES];
-
-void paging_init(void) {
-	int i;
-	cr3_t cr3;
+int paging_init(void) {
+	lvl4e_st * lvl4_table;
 
 	log("<PAGING> CR0: %h\n", _cr0_read());
 	log("<PAGING> CR3: %h\n", _cr3_read());
 
-	// lvl4_table = lvl4t_init(262144); // TODO: Define
-	// if(lvl4_table == NULL) {
-	// 	return; // TODO: Handle errors
-	// }
-
-	// lvl4_table = (lvl4e_st *) 0x400000;
-	// assert(lvl4_table != NULL);
-
-	// lvl3_table = kmalloc(LVL3_SIZE);
-	// assert(lvl3_table != NULL);
-
-	// memset(lvl4_table, 0, LVL4_SIZE);
-	// memset(lvl3_table, 0, LVL3_SIZE);
-
-	for(i = 0; i < LVL3_ENTRIES; i++) {
-		lvl3g_table[i].p = 0;
+	lvl4_table = lvl4t_init(262145); // TODO: Define
+	if(lvl4_table == NULL) {
+		return FALSE;
 	}
 
-	for(i = 0; i < LVL4_ENTRIES; i++) {
-		lvl4g_table[i].p = 0;
-	}
+	paging_enable(lvl4_table);
 
-	lvl3g_table[0].p		= 1;
-	lvl3g_table[0].rw		= 1;
-	lvl3g_table[0].us		= 1;
-	// lvl3g_table[0].pwt		= 0;
-	// lvl3g_table[0].pcd		= 0;
-	// lvl3g_table[0].a		= 0;
-	// lvl3g_table[0].d		= 0;
-	lvl3g_table[0].ps		= 1;
-	// lvl3g_table[0].g		= 0;
-	// lvl3g_table[0].zero_1	= 0;
-	// lvl3g_table[0].pat		= 0;
-	// lvl3g_table[0].zero_2	= 0;
-	// lvl3g_table[0].base		= 0x0;
-	// lvl3g_table[0].zero_3	= 0;
-	// lvl3g_table[0].xd		= 0;
-
-	log("lvl3[0]: %h\n", lvl3g_table[0]);
-
-	// for(i = 1; i < LVL3_ENTRIES; i++) {
-	// 	lvl3_table[i].p = 0;
-	// }
-
-	lvl4g_table[0].p		= 1;
-	lvl4g_table[0].rw		= 1;
-	lvl4g_table[0].us		= 1;
-	// lvl4g_table[0].pwt		= 0;
-	// lvl4g_table[0].pcd		= 0;
-	// lvl4g_table[0].a		= 1;
-	// lvl4g_table[0].zero_1	= 0;
-	lvl4g_table[0].ps		= 1;
-	// lvl4g_table[0].zero_2	= 0;
-	lvl4g_table[0].base		= BASE_MASK(&lvl3g_table[0]);
-	// lvl4g_table[0].zero_3	= 0;
-	// lvl4g_table[0].xd		= 0;
-
-	log("lvl4[0]: %h\n", lvl4g_table[0]);
-
-	// for(i = 1; i < LVL4_ENTRIES; i++) {
-	// 	lvl4_table[i].p = 0;
-	// }
-
-	// paging_enable(lvl4_table);
-
-	cr3 = _cr3_read();
-	// cr3.zero_1 = 0;
-	// cr3.pwt = 1;
-	// cr3.pcd = 0;
-	// cr3.zero_2 = 0;
-	cr3.base = BASE_MASK(&lvl4g_table[0]);
-	// cr3.zero_3 = 0;
-	log("<PAGING> NEW CR3: %h\n", cr3);
-	_cr3_write(cr3);
-	log("---------------------> LLEGUE\n");
+	return TRUE;
 }
 
 void pferror_handler(uint64_t code, uint64_t fault_address) {
@@ -257,7 +167,7 @@ void pferror_handler(uint64_t code, uint64_t fault_address) {
 static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 	int i;
 	uint64_t pages_done = 0;
-	lvl4e_st * entry, * lvl4_table;
+	lvl4e_st * lvl4_table;
 	lvl3e_st * lvl3_table;
 
 	lvl4_table = kmalloc(LVL4_SIZE);
@@ -265,34 +175,28 @@ static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 		return NULL;
 	}
 
-	entry = lvl4_table;
-
 	for(i = 0; i < LVL4_ENTRIES; i++) {
 		if(pages_done < pages_total) {
 			lvl3_table = lvl3t_init(&pages_done, pages_total);
 			if(lvl3_table == NULL) {
-				return NULL; // TODO: Free old elements
+				return NULL;
 			}
 
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 0;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->zero_1	= 0;
-			entry->ps		= 0;
-			entry->zero_2	= 0;
-			entry->base		= BASE_MASK(lvl3_table);
-			entry->zero_3	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL4) Entry #%d: %h:%h\n", i, lvl3_table, entry->base);
+			lvl4_table[i].p			= 1;
+			lvl4_table[i].rw		= 1;
+			lvl4_table[i].us		= 1;
+			lvl4_table[i].pwt		= 0;
+			lvl4_table[i].pcd		= 0;
+			lvl4_table[i].a			= 1;
+			lvl4_table[i].zero_1	= 0;
+			lvl4_table[i].ps		= 0;
+			lvl4_table[i].zero_2	= 0;
+			lvl4_table[i].base		= BASE_MASK(lvl3_table);
+			lvl4_table[i].zero_3	= 0;
+			lvl4_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl4_table[i].p			= 0;
 		}
-
-		entry += sizeof(lvl4e_st);
 	}
 
 	return lvl4_table;
@@ -300,7 +204,7 @@ static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 
 static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl3e_st * entry, * lvl3_table;
+	lvl3e_st * lvl3_table;
 	lvl2e_st * lvl2_table;
 
 	lvl3_table = kmalloc(LVL3_SIZE);
@@ -308,34 +212,28 @@ static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 		return NULL;
 	}
 
-	entry = lvl3_table;
-
 	for(i = 0; i < LVL3_ENTRIES; i++) {
 		if(*pages_done < pages_total) {
 			lvl2_table = lvl2t_init(pages_done, pages_total);
 			if(lvl2_table == NULL) {
-				return NULL; // TODO: Free old elements
+				return NULL;
 			}
 
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 0;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->zero_1	= 0;
-			entry->ps		= 0;
-			entry->zero_2	= 0;
-			entry->base		= BASE_MASK(lvl2_table);
-			entry->zero_3	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL3) Entry #%d: %h:%h\n", i, lvl2_table, entry->base);
+			lvl3_table[i].p			= 1;
+			lvl3_table[i].rw		= 1;
+			lvl3_table[i].us		= 1;
+			lvl3_table[i].pwt		= 0;
+			lvl3_table[i].pcd		= 0;
+			lvl3_table[i].a			= 1;
+			lvl3_table[i].zero_1	= 0;
+			lvl3_table[i].ps		= 0;
+			lvl3_table[i].zero_2	= 0;
+			lvl3_table[i].base		= BASE_MASK(lvl2_table);
+			lvl3_table[i].zero_3	= 0;
+			lvl3_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl3_table[i].p			= 0;
 		}
-
-		entry += sizeof(lvl3e_st);
 	}
 
 	return lvl3_table;
@@ -343,7 +241,7 @@ static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 
 static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl2e_st * entry, * lvl2_table;
+	lvl2e_st * lvl2_table;
 	lvl1e_st * lvl1_table;
 
 	lvl2_table = kmalloc(LVL2_SIZE);
@@ -351,34 +249,28 @@ static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 		return NULL;
 	}
 
-	entry = lvl2_table;
-
 	for(i = 0; i < LVL2_ENTRIES; i++) {
 		if(*pages_done < pages_total) {
 			lvl1_table = lvl1t_init(pages_done, pages_total);
 			if(lvl1_table == NULL) {
-				return NULL; // TODO: Free old elements
+				return NULL;
 			}
 
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 0;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->zero_1	= 0;
-			entry->ps		= 0;
-			entry->zero_2	= 0;
-			entry->base		= BASE_MASK(lvl1_table);
-			entry->zero_3	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL2) Entry #%d: %h:%h\n", i, lvl1_table, entry->base);
+			lvl2_table[i].p			= 1;
+			lvl2_table[i].rw		= 1;
+			lvl2_table[i].us		= 1;
+			lvl2_table[i].pwt		= 0;
+			lvl2_table[i].pcd		= 0;
+			lvl2_table[i].a			= 1;
+			lvl2_table[i].zero_1	= 0;
+			lvl2_table[i].ps		= 0;
+			lvl2_table[i].zero_2	= 0;
+			lvl2_table[i].base		= BASE_MASK(lvl1_table);
+			lvl2_table[i].zero_3	= 0;
+			lvl2_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl2_table[i].p			= 0;
 		}
-
-		entry += sizeof(lvl2e_st);
 	}
 
 	return lvl2_table;
@@ -386,39 +278,31 @@ static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 
 static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl1e_st * entry, * lvl1_table;
+	lvl1e_st * lvl1_table;
 
 	lvl1_table = kmalloc(LVL1_SIZE);
 	if(lvl1_table == NULL) {
 		return NULL;
 	}
 
-	entry = lvl1_table;
-
 	for(i = 0; i < LVL1_ENTRIES; i++) {
 		if(*pages_done < pages_total) {
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 1;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->d		= 1;
-			entry->pat		= 0;
-			entry->g		= 0;
-			entry->zero_1	= 0;
-			entry->base		= (*pages_done);
-			entry->zero_2	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL1) Entry #%d: %h:%h\n", i, (*pages_done), entry->base);
-
-			(*pages_done) = (*pages_done) + 1;
+			lvl1_table[i].p			= 1;
+			lvl1_table[i].rw		= 1;
+			lvl1_table[i].us		= 1;
+			lvl1_table[i].pwt		= 1;
+			lvl1_table[i].pcd		= 0;
+			lvl1_table[i].a			= 1;
+			lvl1_table[i].d			= 1;
+			lvl1_table[i].pat		= 0;
+			lvl1_table[i].g			= 0;
+			lvl1_table[i].zero_1	= 0;
+			lvl1_table[i].base		= (*pages_done)++;
+			lvl1_table[i].zero_2	= 0;
+			lvl1_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl1_table[i].p		= 0;
 		}
-
-		entry += sizeof(lvl1e_st);
 	}
 
 	return lvl1_table;
@@ -428,12 +312,12 @@ static void paging_enable(void * table) {
 	cr3_t cr3;
 
 	cr3 = _cr3_read();
-	cr3.zero_1 = 0;
-	cr3.pwt = 1;
-	cr3.pcd = 0;
-	cr3.zero_2 = 0;
-	cr3.base = BASE_MASK(table);
-	cr3.zero_3 = 0;
+	cr3.zero_1 	= 0;
+	cr3.pwt 	= 1;
+	cr3.pcd 	= 0;
+	cr3.zero_2 	= 0;
+	cr3.base 	= BASE_MASK(table);
+	cr3.zero_3 	= 0;
 	log("<PAGING> NEW CR3: %h\n", cr3);
 	_cr3_write(cr3);
 }

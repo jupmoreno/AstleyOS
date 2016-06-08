@@ -42,10 +42,9 @@ static int buddy_offset(int index, int level);
 static void buddy_markParent(int index);
 static void buddy_combine(int index);
 
-static allocator_st * allocator; // = {(1 << 17), 17, {BUDDY_UNUSED}}; // TODO: Calcular el 17 & Inicializar en 0 tree
+static allocator_st * allocator;
 
 void heap_init(void) {
-	// memset(HEAP_MEMORY_BASE, 0, HEAP_ALLOC_SIZE);
 	allocator = (allocator_st *) HEAP_STRUCT_BASE;
 
 	allocator->size = HEAP_ALLOC_SIZE / _MEMORY_PAGE_SIZE;
@@ -57,25 +56,17 @@ void * heap_pages(unsigned int pages) {
 	int offset;
 
 	if(!pages) {
-		#ifdef _DEGUB_ENABLED
-		log("<HEAP> Invalid pages: (%d)\n", pages);
-		#endif
 		return NULL;
 	}
 
-	offset = buddy_alloc(pages * _MEMORY_PAGE_SIZE);
+	offset = buddy_alloc(pages);
 	if(offset == -1) {
-		#ifdef _DEGUB_ENABLED
-		log("<HEAP> Couldn't alloc: (%d)\n", pages);
-		#endif
 		return NULL;
 	}
 
-	#ifdef _DEGUB_ENABLED
-	log("<HEAP> Alloc: (%d) -> %h\n", pages, HEAP_MEMORY_BASE + offset);
-	#endif
+	log("<HEAP> Alloc: %d -> %h\n", pages, HEAP_MEMORY_BASE + offset * _MEMORY_PAGE_SIZE);
 
-	return (void *) ((intptr_t) (HEAP_MEMORY_BASE + offset));
+	return (void *) ((intptr_t) (HEAP_MEMORY_BASE + offset * _MEMORY_PAGE_SIZE));
 }
 
 void heap_free(void * addr) {

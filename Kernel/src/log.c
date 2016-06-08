@@ -18,6 +18,7 @@ void log_init(void) {
 }
 
 int log(const char * fmt, ...) { // TODO: How to set styles
+	#ifdef _DEBUG_ENABLED
     char symbol;
     int i = 0;
     va_list arg;
@@ -55,6 +56,9 @@ int log(const char * fmt, ...) { // TODO: How to set styles
 	va_end(arg);
 
 	return i - 1;
+	#else
+	return 0;
+	#endif
 }
 
 static void log_write(char character) {

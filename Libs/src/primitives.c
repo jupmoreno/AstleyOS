@@ -1,4 +1,3 @@
-#include <define.h>
 #include <syscalls.h>
 #include <sysio.h>
 #include <sysconsole.h>
@@ -57,8 +56,8 @@ int systerminal_cursor(cursor_st cursor) {
 	return (int) _syscall((uint64_t) cursor, 0, 0, 0, 0, 0, _SYSCALL_TERMINAL_CURSOR);
 }
 
-void * sysalloc_new(unsigned int size) {
-	return (void *) _syscall(_ALLOC_NEW, size, 0, 0, 0, 0, _SYSCALL_ALLOC);
+void * sysalloc_new(unsigned int pages) {
+	return (void *) _syscall(_ALLOC_NEW, pages, 0, 0, 0, 0, _SYSCALL_ALLOC);
 }
 
 void sysalloc_free(void * addr) {

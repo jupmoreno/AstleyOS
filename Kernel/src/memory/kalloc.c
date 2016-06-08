@@ -2,26 +2,18 @@
 #include <heap.h>
 #include <memory.h>
 
-void * kmalloc(unsigned int size) {
-	void * addr;
-
-	addr = heap_pages(size / _MEMORY_PAGE_SIZE + 1);
-	if(addr == NULL) {
-		log("ERRORRRRR\n");
-		return NULL;
-	}
-
-	return addr;
+void * kmalloc(unsigned int bytes) {
+	return heap_pages(1 + ((bytes - 1) / _MEMORY_PAGE_SIZE));
 }
 
-void * kcalloc(unsigned int size) {
+void * kcalloc(unsigned int bytes) {
 	void * addr;
 
-	addr = kmalloc(size);
+	addr = kmalloc(bytes);
 	if(addr == NULL) {
 		return NULL;
 	}
-	memset(addr, 0, size);
+	memset(addr, 0, bytes);
 
 	return addr;
 }

@@ -1,6 +1,8 @@
 #ifndef _LIB_NUMBERS_H_
 #define _LIB_NUMBERS_H_
 
+#include <define.h>
+
 #define _NUMBERS_BASE_BIN 2
 #define _NUMBERS_BASE_DEC 10
 #define _NUMBERS_BASE_HEX 16

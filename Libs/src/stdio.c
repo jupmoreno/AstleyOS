@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <define.h>
 #include <limits.h>
 #include <strings.h>
 #include <numbers.h>

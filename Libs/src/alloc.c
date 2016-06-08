@@ -5,31 +5,26 @@ extern void * sysalloc_new(unsigned int size);
 extern void sysalloc_free(void * addr);
 // extern void sysalloc_realloc(void * addr, unsigned int size);
 
-void * alloc(unsigned int count, unsigned int size) {
-	return salloc(count * size);
+void * alloc(unsigned int count, unsigned int bytes) {
+	return malloc(count * bytes);
 }
 
-void * salloc(unsigned int size) {
-	if(size == 0) {
+void * malloc(unsigned int bytes) {
+	if(bytes == 0) {
 		return NULL;
 	}
 
-	return sysalloc_new(size);
+	return sysalloc_new(1 + ((bytes - 1) / _MEMORY_PAGE_SIZE));
 }
 
-void * zalloc(unsigned int count, unsigned int size) {
-	return zsalloc(count * size);
-}
-
-void * zsalloc(unsigned int size) {
+void * calloc(unsigned int count, unsigned int bytes) {
 	void * addr;
 
-	if(size == 0) {
+	addr = malloc(count * bytes);
+	if(addr == NULL) {
 		return NULL;
 	}
-
-	addr = sysalloc_new(size);
-	memset(addr, 0, size);
+	memset(addr, 0, count * bytes);
 
 	return addr;
 }

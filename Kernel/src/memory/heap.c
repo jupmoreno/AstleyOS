@@ -19,15 +19,11 @@
 // Remember to change kernel's/userland's initial memory location
 // ----------------------------
 
-#define HEAP_MEMORY_SIZE	(HEAP_ALLOC_SIZE + HEAP_STRUCT_SIZE)
-#define HEAP_MEMORY_END		(HEAP_MEMORY_BASE + HEAP_MEMORY_SIZE - 1)
+#define HEAP_MEMORY_SIZE	(HEAP_ALLOC_SIZE + sizeof(allocator_st))
 
-#define HEAP_ALLOC_BASE		HEAP_MEMORY_BASE
-
-#define HEAP_STRUCT_SIZE	sizeof(allocator_st)
-#define HEAP_STRUCT_BASE	(HEAP_ALLOC_BASE + HEAP_ALLOC_SIZE)
-#define HEAP_STRUCT_LEAF	_MEMORY_PAGE_SIZE
-#define HEAP_STRUCT_TREE	(HEAP_ALLOC_SIZE / HEAP_STRUCT_LEAF) * 2 - 1
+#define HEAP_STRUCT_BASE	(HEAP_MEMORY_BASE + HEAP_ALLOC_SIZE)
+#define HEAP_STRUCT_TREE	(HEAP_ALLOC_SIZE / _MEMORY_PAGE_SIZE) * 2 - 1
+#define HEAP_STRUCT_LVLS	17 // (HEAP_ALLOC_SIZE / _MEMORY_PAGE_SIZE) = 2^lvls
 
 #define BUDDY_UNUSED		0
 #define BUDDY_USED			1
@@ -46,49 +42,35 @@ static int buddy_offset(int index, int level);
 static void buddy_markParent(int index);
 static void buddy_combine(int index);
 
-static allocator_st * allocator; // = {(1 << 17), 17, {BUDDY_UNUSED}}; // TODO: Calcular el 17 & Inicializar en 0 tree
+static allocator_st * allocator;
 
 void heap_init(void) {
-	// memset(HEAP_ALLOC_BASE, 0, HEAP_ALLOC_SIZE);
 	allocator = (allocator_st *) HEAP_STRUCT_BASE;
 
-	allocator->size = (1 << 17); 	// TODO: Calcular el 17 y define
-	allocator->levels = 17;			// TODO: Calcular el 17 y define
+	allocator->size = HEAP_ALLOC_SIZE / _MEMORY_PAGE_SIZE;
+	allocator->levels = HEAP_STRUCT_LVLS;
 	memset(allocator->tree, BUDDY_UNUSED, HEAP_STRUCT_TREE);
 }
 
-void * heap_alloc(unsigned int size) {
+void * heap_pages(unsigned int pages) {
 	int offset;
 
-	if(!size) {
+	if(!pages) {
 		return NULL;
 	}
 
-	size = size / HEAP_STRUCT_LEAF;
-	offset = buddy_alloc(size);
+	offset = buddy_alloc(pages);
 	if(offset == -1) {
 		return NULL;
 	}
 
-	log("<HEAP> Alloc: %d -> %h\n", size, HEAP_ALLOC_BASE + offset * HEAP_STRUCT_LEAF);
+	log("<HEAP> Alloc: %d -> %h\n", pages, HEAP_MEMORY_BASE + offset * _MEMORY_PAGE_SIZE);
 
-	return (void *) ((intptr_t) (HEAP_ALLOC_BASE + offset * HEAP_STRUCT_LEAF));
+	return (void *) ((intptr_t) (HEAP_MEMORY_BASE + offset * _MEMORY_PAGE_SIZE));
 }
 
-void * heap_zalloc(unsigned int size) {
-	void * addr;
-
-	addr = heap_alloc(size);
-	if(addr == NULL) {
-		return NULL;
-	}
-	memset(addr, 0, size);
-
-	return addr;
-}
-
-void heap_free(void * adrr) {
-	buddy_free(((intptr_t) adrr - HEAP_ALLOC_BASE) / HEAP_STRUCT_LEAF);
+void heap_free(void * addr) {
+	buddy_free(((intptr_t) addr - HEAP_MEMORY_BASE) / _MEMORY_PAGE_SIZE);
 }
 
 static int buddy_alloc(unsigned int size) {

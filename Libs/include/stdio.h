@@ -1,6 +1,7 @@
 #ifndef _LIB_STDIO_H_
 #define _LIB_STDIO_H_
 
+#include <define.h>
 #include <sysio.h>
 #include <stdarg.h>
 

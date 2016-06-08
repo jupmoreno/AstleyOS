@@ -5,6 +5,4 @@
 #include <log.h>
 #include <assert.h>
 
-#define _MEMORY_PAGE_SIZE	0x1000
-
 #endif

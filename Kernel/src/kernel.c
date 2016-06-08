@@ -11,6 +11,7 @@
 #include <pit.h>
 #include <serial.h>
 #include <sound.h>
+#include <kalloc.h>
 #include <heap.h>
 #include <paging.h>
 
@@ -57,23 +58,23 @@ int kernel_main(void) {
 	out_printf("Initializing video driver... [Done]\n");
 	out_printf("Loading modules... [Done]\n");
 
-	out_printf("Initializing heap... ");
-	heap_init();
-	out_printf("[Done]\n");
-
 	out_printf("Initializing serial port... ");
 	serial_init();
 	out_printf("[Done]\n");
 
 	log_init();
-	#ifdef _DEGUB_ENABLED
-	log("# Kernel Main\n");
-	log("## Kernel's binary\n");
-	log("\ttext: %h\n", (uint64_t) &kernel_text);
-	log("\trodata: %h\n", (uint64_t) &kernel_rodata);
-	log("\tdata: %h\n", (uint64_t) &kernel_data);
-	log("\tbss: %h\n\n", (uint64_t) &kernel_bss);
-	#endif
+	log("<KERNEL> text: %h\n", (uint64_t) &kernel_text);
+	log("<KERNEL> rodata: %h\n", (uint64_t) &kernel_rodata);
+	log("<KERNEL> data: %h\n", (uint64_t) &kernel_data);
+	log("<KERNEL> bss: %h\n\n", (uint64_t) &kernel_bss);
+
+	out_printf("Initializing heap... ");
+	heap_init();
+	out_printf("[Done]\n");
+
+	out_printf("Enabling paging... ");
+	assert(paging_init());
+	out_printf("[Done]\n");
 
 	out_printf("Initializing & configuring PIC... ");
 	pic_init();
@@ -95,11 +96,7 @@ int kernel_main(void) {
 	pic_mask(0xFC); // TODO:
 	out_printf("[Done]\n");
 
-	out_printf("Enabling paging... ");
-	paging_init();
-	out_printf("[Done]\n");
-
-	// out_clear();
+	out_clear();
 
 	sound_beep(100, 0.2);
 	sound_beep(200, 0.2);

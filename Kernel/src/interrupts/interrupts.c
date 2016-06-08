@@ -16,17 +16,13 @@ syscall_st * interrupt_80(int syscall);
 void interrupt_set(void) {
 	_interrupt_set();
 
-	#ifdef _DEGUB_ENABLED
 	log("<STI>\n");
-	#endif
 }
 
 void interrupt_clear(void) {
 	_interrupt_clear();
 
-	#ifdef _DEGUB_ENABLED
 	log("<CLI>\n");
-	#endif
 }
 
 void interrupt_20(void) {

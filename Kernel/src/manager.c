@@ -103,7 +103,7 @@ int manage_terminal(int operation, int value) {
 }
 
 void * manage_alloc(int op, ...) {
-	unsigned int size;
+	unsigned int pages;
 	void * addr;
 	va_list arg;
 
@@ -111,8 +111,8 @@ void * manage_alloc(int op, ...) {
 
 	switch(op) {
 		case _ALLOC_NEW: {
-			size = va_arg(arg, unsigned int);
-			addr = heap_alloc(size);
+			pages = va_arg(arg, unsigned int);
+			addr = heap_pages(pages);
 		} break;
 
 		case _ALLOC_FREE: {

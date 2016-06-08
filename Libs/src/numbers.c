@@ -1,5 +1,4 @@
 #include <numbers.h>
-#include <define.h>
 
 #define CHAR_IS_INT(x) (((x) >= '0') && ((x) <= '9'))
 #define CHAR_TO_INT(x) ((x) - '0')

@@ -3,7 +3,7 @@
 
 #include <kdefine.h>
 
-void paging_init(void);
+int paging_init(void);
 
 void pferror_handler(uint64_t code, uint64_t fault_address);
 

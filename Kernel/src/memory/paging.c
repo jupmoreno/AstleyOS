@@ -1,5 +1,6 @@
 #include <paging.h>
-#include <heap.h>
+#include <kalloc.h>
+#include <memory.h>
 
 // http://www.tutorialspoint.com/cprogramming/c_bit_fields.htm
 typedef struct {
@@ -123,11 +124,11 @@ extern void _cr3_write(cr3_t cr3);
 extern cr3_t _cr4_read(void);
 // extern void _cr4_write(cr4_t cr4);
 
-static void paging_enable(void * addr);
 static lvl4e_st * lvl4t_init(uint64_t pages_total);
 static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total);
 static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total);
 static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
+static void paging_enable(void * addr);
 
 #define BASE_MASK(x) (((uint64_t)(x))>>12)
 
@@ -143,18 +144,20 @@ static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total);
 #define LVL1_ENTRIES	512
 #define LVL1_SIZE		(LVL1_ENTRIES * sizeof(lvl1e_st))
 
-void paging_init(void) {
+int paging_init(void) {
 	lvl4e_st * lvl4_table;
 
 	log("<PAGING> CR0: %h\n", _cr0_read());
 	log("<PAGING> CR3: %h\n", _cr3_read());
 
-	lvl4_table = lvl4t_init(262144); // TODO: Define
+	lvl4_table = lvl4t_init(262145); // TODO: Define
 	if(lvl4_table == NULL) {
-		return; // TODO: Handle errors
+		return FALSE;
 	}
 
 	paging_enable(lvl4_table);
+
+	return TRUE;
 }
 
 void pferror_handler(uint64_t code, uint64_t fault_address) {
@@ -164,42 +167,36 @@ void pferror_handler(uint64_t code, uint64_t fault_address) {
 static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 	int i;
 	uint64_t pages_done = 0;
-	lvl4e_st * entry, * lvl4_table;
+	lvl4e_st * lvl4_table;
 	lvl3e_st * lvl3_table;
 
-	lvl4_table = heap_alloc(LVL4_SIZE);
+	lvl4_table = kmalloc(LVL4_SIZE);
 	if(lvl4_table == NULL) {
 		return NULL;
 	}
-
-	entry = lvl4_table;
 
 	for(i = 0; i < LVL4_ENTRIES; i++) {
 		if(pages_done < pages_total) {
 			lvl3_table = lvl3t_init(&pages_done, pages_total);
 			if(lvl3_table == NULL) {
-				return NULL; // TODO: Free old elements
+				return NULL;
 			}
 
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 0;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->zero_1	= 0;
-			entry->ps		= 0;
-			entry->zero_2	= 0;
-			entry->base		= BASE_MASK(lvl3_table);
-			entry->zero_3	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL4) Entry #%d: %h:%h\n", i, lvl3_table, entry->base);
+			lvl4_table[i].p			= 1;
+			lvl4_table[i].rw		= 1;
+			lvl4_table[i].us		= 1;
+			lvl4_table[i].pwt		= 0;
+			lvl4_table[i].pcd		= 0;
+			lvl4_table[i].a			= 1;
+			lvl4_table[i].zero_1	= 0;
+			lvl4_table[i].ps		= 0;
+			lvl4_table[i].zero_2	= 0;
+			lvl4_table[i].base		= BASE_MASK(lvl3_table);
+			lvl4_table[i].zero_3	= 0;
+			lvl4_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl4_table[i].p			= 0;
 		}
-
-		entry += sizeof(lvl4e_st);
 	}
 
 	return lvl4_table;
@@ -207,42 +204,36 @@ static lvl4e_st * lvl4t_init(uint64_t pages_total) {
 
 static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl3e_st * entry, * lvl3_table;
+	lvl3e_st * lvl3_table;
 	lvl2e_st * lvl2_table;
 
-	lvl3_table = heap_alloc(LVL3_SIZE);
+	lvl3_table = kmalloc(LVL3_SIZE);
 	if(lvl3_table == NULL) {
 		return NULL;
 	}
-
-	entry = lvl3_table;
 
 	for(i = 0; i < LVL3_ENTRIES; i++) {
 		if(*pages_done < pages_total) {
 			lvl2_table = lvl2t_init(pages_done, pages_total);
 			if(lvl2_table == NULL) {
-				return NULL; // TODO: Free old elements
+				return NULL;
 			}
 
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 0;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->zero_1	= 0;
-			entry->ps		= 0;
-			entry->zero_2	= 0;
-			entry->base		= BASE_MASK(lvl2_table);
-			entry->zero_3	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL3) Entry #%d: %h:%h\n", i, lvl2_table, entry->base);
+			lvl3_table[i].p			= 1;
+			lvl3_table[i].rw		= 1;
+			lvl3_table[i].us		= 1;
+			lvl3_table[i].pwt		= 0;
+			lvl3_table[i].pcd		= 0;
+			lvl3_table[i].a			= 1;
+			lvl3_table[i].zero_1	= 0;
+			lvl3_table[i].ps		= 0;
+			lvl3_table[i].zero_2	= 0;
+			lvl3_table[i].base		= BASE_MASK(lvl2_table);
+			lvl3_table[i].zero_3	= 0;
+			lvl3_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl3_table[i].p			= 0;
 		}
-
-		entry += sizeof(lvl3e_st);
 	}
 
 	return lvl3_table;
@@ -250,42 +241,36 @@ static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total) {
 
 static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl2e_st * entry, * lvl2_table;
+	lvl2e_st * lvl2_table;
 	lvl1e_st * lvl1_table;
 
-	lvl2_table = heap_alloc(LVL2_SIZE);
+	lvl2_table = kmalloc(LVL2_SIZE);
 	if(lvl2_table == NULL) {
 		return NULL;
 	}
-
-	entry = lvl2_table;
 
 	for(i = 0; i < LVL2_ENTRIES; i++) {
 		if(*pages_done < pages_total) {
 			lvl1_table = lvl1t_init(pages_done, pages_total);
 			if(lvl1_table == NULL) {
-				return NULL; // TODO: Free old elements
+				return NULL;
 			}
 
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 0;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->zero_1	= 0;
-			entry->ps		= 0;
-			entry->zero_2	= 0;
-			entry->base		= BASE_MASK(lvl1_table);
-			entry->zero_3	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL2) Entry #%d: %h:%h\n", i, lvl1_table, entry->base);
+			lvl2_table[i].p			= 1;
+			lvl2_table[i].rw		= 1;
+			lvl2_table[i].us		= 1;
+			lvl2_table[i].pwt		= 0;
+			lvl2_table[i].pcd		= 0;
+			lvl2_table[i].a			= 1;
+			lvl2_table[i].zero_1	= 0;
+			lvl2_table[i].ps		= 0;
+			lvl2_table[i].zero_2	= 0;
+			lvl2_table[i].base		= BASE_MASK(lvl1_table);
+			lvl2_table[i].zero_3	= 0;
+			lvl2_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl2_table[i].p			= 0;
 		}
-
-		entry += sizeof(lvl2e_st);
 	}
 
 	return lvl2_table;
@@ -293,39 +278,31 @@ static lvl2e_st * lvl2t_init(uint64_t * pages_done, uint64_t pages_total) {
 
 static lvl1e_st * lvl1t_init(uint64_t * pages_done, uint64_t pages_total) {
 	int i;
-	lvl1e_st * entry, * lvl1_table;
+	lvl1e_st * lvl1_table;
 
-	lvl1_table = heap_alloc(LVL1_SIZE);
+	lvl1_table = kmalloc(LVL1_SIZE);
 	if(lvl1_table == NULL) {
 		return NULL;
 	}
 
-	entry = lvl1_table;
-
 	for(i = 0; i < LVL1_ENTRIES; i++) {
 		if(*pages_done < pages_total) {
-			entry->p		= 1;
-			entry->rw		= 1;
-			entry->us		= 1;
-			entry->pwt		= 1;
-			entry->pcd		= 0;
-			entry->a		= 1;
-			entry->d		= 1;
-			entry->pat		= 0;
-			entry->g		= 0;
-			entry->zero_1	= 0;
-			entry->base		= (*pages_done);
-			entry->zero_2	= 0;
-			entry->xd		= 0;
-
-			// log("<PAGING> (LVL1) Entry #%d: %h:%h\n", i, (*pages_done), entry->base);
-
-			(*pages_done) = (*pages_done) + 1;
+			lvl1_table[i].p			= 1;
+			lvl1_table[i].rw		= 1;
+			lvl1_table[i].us		= 1;
+			lvl1_table[i].pwt		= 1;
+			lvl1_table[i].pcd		= 0;
+			lvl1_table[i].a			= 1;
+			lvl1_table[i].d			= 1;
+			lvl1_table[i].pat		= 0;
+			lvl1_table[i].g			= 0;
+			lvl1_table[i].zero_1	= 0;
+			lvl1_table[i].base		= (*pages_done)++;
+			lvl1_table[i].zero_2	= 0;
+			lvl1_table[i].xd		= 0;
 		} else {
-			entry->p		= 0;
+			lvl1_table[i].p		= 0;
 		}
-
-		entry += sizeof(lvl1e_st);
 	}
 
 	return lvl1_table;
@@ -335,12 +312,12 @@ static void paging_enable(void * table) {
 	cr3_t cr3;
 
 	cr3 = _cr3_read();
-	cr3.zero_1 = 0;
-	// cr3.pwt = 1;
-	// cr3.pcd = 0;
-	cr3.zero_2 = 0;
-	cr3.base = BASE_MASK(table);
-	cr3.zero_3 = 0;
+	cr3.zero_1 	= 0;
+	cr3.pwt 	= 1;
+	cr3.pcd 	= 0;
+	cr3.zero_2 	= 0;
+	cr3.base 	= BASE_MASK(table);
+	cr3.zero_3 	= 0;
 	log("<PAGING> NEW CR3: %h\n", cr3);
 	_cr3_write(cr3);
 }

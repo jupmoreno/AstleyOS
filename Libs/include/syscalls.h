@@ -1,6 +1,8 @@
 #ifndef _SYSCALLS_H_
 #define _SYSCALLS_H_
 
+#include <define.h>
+
 enum syscall_triggers {
 	_SYSCALL_READ = 0,
 	_SYSCALL_WRITE,

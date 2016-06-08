@@ -122,8 +122,6 @@ extern cr0_t _cr0_read(void);
 extern void _cr0_write(cr0_t cr0);
 extern cr3_t _cr3_read(void);
 extern void _cr3_write(cr3_t cr3);
-extern cr3_t _cr4_read(void);
-// extern void _cr4_write(cr4_t cr4);
 
 static lvl4e_st * lvl4t_init(uint64_t pages_total);
 static lvl3e_st * lvl3t_init(uint64_t * pages_done, uint64_t pages_total);

@@ -1,12 +1,10 @@
 #include <syscalls.h>
 #include <sysio.h>
 #include <sysconsole.h>
-#include <systime.h>
 #include <sysalloc.h>
 
 unsigned int sysread(char * buffer, unsigned int length);
 unsigned int syswrite(char * string, unsigned int length);
-int systime(int operation, time_st * time);
 int systerminal_select(int index);
 void systerminal_clear(void);
 void systerminal_color(int operation, style_st color);
@@ -34,10 +32,6 @@ unsigned int sysread(char * buffer, unsigned int length) {
 
 unsigned int syswrite(char * string, unsigned int length) {
 	return (unsigned int) _syscall(_FILEDESCRIPTOR_STDOUT, (uint64_t) string, length, 0, 0, 0, _SYSCALL_WRITE);
-}
-
-int systime(int operation, time_st * time) {
-	return (int) _syscall(operation, (uint64_t) time, 0, 0, 0, 0, _SYSCALL_TIME);
 }
 
 int systerminal_select(int index) {

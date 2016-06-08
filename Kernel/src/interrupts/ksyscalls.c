@@ -2,18 +2,15 @@
 #include <manager.h>
 #include <sysio.h>
 #include <sysconsole.h>
-#include <systime.h>
 
 extern unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 extern unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);
-extern int manage_rtc(int operation, time_st * time);
 extern int manage_terminal(int operation, int value);
 extern void * manage_alloc(int op, ...);
 
 syscall_st * syscalls_table[_SYSCALLS_SIZE] = {
 	[_SYSCALL_READ] = syscall_read,
 	[_SYSCALL_WRITE] = syscall_write,
-	[_SYSCALL_TIME] = syscall_time,
 	[_SYSCALL_TERMINAL_SELECT] = syscall_terminal_select,
 	[_SYSCALL_TERMINAL_CLEAR] = syscall_terminal_clear,
 	[_SYSCALL_TERMINAL_COLOR] = syscall_terminal_color,
@@ -36,13 +33,6 @@ uint64_t syscall_write(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, u
 	unsigned int count = (unsigned int) rdx;
 
 	return manage_write(fd, string, count);
-}
-
-uint64_t syscall_time(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
-	int operation = (int) rdi;
-	time_st * time = (time_st *) rsi;
-
-	return manage_rtc(operation, time);
 }
 
 uint64_t syscall_terminal_select(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {

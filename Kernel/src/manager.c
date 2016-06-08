@@ -2,10 +2,8 @@
 #include <limits.h>
 #include <output.h>
 #include <keyboard.h>
-#include <rtc.h>
 #include <syscalls.h>
 #include <sysio.h>
-#include <systime.h>
 #include <stdarg.h>
 #include <heap.h>
 #include <sysalloc.h>
@@ -14,7 +12,6 @@ void manage_time(void);
 void manage_key(key_st * key);
 unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);
-int manage_rtc(int operation, time_st * time);
 int manage_terminal(int operation, int value);
 void * manage_alloc(int op, ...);
 
@@ -68,18 +65,6 @@ unsigned int manage_write(unsigned int fd, const char * string, unsigned int len
 	}
 
 	return 0;
-}
-
-int manage_rtc(int operation, time_st * time) {
-	switch(operation) {
-		case _TIME_OPERATION_SET:
-			return rtc_write(time);
-
-		case _TIME_OPERATION_GET:
-			return rtc_read(time);
-	}
-
-	return _SYSCALL_ERROR_TIME_OPERATION_INVALID;
 }
 
 int manage_terminal(int operation, int value) {

@@ -1,7 +1,7 @@
 OUTPUT_FORMAT("binary")
 ENTRY(init)
 SECTIONS {
-	.text 0x0000000020441000 : {
+	.text 0x0000000020440358 : {
 		shell_text = .;
 		*(.text*)
 		. = ALIGN(0x1000);

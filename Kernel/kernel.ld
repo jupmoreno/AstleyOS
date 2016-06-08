@@ -1,7 +1,7 @@
 OUTPUT_FORMAT("binary")
 ENTRY(loader)
 SECTIONS {
-	.text 0x0000000020141000 : {
+	.text 0x0000000020140358 : {
 		kernel_text = .;
 		*(.text*)
 		. = ALIGN(0x1000);

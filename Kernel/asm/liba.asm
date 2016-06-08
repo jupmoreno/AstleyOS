@@ -1,4 +1,5 @@
 GLOBAL _cpu_vendor
+GLOBAL _ram_amount
 
 section .text
 
@@ -66,6 +67,18 @@ _cpu_vendor:
 	mov rax, rdi
 
 	pop rbx
+
+	mov rsp, rbp
+	pop rbp
+	ret
+
+_ram_amount:
+	push rbp
+	mov rbp, rsp
+
+	xor rax, rax
+
+	mov eax, [0x5020]
 
 	mov rsp, rbp
 	pop rbp

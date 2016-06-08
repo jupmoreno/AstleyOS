@@ -8,6 +8,8 @@
  * @param  result  - where to write the cpu vendor
  * @return         - a pointer to the string result
  */
-char * cpuVendor(char * result);
+// char * cpuVendor(char * result); // TODO:
+
+unsigned int ram_amount();
 
 #endif

@@ -1,6 +1,7 @@
 #include <paging.h>
 #include <kalloc.h>
 #include <memory.h>
+#include <liba.h>
 
 // http://www.tutorialspoint.com/cprogramming/c_bit_fields.htm
 typedef struct {
@@ -150,7 +151,7 @@ int paging_init(void) {
 	log("<PAGING> CR0: %h\n", _cr0_read());
 	log("<PAGING> CR3: %h\n", _cr3_read());
 
-	lvl4_table = lvl4t_init(262145); // TODO: Define
+	lvl4_table = lvl4t_init(MEGABYTES(ram_amount()) / _MEMORY_PAGE_SIZE);
 	if(lvl4_table == NULL) {
 		return FALSE;
 	}
@@ -318,6 +319,7 @@ static void paging_enable(void * table) {
 	cr3.zero_2 	= 0;
 	cr3.base 	= BASE_MASK(table);
 	cr3.zero_3 	= 0;
-	log("<PAGING> NEW CR3: %h\n", cr3);
+	log("<PAGING> Setting CR3: %h\n", cr3);
 	_cr3_write(cr3);
+	log("<PAGING> Set CR3: %h\n", _cr3_read());
 }

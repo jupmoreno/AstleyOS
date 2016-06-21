@@ -7,6 +7,9 @@ typedef struct process_queue{
 
 
 typedef struct Process{
+	uint64_t stack;
+	uint64_t reserved;
+	
 	
 	char* name;
 	unsigned int pid;

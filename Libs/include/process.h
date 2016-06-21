@@ -1,3 +1,5 @@
+#include <stdint.h>
+
 typedef struct process_queue{
 	
 	struct Process* head;
@@ -5,25 +7,24 @@ typedef struct process_queue{
 	
 }process_queue;
 
+typedef int (*process_func) (int argc, char *argv);
+typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD} state_t;
 
 typedef struct Process{
 	uint64_t stack;
-	uint64_t rsp;
+	void* rsp;  //TODO: VER SI VOID * O UINT64
 	uint64_t reserved;
 	
 	
 	char* name;
-	unsigned int pid;
+	uint64_t pid;
 	
-	process_t *next;
-	process_t *prev;
+	struct Process *next;
+	struct Process *prev;
 
 	state_t state;
 
-}process_t;
-
-typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD} state_t;
-
+}Process;
 
 
 typedef struct stack_frame {
@@ -59,4 +60,3 @@ typedef struct stack_frame {
 }stack_frame;
 
 
-typedef int (*process_func) (int argc, char *argv);

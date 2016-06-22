@@ -27,7 +27,7 @@ void printProcesses(){
 	LLnode first = scheduler->waitingpq->current;
 	LLnode current = scheduler->waitingpq->current;
 	
-	out_printf("Processes that are waiting:\n");
+	out_printf ("Processes that are waiting:\n");
 	do {
 		out_printf("%s: pid %d", current->process->name, current->process->pid);
 		current = current -> next;

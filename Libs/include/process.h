@@ -12,7 +12,7 @@ typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD} state_t;
 
 typedef struct Process{
 	uint64_t stack;
-	void* rsp;  //TODO: VER SI VOID * O UINT64
+	void* rsp;  //TODO: VER SI VOID* O UINT64
 	uint64_t reserved;
 	
 	
@@ -45,7 +45,6 @@ typedef struct stack_frame {
 	uint64_t rcx;
 	uint64_t rbx;
 	uint64_t rax;
-
 	
 	//iretq hook
 	uint64_t rip;

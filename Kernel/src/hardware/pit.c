@@ -95,7 +95,7 @@ void pit_trigger(void) {
 	int i;
 	tick();
 
-	if(ticks = TICKS_TO_NEXT_PROCESS) {
+	if(ticks == TICKS_TO_NEXT_PROCESS) {
 		ticks = 0;
 		//schedule();
 	}

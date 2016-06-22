@@ -1,5 +1,4 @@
 #include <scheduler.h>
-#include <process.h>
 
 static Scheduler scheduler;
 
@@ -24,24 +23,24 @@ SchedulerLL queueInit(){
 void printProcesses(){
 	LLnode first = kmalloc(sizeof(struct llnode));
 	LLnode current = kmalloc(sizeof(struct llnode));
-	first = scheduler->waitingpql->current;
-	current = scheduler->waitingpql->current;
+	first = scheduler->waitingpq->current;
+	current = scheduler->waitingpq->current;
 	
-	outprint_f("Processes that are waiting:\n");
-	outprint_f("%s: pid %d", current->process->name, current->process->pid);
+	out_printf("Processes that are waiting:\n");
+	out_printf("%s: pid %d", current->process->name, current->process->pid);
 	while(current != first){
 		current = current -> next;
-		outprint_f("%s: pid %d", current->process->name, current->process->pid);
+		out_printf("%s: pid %d", current->process->name, current->process->pid);
 	}
 	
 	current = scheduler->blockedpq->current;
 	first = scheduler->blockedpq->current;
 	
-	outprintf("Processes that are blocked:\n");
-	outprint_t("%s: pid %d", current->process->name, current->process->pid);
+	out_printf("Processes that are blocked:\n");
+	out_printf("%s: pid %d", current->process->name, current->process->pid);
 	while(current != first){
 		current = current -> next;
-		outprint_f("%s: pid %d", current->process->name, current->process->pid);
+		out_printf("%s: pid %d", current->process->name, current->process->pid);
 	}
 	
 }
@@ -52,38 +51,38 @@ int addProcess(Process p, SchedulerLL q){
 	if(q == NULL)
 		return ERROR;
 	LLnode node = kmalloc(sizeof(struct llnode));
-	if(LLnode == NULL)
-		return ERROR;
+	if(node == NULL)
+		return 0; //error
 	if(q->size == 0){
 		q->current = node;
 		node -> next = node;
 		node -> prev = node;
 		q->size++;
-		return SUCCESS;
+		return 1;
 	}
 	q->current->prev ->next = node;
 	node -> prev = q -> current -> prev;
 	node -> next = q -> current;
 	q -> current -> prev = node;
 	q->size++;
-	return SUCCESS; 
+	return 1; 
 }
 
-Process removeProcess(int pid, SchedulerLL q){
+Process removeProcess(uint64_t pid, SchedulerLL q){
 	int found = 0;
 	LLnode node = q -> current;
 	Process p = NULL;
 	if(q->size < 1){
-		return ERROR;
+		return 0;
 	}
 	do{
-		if(node->process->pid = pid)
+		if(node->process->pid == pid)
 			found = 1;
 	}while(node != q ->current && !found);
 
-	if(size == 1 && found){
+	if(q->size == 1 && found){
 		p = node -> process; 
-		size --;
+		q->size --;
 		q -> current = NULL;
 		return p;
 	}
@@ -92,6 +91,6 @@ Process removeProcess(int pid, SchedulerLL q){
 		node -> prev -> next = node -> next;
 		node -> next -> prev = node -> prev;
 	}
-	return ERROR;
+	return 0;
 }
 

@@ -1,5 +1,6 @@
 #include <pit.h>
 #include <interrupts.h>
+#include <output.h>
 
 #define SECONDS_TO_PIT_CYCLES(x) (((x) * 1000) / time)
 
@@ -53,6 +54,8 @@
 #define CMD_MD_BIN 		0x00 // 0000 000 0
 #define CMD_MD_BCD 		0x01 // 0000 000 1
 
+#define TICKS_TO_NEXT_PROCESS 1
+
 typedef struct {
 	unsigned int time;
 } timer_t;
@@ -66,6 +69,8 @@ static unsigned int time;
 static int * pit_sleep_asign(double seconds);
 
 extern void manage_time(void);
+
+static int ticks = 0;
 
 void pit_init(void) {
 	int i;
@@ -88,7 +93,13 @@ void pit_init(void) {
 
 void pit_trigger(void) {
 	int i;
+	tick();
 
+	if(ticks = TICKS_TO_NEXT_PROCESS) {
+		ticks = 0;
+		//schedule();
+	}
+	
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time > 0) {
 			timers[i].time--;
@@ -116,10 +127,7 @@ void pit_wait(double seconds) {
 
 static int * pit_sleep_asign(double seconds) {
 	int i;
-
-	if(seconds <= 0) {
-		return NULL;
-	}
+	
 
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time == 0) {
@@ -130,4 +138,8 @@ static int * pit_sleep_asign(double seconds) {
 	}
 
 	return NULL;
+}
+
+void tick(){
+	ticks++;
 }

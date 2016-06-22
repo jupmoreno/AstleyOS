@@ -21,6 +21,31 @@ SchedulerLL queueInit(){
 	return q;
 }
 
+void printProcesses(){
+	LLnode first = kmalloc(sizeof(struct llnode));
+	LLnode current = kmalloc(sizeof(struct llnode));
+	first = scheduler->waitingpql->current;
+	current = scheduler->waitingpql->current;
+	
+	outprint_f("Processes that are waiting:\n");
+	outprint_f("%s: pid %d", current->process->name, current->process->pid);
+	while(current != first){
+		current = current -> next;
+		outprint_f("%s: pid %d", current->process->name, current->process->pid);
+	}
+	
+	current = scheduler->blockedpq->current;
+	first = scheduler->blockedpq->current;
+	
+	outprintf("Processes that are blocked:\n");
+	outprint_t("%s: pid %d", current->process->name, current->process->pid);
+	while(current != first){
+		current = current -> next;
+		outprint_f("%s: pid %d", current->process->name, current->process->pid);
+	}
+	
+}
+
 int addProcess(Process p, SchedulerLL q){
 	if(p == NULL)
 		return ERROR;

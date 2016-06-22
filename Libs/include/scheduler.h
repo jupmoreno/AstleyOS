@@ -10,7 +10,7 @@
  };
 
  struct scheduler{
- 	struct schedulerLL * waitingpq;
+ 	struct schedulerLL * waitingpql;
  	struct schedulerLL * blockedpq;
  };
 

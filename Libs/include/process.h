@@ -3,7 +3,7 @@
 typedef struct process_queue{
 	
 	struct Process* head;
-	struct Process* tail;
+	struct Process* tail;n
 	
 }process_queue;
 

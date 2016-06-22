@@ -24,27 +24,23 @@ SchedulerLL queueInit(){
 }
 
 void printProcesses(){
-	LLnode first = kmalloc(sizeof(struct llnode));
-	LLnode current = kmalloc(sizeof(struct llnode));
-	first = scheduler->waitingpq->current;
-	current = scheduler->waitingpq->current;
+	LLnode first = scheduler->waitingpq->current;
+	LLnode current = scheduler->waitingpq->current;
 	
 	out_printf("Processes that are waiting:\n");
-	out_printf("%s: pid %d", current->process->name, current->process->pid);
-	while(current != first){
-		current = current -> next;
+	do {
 		out_printf("%s: pid %d", current->process->name, current->process->pid);
-	}
+		current = current -> next;
+	}while(current != first);
 	
 	current = scheduler->blockedpq->current;
 	first = scheduler->blockedpq->current;
 	
 	out_printf("Processes that are blocked:\n");
-	out_printf("%s: pid %d", current->process->name, current->process->pid);
-	while(current != first){
-		current = current -> next;
+	do {
 		out_printf("%s: pid %d", current->process->name, current->process->pid);
-	}
+		current = current -> next;
+	}while(current != first);
 	
 }
 

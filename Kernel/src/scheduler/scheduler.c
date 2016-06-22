@@ -11,7 +11,7 @@ void schedulerInit(){
 
 void schedule(){
 
-	SchedulerLL -> current = SchedulerLL -> current -> next;
+	scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
 }
 
 SchedulerLL queueInit(){
@@ -69,3 +69,4 @@ Process removeProcess(int pid, SchedulerLL q){
 	}
 	return ERROR;
 }
+

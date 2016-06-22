@@ -54,9 +54,4 @@ void create_process(char* name, process_func func, uint64_t argc, void* argv, vo
 	//p->stack = rsp; TODO:VER PARA QUE SIRVE EL STACK
 	p->rsp = set_stack_frame(rsp, func, argc, argv, start_func);
 }
-
-
-
-
-	
 	

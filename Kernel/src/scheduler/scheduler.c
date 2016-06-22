@@ -9,9 +9,12 @@ void schedulerInit(){
 	scheduler -> blockedpq = queueInit();
 }
 
-void schedule(){
+Process schedule(){
 
-	scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
+	if(scheduler -> waitingpq -> current !=NULL){
+		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
+		return scheduler -> waitingpq -> current -> process;	
+	}
 }
 
 SchedulerLL queueInit(){

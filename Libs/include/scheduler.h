@@ -1,3 +1,8 @@
+#include <process.h>
+#include <stdint.h>
+#include "kalloc.h"
+#include "output.h"
+
  struct llnode{
  	struct llnode * next;
  	struct llnode * prev;
@@ -6,7 +11,7 @@
 
  struct schedulerLL{
  	struct llnode * current;
- 	unint64_t size;	
+ 	uint64_t size;	
  };
 
  struct scheduler{
@@ -14,6 +19,13 @@
  	struct schedulerLL * blockedpq;
  };
 
- typedef struct llnode * LLnode; 
- typedef struct schedulerLL * SchedulerLL;
- typedef struct scheduler * Scheduler;
+typedef struct llnode * LLnode; 
+typedef struct schedulerLL * SchedulerLL;
+typedef struct scheduler * Scheduler;
+ 
+void schedulerInit(void);
+void schedule(void);
+SchedulerLL queueInit(void);
+void printProcesses(void);
+int addProcess(Process p, SchedulerLL q);
+Process removeProcess(uint64_t pid, SchedulerLL q);

@@ -44,7 +44,7 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 }
 
 void create_process(char* name, process_func func, uint64_t argc, void* argv, void* start_func){
-	Process *p;
+	Process p;
 	p = kmalloc(sizeof(Process));
 	strcpy(p->name, name);
 	p->pid =  pids++;

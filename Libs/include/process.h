@@ -10,7 +10,7 @@ typedef struct process_queue{
 typedef int (*process_func) (int argc, char *argv);
 typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD} state_t;
 
-typedef struct Process{
+typedef struct process{
 	uint64_t stack;
 	void* rsp;  //TODO: VER SI VOID* O UINT64
 	uint64_t reserved;
@@ -24,8 +24,9 @@ typedef struct Process{
 
 	state_t state;
 
-}Process;
+}process;
 
+typedef struct process *Process;
 
 typedef struct stack_frame {
 	uint64_t gs;

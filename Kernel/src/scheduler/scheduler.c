@@ -94,3 +94,10 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	return 0;
 }
 
+Process getCurrentWaiting(){
+	return scheduler -> waitingpq -> current -> process;
+}
+
+Process getCurrentBlocked(){
+	return scheduler -> blockedpq -> current -> process;
+}

@@ -18,11 +18,13 @@
 COMMAND_DECLARE(help);
 COMMAND_DECLARE(echo);
 COMMAND_DECLARE(clear);
+COMMAND_DECLARE(game);
 
 command_t commands[] = {
 	COMMAND(help),
 	COMMAND(echo),
 	COMMAND(clear),
+	COMMAND(game),
 	// FUTURE COMMAND HERE !!
 	{ NULL, NULL, NULL}
 };

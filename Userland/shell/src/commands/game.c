@@ -5,19 +5,21 @@
 extern void sysvideo_mode(void);
 extern void syspaint_pixel(int x, int y, int blue, int green, int red);
 void paintPixel(int x, int y, int blue, int green, int red);
+extern void sys_sound(int frequency, double time);
 
 COMMAND_FUNCTION(game);
 COMMAND_HELP(game);
 
 COMMAND_FUNCTION(game) {
 	sysvideo_mode();
+	//sys_sound(200, 1.1);
 	int i,j;
-/*	for(i=0; i<200; i++){
+	for(i=0; i<200; i++){
 		for (j = 0; j < 200; j++)
 		{
 			paintPixel(i,j,118,0,236);
 		}
-	}*/
+	}
 	//startGame();
 
 	return OK;

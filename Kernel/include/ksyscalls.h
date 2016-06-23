@@ -15,6 +15,7 @@ syscall_st syscall_terminal_color;
 syscall_st syscall_terminal_cursor;
 syscall_st syscall_set_video_mode;
 syscall_st syscall_paint_pixel;
+syscall_st syscall_sound;
 syscall_st syscall_alloc;
 // (2) FUTURE SYSCALL HERE !!
 

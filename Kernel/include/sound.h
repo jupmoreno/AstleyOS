@@ -3,6 +3,6 @@
 
 #include <kdefine.h>
 
-void sound_beep(unsigned int frequency, double time);
+uint64_t sound_beep(unsigned int frequency, double time);
 
 #endif

@@ -1,7 +1,7 @@
 #include <sound.h>
 #include <ports.h>
 #include <pit.h>
-
+#include "output.h"
 typedef struct {
 	unsigned int frequency;
 	int time;
@@ -10,10 +10,14 @@ typedef struct {
 static void sound_play(unsigned int frequency);
 static void sound_stop(void);
 
-void sound_beep(unsigned int frequency, double time) {
+uint64_t sound_beep(unsigned int frequency, double time) {
+	char a = (char) time;
+	//out_vprintf(&a, NULL);
 	sound_play(frequency);
+
 	pit_wait(time); // TODO: pit_later(time)
 	sound_stop();
+	return 0;
 }
 
 static void sound_play(unsigned int frequency) {

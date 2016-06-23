@@ -12,6 +12,7 @@ int systerminal_cursor(cursor_st cursor);
 void * sysalloc_new(unsigned int size);
 void sysalloc_free(void * addr);
 void sysvideo_mode(void);
+void sys_sound(int frequency, double time);
 
 /**
  * Syscall caller or wrapper
@@ -63,6 +64,9 @@ void sysvideo_mode(void) {
 	_syscall(0, 0, 0, 0, 0, 0, _SYSCALL_VIDEO_MODE);
 }
 
+void sys_sound(int frequency, double time) {
+	_syscall((uint64_t)frequency,(uint64_t) time, 0, 0, 0, 0, _SYSCALL_SOUND);
+}
 // void * sysalloc_renew(void * addr, unsigned int size) {
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);
 // }

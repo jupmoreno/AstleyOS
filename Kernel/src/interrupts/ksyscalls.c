@@ -3,6 +3,7 @@
 #include <sysio.h>
 #include <sysconsole.h>
 #include "video_mode.h"
+#include "sound.h"
 
 extern unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 extern unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);
@@ -17,6 +18,7 @@ syscall_st * syscalls_table[_SYSCALLS_SIZE] = {
 	[_SYSCALL_TERMINAL_COLOR] = syscall_terminal_color,
 	[_SYSCALL_TERMINAL_CURSOR] = syscall_terminal_cursor,
 	[_SYSCALL_VIDEO_MODE] = syscall_set_video_mode,
+	[_SYSCALL_SOUND] = syscall_sound,
 	[_SYSCALL_ALLOC] = syscall_alloc,
 	// (3) FUTURE SYSCALL HERE !! REMEMBER TO CHANGE _SYSCALLS_LAST !!
 };
@@ -69,4 +71,10 @@ uint64_t syscall_alloc(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, u
 uint64_t syscall_set_video_mode(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
 	
 	return SetVideoMode();
+}
+
+uint64_t syscall_sound(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
+	unsigned int frequency = rdi;
+	double time = rsi;
+	return sound_beep(frequency, time);
 }

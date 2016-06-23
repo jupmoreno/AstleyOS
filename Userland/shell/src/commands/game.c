@@ -3,11 +3,13 @@
 #include <console.h>
 
 extern void sysvideo_mode(void);
+extern void sys_sound(int frequency, double time);
 
 COMMAND_FUNCTION(game);
 COMMAND_HELP(game);
 
 COMMAND_FUNCTION(game) {
+	sys_sound(200, (double)5.2);
 	sysvideo_mode();
 	//startGame();
 

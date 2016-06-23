@@ -10,10 +10,11 @@ typedef struct {
 static void sound_play(unsigned int frequency);
 static void sound_stop(void);
 
-void sound_beep(unsigned int frequency, double time) {
+uint64_t sound_beep(unsigned int frequency, double time) {
 	sound_play(frequency);
 	pit_wait(time); // TODO: pit_later(time)
 	sound_stop();
+	return 0;
 }
 
 static void sound_play(unsigned int frequency) {

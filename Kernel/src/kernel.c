@@ -15,6 +15,7 @@
 #include <heap.h>
 #include <paging.h>
 #include <process.h>
+#include <video_mode.h>
 
 #define PAGE_SIZE 0x1000
 
@@ -111,6 +112,8 @@ int kernel_main(void) {
 	sound_beep(300, 0.2);
 	sound_beep(400, 0.2);
 	sound_beep(500, 0.2);
+	
+	SetVideoMode();
 
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 	shell();

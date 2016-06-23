@@ -108,7 +108,7 @@ void paintPixel(int x, int y, char blue, char green, char red){
 
 
 
-void SetVideoMode(void){
+int SetVideoMode(void){
    BgaSetVideoMode(WIDTH, HEIGHT, VBE_DISPI_BPP_32, 1,1);
    
     // int iterations = 0;
@@ -119,7 +119,8 @@ void SetVideoMode(void){
     //   data++;
     // }
 	
-	paintPixel(600, 600, 1, 0, 0);
+	//paintPixel(600, 600, 1, 0, 0);
+   return 0;
 }
 
 

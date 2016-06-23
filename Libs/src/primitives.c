@@ -11,6 +11,7 @@ void systerminal_color(int operation, style_st color);
 int systerminal_cursor(cursor_st cursor);
 void * sysalloc_new(unsigned int size);
 void sysalloc_free(void * addr);
+void sysvideo_mode(void);
 
 /**
  * Syscall caller or wrapper
@@ -56,6 +57,10 @@ void * sysalloc_new(unsigned int pages) {
 
 void sysalloc_free(void * addr) {
 	_syscall(_ALLOC_FREE, (uint64_t) addr, 0, 0, 0, 0, _SYSCALL_ALLOC);
+}
+
+void sysvideo_mode(void) {
+	_syscall(0, 0, 0, 0, 0, 0, _SYSCALL_VIDEO_MODE);
 }
 
 // void * sysalloc_renew(void * addr, unsigned int size) {

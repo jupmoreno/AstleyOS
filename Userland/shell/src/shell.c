@@ -6,6 +6,7 @@
 #include <numbers.h>
 #include <strings.h>
 
+
 #define MAX_BUFFER_LENGTH 128
 
 int main(void);
@@ -26,6 +27,8 @@ int main(void) {
 	// Shell cycle
 	while(TRUE) {
 		// Print prompt
+		//sysvideo_mode();
+
 		printf("$> ");
 
 		// Get command's name

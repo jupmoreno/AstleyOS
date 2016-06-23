@@ -113,7 +113,7 @@ int kernel_main(void) {
 	sound_beep(400, 0.2);
 	sound_beep(500, 0.2);
 	
-	SetVideoMode();
+	//SetVideoMode();
 
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 	shell();

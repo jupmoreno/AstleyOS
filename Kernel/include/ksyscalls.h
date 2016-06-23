@@ -13,6 +13,7 @@ syscall_st syscall_terminal_select;
 syscall_st syscall_terminal_clear;
 syscall_st syscall_terminal_color;
 syscall_st syscall_terminal_cursor;
+syscall_st syscall_set_video_mode;
 syscall_st syscall_alloc;
 // (2) FUTURE SYSCALL HERE !!
 

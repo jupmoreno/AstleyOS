@@ -8,9 +8,12 @@ void schedulerInit(){
 	scheduler -> blockedpq = queueInit();
 }
 
-void schedule(){
+Process schedule(){
 
-	scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
+	if(scheduler -> waitingpq -> current !=NULL){
+		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
+		return scheduler -> waitingpq -> current -> process;	
+	}
 }
 
 SchedulerLL queueInit(){
@@ -21,27 +24,23 @@ SchedulerLL queueInit(){
 }
 
 void printProcesses(){
-	LLnode first = kmalloc(sizeof(struct llnode));
-	LLnode current = kmalloc(sizeof(struct llnode));
-	first = scheduler->waitingpq->current;
-	current = scheduler->waitingpq->current;
+	LLnode first = scheduler->waitingpq->current;
+	LLnode current = scheduler->waitingpq->current;
 	
-	out_printf("Processes that are waiting:\n");
-	out_printf("%s: pid %d", current->process->name, current->process->pid);
-	while(current != first){
-		current = current -> next;
+	out_printf ("Processes that are waiting:\n");
+	do {
 		out_printf("%s: pid %d", current->process->name, current->process->pid);
-	}
+		current = current -> next;
+	}while(current != first);
 	
 	current = scheduler->blockedpq->current;
 	first = scheduler->blockedpq->current;
 	
 	out_printf("Processes that are blocked:\n");
-	out_printf("%s: pid %d", current->process->name, current->process->pid);
-	while(current != first){
-		current = current -> next;
+	do {
 		out_printf("%s: pid %d", current->process->name, current->process->pid);
-	}
+		current = current -> next;
+	}while(current != first);
 	
 }
 
@@ -94,3 +93,10 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	return 0;
 }
 
+Process getCurrentWaiting(){
+	return scheduler -> waitingpq -> current -> process;
+}
+
+Process getCurrentBlocked(){
+	return scheduler -> blockedpq -> current -> process;
+}

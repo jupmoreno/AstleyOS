@@ -1,7 +1,7 @@
 #include "process.h"
 #include <strings.h>
 #include "kalloc.h"
-
+#include <scheduler.h>
 void create_process(char* name, process_func func, uint64_t argc, void* argv, void* start_func);
 void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv, void* start_func); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
 
@@ -54,4 +54,15 @@ void create_process(char* name, process_func func, uint64_t argc, void* argv, vo
 	//p->stack = rsp; TODO:VER PARA QUE SIRVE EL STACK
 	p->rsp = set_stack_frame(rsp, func, argc, argv, start_func);
 }
-	
+
+uint64_t contextSwitch(uint64_t stackFrame){
+	Process p = getCurrentWaiting();
+	if (p == NULL)
+	{
+		return NULL;
+	}
+	p-> stack = stackFrame;
+
+	p = schedule();
+	return p -> stack;
+}

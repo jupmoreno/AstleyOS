@@ -29,3 +29,5 @@ SchedulerLL queueInit(void);
 void printProcesses(void);
 int addProcess(Process p, SchedulerLL q);
 Process removeProcess(uint64_t pid, SchedulerLL q);
+Process getCurrentWaiting();
+Process getCurrentBlocked();

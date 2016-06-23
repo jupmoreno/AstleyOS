@@ -14,6 +14,7 @@
 #include <kalloc.h>
 #include <heap.h>
 #include <paging.h>
+#include <process.h>
 
 #define PAGE_SIZE 0x1000
 
@@ -33,6 +34,9 @@ void * kernel_init(void);
 int kernel_main(void);
 
 static void loadIDT(void);
+
+void foo1();
+void foo2();
 
 static void * module_addresses[] = {
 	(void *) MODULE_SHELL_ADDRESS // Shell address
@@ -111,6 +115,8 @@ int kernel_main(void) {
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 	shell();
 
+	//create_process("imprime a", (process_func)&foo1,0, NULL, &foo1);
+
 	while(1);
 
 	return 0;
@@ -168,4 +174,16 @@ static void loadIDT(void) {
 	_IDT_ENTRY_INTERRUPT(80, _IDT_ACCESS_INT);
 	out_printf("[Done]\n");
 	// ^^ Interrupts ^^
+}
+
+void foo1(){
+	while(1){
+		out_printf("a");
+	}
+}
+
+void foo2(){
+	while(1){
+		out_printf("b");
+	}
 }

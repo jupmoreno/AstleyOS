@@ -2,7 +2,7 @@
 #include <strings.h>
 #include "kalloc.h"
 #include <scheduler.h>
-void create_process(char* name, process_func func, uint64_t argc, void* argv, void* start_func);
+
 void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv, void* start_func); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
 
 static uint64_t pids = 0;
@@ -43,9 +43,9 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	return &(r->gs);
 }
 
-void create_process(char* name, process_func func, uint64_t argc, void* argv, void* start_func){
+void create_process(const char* name, process_func func, uint64_t argc, void* argv, void* start_func){
 	Process p;
-	p = kmalloc(sizeof(Process));
+	p = kmalloc(sizeof(struct process));
 	strcpy(p->name, name);
 	p->pid =  pids++;
 	p->state = WAITING;
@@ -53,16 +53,20 @@ void create_process(char* name, process_func func, uint64_t argc, void* argv, vo
 	uint64_t* rsp = kmalloc(sizeof(stack_frame));
 	//p->stack = rsp; TODO:VER PARA QUE SIRVE EL STACK
 	p->rsp = set_stack_frame(rsp, func, argc, argv, start_func);
+	addProcessWaiting(p);
 }
 
 uint64_t contextSwitch(uint64_t stackFrame){
 	Process p = getCurrentWaiting();
 	if (p == NULL)
 	{
-		return NULL;
+		return 0;
 	}
 	p-> stack = stackFrame;
 
 	p = schedule();
+
+	if(p == NULL)
+		return 0;
 	return p -> stack;
 }

@@ -14,6 +14,7 @@ Process schedule(){
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
 		return scheduler -> waitingpq -> current -> process;	
 	}
+	return NULL;
 }
 
 SchedulerLL queueInit(){
@@ -67,6 +68,14 @@ int addProcess(Process p, SchedulerLL q){
 	return 1; 
 }
 
+int addProcessWaiting(Process p){
+	return addProcess(p, scheduler -> waitingpq);
+}
+
+int addProcessBlocked(Process p){
+	return addProcess(p, scheduler -> blockedpq);
+}
+
 Process removeProcess(uint64_t pid, SchedulerLL q){
 	int found = 0;
 	LLnode node = q -> current;
@@ -91,6 +100,14 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 		node -> next -> prev = node -> prev;
 	}
 	return 0;
+}
+
+Process removeProcessWaiting(uint64_t pid){
+	return removeProcess(pid, scheduler -> waitingpq);
+}
+
+Process removeProcessBlocked(uint64_t pid){
+	return removeProcess(pid, scheduler -> blockedpq);
 }
 
 Process getCurrentWaiting(){

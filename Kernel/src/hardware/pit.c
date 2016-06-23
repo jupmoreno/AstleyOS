@@ -1,6 +1,7 @@
 #include <pit.h>
 #include <interrupts.h>
 #include <output.h>
+#include <scheduler.h>
 
 #define SECONDS_TO_PIT_CYCLES(x) (((x) * 1000) / time)
 
@@ -97,7 +98,7 @@ void pit_trigger(void) {
 
 	if(ticks == TICKS_TO_NEXT_PROCESS) {
 		ticks = 0;
-		//schedule();
+		//contextSwitch(0);
 	}
 	
 	for(i = 0; i < TIMERS; i++) {

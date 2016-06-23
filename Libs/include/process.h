@@ -1,14 +1,9 @@
+#ifndef _PROCESS_H_
+#define _PROCESS_H_
 #include <stdint.h>
 
-typedef struct process_queue{
-	
-	struct Process* head;
-	struct Process* tail;
-	
-}process_queue;
-
 typedef int (*process_func) (int argc, char *argv);
-typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD} state_t;
+typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD}state_t;
 
 typedef struct process{
 	uint64_t stack;
@@ -26,7 +21,14 @@ typedef struct process{
 
 }process;
 
-typedef struct process *Process;
+typedef struct process_queue{
+	
+	struct process* head;
+	struct process* tail;
+	
+}process_queue;
+
+typedef struct process* Process;
 
 typedef struct stack_frame {
 	uint64_t gs;
@@ -59,4 +61,7 @@ typedef struct stack_frame {
 	
 }stack_frame;
 
+uint64_t contextSwitch(uint64_t stackFrame);
+void create_process(const char* name, process_func func, uint64_t argc, void* argv, void* start_func);
 
+#endif

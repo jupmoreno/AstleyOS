@@ -6,6 +6,6 @@
 void pit_init(void);
 // void pit_set(unsigned int miliseconds);
 void pit_wait(double seconds);
-void tick();
+void tick(void);
 
 #endif

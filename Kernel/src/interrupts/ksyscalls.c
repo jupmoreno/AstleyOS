@@ -2,6 +2,7 @@
 #include <manager.h>
 #include <sysio.h>
 #include <sysconsole.h>
+#include "video_mode.h"
 
 extern unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 extern unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);

@@ -17,6 +17,7 @@ static args_t * getArgs(char * buffer);
 
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
 
+
 int main(void) {
 	static args_t noargs = {NULL, 0};
 	int ret, should_clear;

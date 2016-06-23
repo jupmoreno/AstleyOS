@@ -4,3 +4,4 @@ int BgaIsAvailable(void);
 void BgaSetVideoMode(unsigned int Width, unsigned int Height, unsigned int BitDepth, int UseLinearFrameBuffer, int ClearVideoMemory);
 void BgaSetBank(unsigned short BankNumber);
 int SetVideoMode(void);
+void paintPixel(int x, int y, char blue, char green, char red);

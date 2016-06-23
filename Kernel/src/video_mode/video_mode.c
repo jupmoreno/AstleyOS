@@ -51,7 +51,6 @@
 
 
 //BORRAR TODO
-void paintPixel(int x, int y, char blue, char green, char red);
 
 
 

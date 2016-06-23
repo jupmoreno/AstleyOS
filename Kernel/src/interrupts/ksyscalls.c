@@ -17,6 +17,7 @@ syscall_st * syscalls_table[_SYSCALLS_SIZE] = {
 	[_SYSCALL_TERMINAL_COLOR] = syscall_terminal_color,
 	[_SYSCALL_TERMINAL_CURSOR] = syscall_terminal_cursor,
 	[_SYSCALL_VIDEO_MODE] = syscall_set_video_mode,
+	[_SYSCALL_PAINT_PIXEL] = syscall_paint_pixel,
 	[_SYSCALL_ALLOC] = syscall_alloc,
 	// (3) FUTURE SYSCALL HERE !! REMEMBER TO CHANGE _SYSCALLS_LAST !!
 };
@@ -69,4 +70,17 @@ uint64_t syscall_alloc(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, u
 uint64_t syscall_set_video_mode(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
 	
 	return SetVideoMode();
+}
+
+uint64_t syscall_paint_pixel(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
+	
+	int x = (int) rdi;
+	int y = (int) rsi;
+	char blue = (char) rdx;
+	char green = (char) r10;
+	char red = (char) r8;
+	
+	paintPixel(x, y, blue, green, red);
+
+	return 0;
 }

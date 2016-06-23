@@ -12,6 +12,8 @@ int systerminal_cursor(cursor_st cursor);
 void * sysalloc_new(unsigned int size);
 void sysalloc_free(void * addr);
 void sysvideo_mode(void);
+void syspaint_pixel(int x, int y, char blue, char green, char red);
+
 
 /**
  * Syscall caller or wrapper
@@ -61,6 +63,10 @@ void sysalloc_free(void * addr) {
 
 void sysvideo_mode(void) {
 	_syscall(0, 0, 0, 0, 0, 0, _SYSCALL_VIDEO_MODE);
+}
+
+void syspaint_pixel(int x, int y, char blue, char green, char red){
+	_syscall(x,y,blue,green,red,0, _SYSCALL_PAINT_PIXEL);
 }
 
 // void * sysalloc_renew(void * addr, unsigned int size) {

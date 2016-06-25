@@ -81,11 +81,11 @@ _interrupt_20:
 	mov rdi, rsp
 	call interrupt_20
 	cmp rax, 0
-	jnz curry
+	jz .curry
 	mov rsp, rax
+.curry: 
 	popaq
-	
-.curry: iretq
+	iretq
 ; -----------------------------------------------------------------------------
 
 ; -----------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 extern void _interrupt_set(void);
 extern void _interrupt_clear(void);
 
-extern void pit_trigger(uint64_t stackF);
+extern uint64_t pit_trigger(uint64_t stackF);
 extern void keyboard_trigger(unsigned char scancode);
 
 uint64_t interrupt_20(uint64_t stackF);

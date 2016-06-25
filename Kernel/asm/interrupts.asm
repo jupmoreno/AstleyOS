@@ -10,6 +10,8 @@ EXTERN interrupt_21
 GLOBAL _interrupt_80
 EXTERN interrupt_80
 
+GLOBAL _startProcess
+
 section .text
 
 align 16
@@ -78,9 +80,12 @@ _interrupt_20:
 	pushaq
 	mov rdi, rsp
 	call interrupt_20
+	cmp rax, 0
+	jnz curry
 	mov rsp, rax
 	popaq
-	iretq
+	
+.curry: iretq
 ; -----------------------------------------------------------------------------
 
 ; -----------------------------------------------------------------------------

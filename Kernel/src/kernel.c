@@ -123,17 +123,14 @@ int kernel_main(void) {
 			paintPixel(i,j,(char)118,(char)0,(char)236);
 		}
 	}*/
-	sound_beep(500, 0.2);
-	sound_beep(400, 0.2);
-	sound_beep(300, 0.2);
-	sound_beep(200, 0.2);
-	sound_beep(100, 0.2);
 
-	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
-	shell();
 
 	schedulerInit();
 	create_process("imprime a", (process_func)&foo1,0, NULL);
+	
+	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
+	shell();
+
 
 	while(1);
 

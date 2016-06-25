@@ -25,10 +25,11 @@ void pic_init(void) {
 	log("<PIC> Inited.\n");
 }
 
-void pic_mask(uint8_t mask) {
+void pic_mask(uint8_t mask, uint64_t stackF) {
 	_port_write_byte(_PIC_MASTER_DATA, mask);
 
 	log("<PIC> Masked: %h\n", mask);
+	return stackF;
 }
 
 void pic_mask_all(void) {

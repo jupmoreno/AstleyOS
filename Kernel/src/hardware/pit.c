@@ -61,7 +61,7 @@ typedef struct {
 	unsigned int time;
 } timer_t;
 
-void pit_trigger(void);
+uint64_t pit_trigger(uint64_t);
 
 static timer_t timers[TIMERS];
 static int booleans[TIMERS];
@@ -92,7 +92,7 @@ void pit_init(void) {
 // 	return 1;
 // }
 
-void pit_trigger(uint64_t stackF) {
+uint64_t pit_trigger(uint64_t stackF) {
 	int i;
 	tick();
 
@@ -111,6 +111,7 @@ void pit_trigger(uint64_t stackF) {
 		ticks = 0;
 		return contextSwitch(stackF);
 	}
+	return 0;
 }
 
 void pit_wait(double seconds) {

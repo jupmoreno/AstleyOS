@@ -59,5 +59,6 @@ typedef struct stack_frame {
 
 uint64_t contextSwitch(uint64_t stackFrame);
 uint64_t create_process(const char* name, process_func func, uint64_t argc, void* argv);
+void start();
 
 #endif

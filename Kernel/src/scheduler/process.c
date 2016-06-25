@@ -2,8 +2,11 @@
 #include <strings.h>
 #include "kalloc.h"
 #include <scheduler.h>
+#include <output.h>
 
 void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv, void* start_func); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
+extern void _startProcess(uint64_t);
+
 
 static uint64_t pids = 0;
 
@@ -64,15 +67,16 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, void
 
 uint64_t contextSwitch(uint64_t stackFrame){
 	Process p = getCurrentWaiting();
+
 	if (p == NULL)
 	{
 		return 0;
 	}
 	p->stackF = stackFrame;
-
 	p = schedule();
 
 	if(p == NULL)
 		return 0;
+
 	return p -> stackF;
 }

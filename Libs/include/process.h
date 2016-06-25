@@ -1,21 +1,17 @@
 #ifndef _PROCESS_H_
 #define _PROCESS_H_
 #include <stdint.h>
+#define STACK_SIZE 1048576	(1MB)
 
 typedef int (*process_func) (int argc, char *argv);
 typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD}state_t;
 
 typedef struct process{
-	uint64_t stack;
-	void* rsp;  //TODO: VER SI VOID* O UINT64
+	uint64_t stackF;
+	uint64_t rsp;  //TODO: VER SI VOID* O UINT64
 	uint64_t reserved;
-	
-	
 	char* name;
 	uint64_t pid;
-	
-	struct Process *next;
-	struct Process *prev;
 
 	state_t state;
 
@@ -62,6 +58,6 @@ typedef struct stack_frame {
 }stack_frame;
 
 uint64_t contextSwitch(uint64_t stackFrame);
-void create_process(const char* name, process_func func, uint64_t argc, void* argv, void* start_func);
+void create_process(const char* name, process_func func, uint64_t argc, void* argv);
 
 #endif

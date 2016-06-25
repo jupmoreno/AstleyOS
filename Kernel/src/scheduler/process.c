@@ -43,17 +43,23 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	return &(r->gs);
 }
 
-void create_process(const char* name, process_func func, uint64_t argc, void* argv, void* start_func){
+void create_process(const char* name, process_func func, uint64_t argc, void* argv){
 	Process p;
 	p = kmalloc(sizeof(struct process));
+	if(p == NULL){
+		return -1;
+	}
 	strcpy(p->name, name);
-	p->pid =  pids++;
+	p->pid = ++pids;
 	p->state = WAITING;
-	
-	uint64_t* rsp = kmalloc(sizeof(stack_frame));
-	//p->stack = rsp; TODO:VER PARA QUE SIRVE EL STACK
-	p->rsp = set_stack_frame(rsp, func, argc, argv, start_func);
+	uint64_t rsp = kmalloc(STACK_SIZE);
+	uint64_t p->stackF = kmalloc(sizeof(struct stack_frame));
+	if(rps == NULL || p->stackF == NULL){
+		return -1;
+	}
+	p->stackF = set_stack_frame(rsp, func, argc, argv, func);
 	addProcessWaiting(p);
+	return 0;
 }
 
 uint64_t contextSwitch(uint64_t stackFrame){

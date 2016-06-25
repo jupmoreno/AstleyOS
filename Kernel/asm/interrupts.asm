@@ -78,7 +78,7 @@ _interrupt_20:
 	pushaq
 	mov rdi, rsp
 	call interrupt_20
-
+	mov rsp, rax
 	popaq
 	iretq
 ; -----------------------------------------------------------------------------
@@ -129,8 +129,3 @@ interrupt_80_error:
 	mov rax, -1					; // TODO: Error code?
 	jmp interrupt_80_ret
 ; -----------------------------------------------------------------------------
-
-_startProcess:
-	mov rsp, rdi
-	popaq
-	iretq

@@ -2,6 +2,8 @@ GLOBAL _port_write_byte
 GLOBAL _port_write_word
 GLOBAL _port_read_byte
 GLOBAL _port_read_word
+GLOBAL inpw
+GLOBAL outpw
 
 section .text
 
@@ -108,4 +110,15 @@ _port_read_word: ; TODO: Test & Doc
 
 	pop rdx					; Restore everything
 	popfq
+	ret
+
+; out for video function
+outpw:
+	mov rdx, rdi
+	out dx, ax
+	ret
+; in for video function
+inpw:
+	mov rdx, rdi
+	in ax, dx
 	ret

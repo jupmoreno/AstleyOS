@@ -3,7 +3,7 @@
 static Scheduler scheduler;
 
 void schedulerInit(){
-
+	scheduler = kmalloc(sizeof(struct scheduler));
 	scheduler -> waitingpq = queueInit();
 	scheduler -> blockedpq = queueInit();
 }
@@ -117,3 +117,4 @@ Process getCurrentWaiting(){
 Process getCurrentBlocked(){
 	return scheduler -> blockedpq -> current -> process;
 }
+

@@ -39,7 +39,6 @@
 #define VBE_DISPI_LFB_ENABLED 0x40
 
 
-//defines de facu
 #define VIDEO_ADDRESS_START ((char *)0xFD000000)
 #define RESOLUTION 2359296
 #define VIDEO_RESOLUTION 786432
@@ -50,21 +49,22 @@
 #define DATA_MODULE_ADDRESS 0x500000
 
 
-//BORRAR TODO
 
+void outpw(uint16_t port, uint16_t value);
+uint16_t inpw(uint16_t port);
 
 
 
 void BgaWriteRegister(unsigned short IndexValue, unsigned short DataValue)
 {
-    _port_write_word(VBE_DISPI_IOPORT_INDEX, IndexValue);
-    _port_write_word(VBE_DISPI_IOPORT_DATA, DataValue);
+    outpw(VBE_DISPI_IOPORT_INDEX, IndexValue);
+    outpw(VBE_DISPI_IOPORT_DATA, DataValue);
 }
 
 unsigned short BgaReadRegister(unsigned short IndexValue)
 {
-    _port_write_word(VBE_DISPI_IOPORT_INDEX, IndexValue);
-    return _port_read_word(VBE_DISPI_IOPORT_DATA);
+    outpw(VBE_DISPI_IOPORT_INDEX, IndexValue);
+    return inpw(VBE_DISPI_IOPORT_DATA);
 }
 
 int BgaIsAvailable(void)
@@ -76,7 +76,7 @@ void BgaSetVideoMode(unsigned int Width, unsigned int Height, unsigned int BitDe
 {
 
 
-    BgaWriteRegister(VBE_DISPI_INDEX_ENABLE, (short unsigned int)VBE_DISPI_DISABLED);
+    BgaWriteRegister(VBE_DISPI_INDEX_ENABLE, (short unsigned int)VBE_DISPI_ENABLED);
     BgaWriteRegister(VBE_DISPI_INDEX_XRES, (short unsigned int) Width);
     BgaWriteRegister(VBE_DISPI_INDEX_YRES, (short unsigned int) Height);
     BgaWriteRegister(VBE_DISPI_INDEX_BPP, (short unsigned int) BitDepth);
@@ -95,7 +95,7 @@ void BgaSetBank(unsigned short BankNumber)
 
 
 void paintPixel(int x, int y, char blue, char green, char red){
-    char *videoPointer = (char*) VIDEO_ADDRESS_START;
+    char *videoPointer =  VIDEO_ADDRESS_START;
     int offset = ((y*WIDTH + x))*BPP_32_FACTOR;
     videoPointer = videoPointer + offset;
     *videoPointer = blue;
@@ -103,22 +103,12 @@ void paintPixel(int x, int y, char blue, char green, char red){
     *videoPointer = green;
     videoPointer++;
     *videoPointer = red;
-}
 
+}
 
 
 int SetVideoMode(void){
    BgaSetVideoMode(WIDTH, HEIGHT, VBE_DISPI_BPP_32, 1,1);
-   
-    // int iterations = 0;
-    // char* data = (char*)DATA_MODULE_ADDRESS;
-    // while(*data != '\0'){
-    //   iterations *= 10;
-    //   iterations += *data - '0';
-    //   data++;
-    // }
-	
-	//paintPixel(600, 600, 1, 0, 0);
    return 0;
 }
 

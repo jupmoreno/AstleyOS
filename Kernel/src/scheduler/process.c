@@ -16,7 +16,7 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	r->fs = 0x002;
 	r->r15= 0x003;
 	r->r14= 0x004;
-	r->r13= 0x005;
+	r->r13= 0x005;	
 	r->r12= 0x006;
 	r->r11= 0x007;
 	r->r10= 0x008;
@@ -43,7 +43,7 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	return &(r->gs);
 }
 
-void create_process(const char* name, process_func func, uint64_t argc, void* argv){
+uint64_t create_process(const char* name, process_func func, uint64_t argc, void* argv){
 	Process p;
 	p = kmalloc(sizeof(struct process));
 	if(p == NULL){
@@ -52,12 +52,12 @@ void create_process(const char* name, process_func func, uint64_t argc, void* ar
 	strcpy(p->name, name);
 	p->pid = ++pids;
 	p->state = WAITING;
-	uint64_t rsp = kmalloc(STACK_SIZE);
-	uint64_t p->stackF = kmalloc(sizeof(struct stack_frame));
-	if(rps == NULL || p->stackF == NULL){
+	uint64_t rsp = (uint64_t) kmalloc(STACK_SIZE);
+	p->stackF = (uint64_t) kmalloc(sizeof(struct stack_frame));
+	if(rsp == 0 || p->stackF == 0){
 		return -1;
 	}
-	p->stackF = set_stack_frame(rsp, func, argc, argv, func);
+	p->stackF = (uint64_t) set_stack_frame(&rsp, func, argc, argv, func);
 	addProcessWaiting(p);
 	return 0;
 }
@@ -68,11 +68,11 @@ uint64_t contextSwitch(uint64_t stackFrame){
 	{
 		return 0;
 	}
-	p-> stack = stackFrame;
+	p->stackF = stackFrame;
 
 	p = schedule();
 
 	if(p == NULL)
 		return 0;
-	return p -> stack;
+	return p -> stackF;
 }

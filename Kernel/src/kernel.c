@@ -15,7 +15,9 @@
 #include <heap.h>
 #include <paging.h>
 #include <process.h>
+#include <scheduler.h>
 #include <video_mode.h>
+
 
 #define PAGE_SIZE 0x1000
 
@@ -113,12 +115,25 @@ int kernel_main(void) {
 	sound_beep(400, 0.2);
 	sound_beep(500, 0.2);
 	
-	//SetVideoMode();
+	/*SetVideoMode();
+	int i,j;
+	for(i=0; i<200; i++){
+		for (j = 0; j < 200; j++)
+		{
+			paintPixel(i,j,(char)118,(char)0,(char)236);
+		}
+	}*/
+	sound_beep(500, 0.2);
+	sound_beep(400, 0.2);
+	sound_beep(300, 0.2);
+	sound_beep(200, 0.2);
+	sound_beep(100, 0.2);
 
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 	shell();
 
-	//create_process("imprime a", (process_func)&foo1,0, NULL, &foo1);
+	schedulerInit();
+	create_process("imprime a", (process_func)&foo1,0, NULL);
 
 	while(1);
 

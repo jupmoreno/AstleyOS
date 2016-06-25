@@ -129,3 +129,10 @@ interrupt_80_error:
 	mov rax, -1					; // TODO: Error code?
 	jmp interrupt_80_ret
 ; -----------------------------------------------------------------------------
+
+_startProcess:
+	mov rax, rsp
+	add rax, 8
+	mov rsp, eax
+	popaq
+	iretq

@@ -31,12 +31,16 @@ align 16
 	push r13
 	push r14
 	push r15
+	push fs
+	push gs
 	pushfq
 %endmacro
 
 align 16
 %macro popaq 0
 	popfq
+	pop gs
+	pop fs
 	pop r15
 	pop r14
 	pop r13
@@ -52,6 +56,7 @@ align 16
 	pop rcx
 	pop rbx
 	pop rax
+
 %endmacro
 
 ; -----------------------------------------------------------------------------

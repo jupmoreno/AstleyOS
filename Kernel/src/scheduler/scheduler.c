@@ -1,11 +1,13 @@
 #include <scheduler.h>
 
 static Scheduler scheduler;
+static int schedulerInitiated = 0;
 
 void schedulerInit(){
 	scheduler = kmalloc(sizeof(struct scheduler));
 	scheduler -> waitingpq = queueInit();
 	scheduler -> blockedpq = queueInit();
+	schedulerInitiated = 1;
 }
 
 Process schedule(){
@@ -111,10 +113,14 @@ Process removeProcessBlocked(uint64_t pid){
 }
 
 Process getCurrentWaiting(){
+	if(!schedulerInitiated)
+		return NULL;
 	return scheduler -> waitingpq -> current -> process;
 }
 
 Process getCurrentBlocked(){
+	if(!schedulerInitiated)
+		return NULL;
 	return scheduler -> blockedpq -> current -> process;
 }
 

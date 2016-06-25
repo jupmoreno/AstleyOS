@@ -98,7 +98,7 @@ void pit_trigger(void) {
 
 	if(ticks == TICKS_TO_NEXT_PROCESS) {
 		ticks = 0;
-		//contextSwitch(0);
+		contextSwitch(0);
 	}
 	
 	for(i = 0; i < TIMERS; i++) {

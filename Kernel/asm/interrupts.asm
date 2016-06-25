@@ -131,8 +131,6 @@ interrupt_80_error:
 ; -----------------------------------------------------------------------------
 
 _startProcess:
-	mov rax, rsp
-	add rax, 8
-	mov rsp, eax
+	mov rsp, rdi
 	popaq
 	iretq

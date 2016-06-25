@@ -10,6 +10,8 @@ EXTERN interrupt_21
 GLOBAL _interrupt_80
 EXTERN interrupt_80
 
+GLOBAL _startProcess
+
 section .text
 
 align 16
@@ -133,6 +135,6 @@ interrupt_80_error:
 _startProcess:
 	mov rax, rsp
 	add rax, 8
-	mov rsp, eax
+	mov rsp, rax
 	popaq
 	iretq

@@ -61,7 +61,7 @@ typedef struct {
 	unsigned int time;
 } timer_t;
 
-void pit_trigger(void);
+void pit_trigger(uint64_t);
 
 static timer_t timers[TIMERS];
 static int booleans[TIMERS];
@@ -109,7 +109,9 @@ void pit_trigger(uint64_t stackF) {
 
 	if(ticks == TICKS_TO_NEXT_PROCESS) {
 		ticks = 0;
+					
 		contextSwitch(stackF);
+
 	}
 }
 

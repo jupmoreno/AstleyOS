@@ -1,4 +1,5 @@
 #include <scheduler.h>
+#include <output.h>
 
 static Scheduler scheduler;
 static int schedulerInitiated = 0;
@@ -115,12 +116,18 @@ Process removeProcessBlocked(uint64_t pid){
 Process getCurrentWaiting(){
 	if(!schedulerInitiated)
 		return NULL;
-	return scheduler -> waitingpq -> current -> process;
+	return getCurrent(scheduler -> waitingpq);
 }
 
 Process getCurrentBlocked(){
 	if(!schedulerInitiated)
 		return NULL;
-	return scheduler -> blockedpq -> current -> process;
+	return getCurrent(scheduler -> blockedpq);
+}
+
+Process getCurrent(SchedulerLL q){
+	if(q->size == 0)
+		return NULL;
+	return q -> current -> process;
 }
 

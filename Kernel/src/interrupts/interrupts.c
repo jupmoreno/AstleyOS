@@ -6,10 +6,10 @@
 extern void _interrupt_set(void);
 extern void _interrupt_clear(void);
 
-extern void pit_trigger(void);
+extern void pit_trigger(uint64_t stackF);
 extern void keyboard_trigger(unsigned char scancode);
 
-void interrupt_20(void);
+void interrupt_20(uint64_t stackF);
 void interrupt_21(unsigned char scancode);
 syscall_st * interrupt_80(int syscall);
 
@@ -25,8 +25,8 @@ void interrupt_clear(void) {
 	log("<CLI>\n");
 }
 
-void interrupt_20(void) {
-	pit_trigger();
+void interrupt_20(uint64_t stackF) {
+	pit_trigger(stackF);
 	pic_irq_eoi(0);
 }
 

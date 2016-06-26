@@ -13,7 +13,7 @@ void interrupt_set(void);
  */
 void interrupt_clear(void);
 
-extern void _interrupt_20(void);
+extern void _interrupt_20(uint64_t stackF);
 extern void _interrupt_21(void);
 extern void _interrupt_80(void);
 

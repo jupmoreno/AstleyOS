@@ -76,7 +76,7 @@ _interrupt_clear:
 align 16
 _interrupt_20:
 	pushaq
-
+	mov rdi, rsp
 	call interrupt_20
 
 	popaq

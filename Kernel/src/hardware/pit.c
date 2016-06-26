@@ -92,15 +92,10 @@ void pit_init(void) {
 // 	return 1;
 // }
 
-void pit_trigger(void) {
+void pit_trigger(uint64_t stackF) {
 	int i;
 	tick();
 
-	if(ticks == TICKS_TO_NEXT_PROCESS) {
-		ticks = 0;
-		contextSwitch(0);
-	}
-	
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time > 0) {
 			timers[i].time--;
@@ -111,6 +106,11 @@ void pit_trigger(void) {
 	}
 
 	manage_time();
+
+	if(ticks == TICKS_TO_NEXT_PROCESS) {
+		ticks = 0;
+		contextSwitch(stackF);
+	}
 }
 
 void pit_wait(double seconds) {

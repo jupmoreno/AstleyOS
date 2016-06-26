@@ -142,7 +142,7 @@ Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q){
 		return NULL;
 	}
 	do{
-		if(node->process->pid == pid)
+		if(node->process->pid == (uint64_t)pid)
 			found = 1;
 	}while(node != q ->current && !found);
 

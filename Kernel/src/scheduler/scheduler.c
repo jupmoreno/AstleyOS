@@ -4,6 +4,8 @@
 static Scheduler scheduler;
 static int schedulerInitiated = 0;
 
+Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q);
+
 void schedulerInit(){
 	scheduler = kmalloc(sizeof(struct scheduler));
 	scheduler -> waitingpq = queueInit();
@@ -133,3 +135,33 @@ Process getCurrent(SchedulerLL q){
 	return q -> current -> process;
 }
 
+Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q){
+	int found = 0;
+	LLnode node = q -> current;
+	if(q->size < 1){
+		return NULL;
+	}
+	do{
+		if(node->process->pid == pid)
+			found = 1;
+	}while(node != q ->current && !found);
+
+	if(found)
+		return node->process;
+	return NULL;
+}
+
+Process getProcess(int pid){
+	Process ret = getProcessWithSpecifiedQueue(pid, scheduler->waitingpq);
+	if(ret != NULL)
+		return ret;
+	return getProcessWithSpecifiedQueue(pid, scheduler->blockedpq);
+}
+
+int isWaiting(int pid){
+	return getProcessWithSpecifiedQueue(pid, scheduler->waitingpq) != NULL;
+}
+
+int isBlocked(int pid){
+	return getProcessWithSpecifiedQueue(pid, scheduler->blockedpq) != NULL;
+}

@@ -76,7 +76,7 @@ void BgaSetVideoMode(unsigned int Width, unsigned int Height, unsigned int BitDe
 {
 
 
-    BgaWriteRegister(VBE_DISPI_INDEX_ENABLE, (short unsigned int)VBE_DISPI_ENABLED);
+    BgaWriteRegister(VBE_DISPI_INDEX_ENABLE, (short unsigned int)VBE_DISPI_DISABLED);
     BgaWriteRegister(VBE_DISPI_INDEX_XRES, (short unsigned int) Width);
     BgaWriteRegister(VBE_DISPI_INDEX_YRES, (short unsigned int) Height);
     BgaWriteRegister(VBE_DISPI_INDEX_BPP, (short unsigned int) BitDepth);

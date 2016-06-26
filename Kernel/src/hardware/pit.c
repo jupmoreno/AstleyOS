@@ -55,7 +55,7 @@
 #define CMD_MD_BIN 		0x00 // 0000 000 0
 #define CMD_MD_BCD 		0x01 // 0000 000 1
 
-#define TICKS_TO_NEXT_PROCESS 1
+#define TICKS_TO_NEXT_PROCESS 10
 
 typedef struct {
 	unsigned int time;

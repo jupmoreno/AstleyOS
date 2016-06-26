@@ -3,22 +3,23 @@
 #include "kalloc.h"
 #include <scheduler.h>
 #include <output.h>
-
-void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv, void* start_func); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
+//ASDFGHJ
+void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
+int start(process_func func, uint64_t argc, void *argv);
 extern void _startProcess(uint64_t);
 
 
 static uint64_t pids = 0;
 
 
-void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv, void* start_func){
+void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv){
 
 	stack_frame *r = (stack_frame*) (rsp);
-		
+	
 	r->gs = 0x001;
 	r->fs = 0x002;
-	r->r15= 0x003;
-	r->r14= 0x004;
+	//r->r15= 0x003;
+	//r->r14= 0x004;
 	r->r13= 0x005;	
 	r->r12= 0x006;
 	r->r11= 0x007;
@@ -35,7 +36,7 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	
 	//iretq hook
 	
-	r->rip= (uint64_t)start_func;
+	r->rip= (uint64_t)&start;
 	r->cs= 0x008;
 	r->eflags= 0x202;
 	r->rsp= (uint64_t)&(r->base);
@@ -43,6 +44,11 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	
 	r->base= 0x000;
 	
+	//int* f = (int*)(r->rip);
+	//f((process_func)r->rdi,0,0);
+	//f(r->rsi,(void*)r->rdi);
+	//(int*)f = (process_func)
+
 	return &(r->gs);
 }
 
@@ -56,18 +62,22 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, void
 	p->pid = ++pids;
 	p->state = WAITING;
 	uint64_t rsp = (uint64_t) kmalloc(STACK_SIZE);
+	rsp += STACK_SIZE - 1 - sizeof(struct stack_frame);
+
 	p->stackF = (uint64_t) kmalloc(sizeof(struct stack_frame));
 	if(rsp == 0 || p->stackF == 0){
 		return -1;
 	}
-	p->stackF = (uint64_t) set_stack_frame(&rsp, func, argc, argv, func);
+	p->stackF = (uint64_t) set_stack_frame(&rsp, func, argc, argv);
 	addProcessWaiting(p);
-	return 0;
+	//stack_frame *r = (stack_frame*)(&rsp);
+	//process_func f = (process_func)r->rip;
+	//f(0,0);
+	return p->pid;
 }
 
 uint64_t contextSwitch(uint64_t stackFrame){
 	Process p = getCurrentWaiting();
-
 	if (p == NULL)
 	{
 		return 0;
@@ -79,4 +89,10 @@ uint64_t contextSwitch(uint64_t stackFrame){
 		return 0;
 
 	return p -> stackF;
+}
+
+int start(process_func f, uint64_t argc, void *argv){
+	f(argc, argv);
+//	end_process();
+	return 0;
 }

@@ -114,19 +114,10 @@ int kernel_main(void) {
 	sound_beep(300, 0.2);
 	sound_beep(400, 0.2);
 	sound_beep(500, 0.2);
-	
-	/*SetVideoMode();
-	int i,j;
-	for(i=0; i<200; i++){
-		for (j = 0; j < 200; j++)
-		{
-			paintPixel(i,j,(char)118,(char)0,(char)236);
-		}
-	}*/
 
 
 	schedulerInit();
-	create_process("imprime a", (process_func)&foo1,0, NULL);
+	create_process("imprime a", (process_func)&foo1,0, 0);
 	
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 	shell();

@@ -33,12 +33,12 @@ align 16
 	push r15
 	push fs
 	push gs
-	pushfq
+;	pushfq
 %endmacro
 
 align 16
 %macro popaq 0
-	popfq
+;	popfq
 	pop gs
 	pop fs
 	pop r15
@@ -86,10 +86,12 @@ _interrupt_20:
 	mov rdi, rsp
 	call interrupt_20
 	cmp rax, 0
-	jz .curry
+	je .curry
 	mov rsp, rax
 .curry: 
 	popaq
+	mov al, 20h
+	out 20h, al
 	iretq
 ; -----------------------------------------------------------------------------
 

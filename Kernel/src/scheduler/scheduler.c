@@ -55,15 +55,17 @@ int addProcess(Process p, SchedulerLL q){
 		return ERROR;
 	LLnode node = kmalloc(sizeof(struct llnode));
 	if(node == NULL)
-		return 0; //error
+		return ERROR; //error
 	if(q->size == 0){
 		q->current = node;
+		node->process = p;
 		node -> next = node;
 		node -> prev = node;
 		q->size++;
 		return 1;
 	}
 	q->current->prev ->next = node;
+	node->process = p;
 	node -> prev = q -> current -> prev;
 	node -> next = q -> current;
 	q -> current -> prev = node;
@@ -114,13 +116,13 @@ Process removeProcessBlocked(uint64_t pid){
 }
 
 Process getCurrentWaiting(){
-	if(!schedulerInitiated)
+	if(schedulerInitiated == 0)
 		return NULL;
 	return getCurrent(scheduler -> waitingpq);
 }
 
 Process getCurrentBlocked(){
-	if(!schedulerInitiated)
+	if(schedulerInitiated == 0)
 		return NULL;
 	return getCurrent(scheduler -> blockedpq);
 }

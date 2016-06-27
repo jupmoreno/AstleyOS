@@ -90,6 +90,6 @@ uint64_t contextSwitch(uint64_t stack){
 
 int start(process_func f, uint64_t argc, void *argv){
 	f(argc, argv);
-//	end_process();
+	endProcess();
 	return 0;
 }

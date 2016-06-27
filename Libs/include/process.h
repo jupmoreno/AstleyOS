@@ -6,6 +6,8 @@
 typedef int (*process_func) (int argc, char *argv);
 typedef enum state_t{RUNNING, BLOCKED, WAITING, DEAD}state_t;
 
+static const char* states[DEAD + 1] = {"RUNNING", "BLOCKED", "WAITING", "DEAD"};
+
 typedef struct process{
 	const char* name;
 	uint64_t reserved;

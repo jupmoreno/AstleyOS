@@ -40,3 +40,5 @@ Process removeProcessBlocked(uint64_t pid);
 Process getProcess(int pid);
 int isWaiting(int pid);
 int isBlocked(int pid);
+void endProcess();
+int killProcess(int pid);

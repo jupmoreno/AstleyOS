@@ -119,7 +119,10 @@ int kernel_main(void) {
 	schedulerInit();
 	create_process("imprime a", (process_func)&foo1,0, 0);
 	create_process("imprime b", (process_func)&foo1,0, 0);
-
+	printProcesses();
+	killProcess(2);
+	printProcesses();
+	
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 
 

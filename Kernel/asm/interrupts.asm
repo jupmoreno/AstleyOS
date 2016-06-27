@@ -12,6 +12,7 @@ EXTERN interrupt_80
 
 GLOBAL _startProcess
 
+
 section .text
 
 align 16
@@ -90,8 +91,6 @@ _interrupt_20:
 	mov rsp, rax
 .curry: 
 	popaq
-	mov al, 20h
-	out 20h, al
 	iretq
 ; -----------------------------------------------------------------------------
 

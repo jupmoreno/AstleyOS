@@ -7,11 +7,11 @@ typedef int (*process_func) (int argc, char *argv);
 typedef enum state_t{RUNNING, WAITING, BLOCKED, DEAD}state_t;
 
 typedef struct process{
-	uint64_t stackF;
-	uint64_t rsp;
 	uint64_t reserved;
 	char* name;
 	uint64_t pid;
+	uint64_t stackF;
+	uint64_t rsp;
 
 	state_t state;
 

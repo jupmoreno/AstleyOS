@@ -58,6 +58,9 @@ int addProcess(Process p, SchedulerLL q){
 	LLnode node = kmalloc(sizeof(struct llnode));
 	if(node == NULL)
 		return ERROR; //error
+
+	//out_printf("Nuevo Proceso\nID: %d\nName: %s", p->pid,p->name);
+
 	if(q->size == 0){
 		q->current = node;
 		node->process = p;

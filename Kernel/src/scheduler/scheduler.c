@@ -15,10 +15,11 @@ void schedulerInit(){
 }
 
 Process schedule(){
-
-	if(scheduler -> waitingpq -> current != NULL){
+Process p;
+	if(scheduler -> waitingpq -> size >= 1){
+		p = scheduler -> waitingpq -> current -> process;
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
-		return scheduler -> waitingpq -> current -> process;	
+		return p;	
 	}
 	return NULL;
 }
@@ -40,18 +41,16 @@ int addProcess(Process p, SchedulerLL q){
 	if(node == NULL)
 		return ERROR; //error
 
-	//out_printf("Nuevo Proceso\nID: %d\nName: %s", p->pid,p->name);
-
 	if(q->size == 0){
-		q->current = node;
-		node->process = p;
+		q -> current = node;
+		node -> process = p;
 		node -> next = node;
 		node -> prev = node;
-		q->size++;
+		q -> size++;
 		return 1;
 	}
-	q->current->prev ->next = node;
 	node->process = p;
+	q->current->prev ->next = node;
 	node -> prev = q -> current -> prev;
 	node -> next = q -> current;
 	q -> current -> prev = node;
@@ -158,7 +157,8 @@ void printProcessesWithSpecifiedQueue(SchedulerLL q){
 		return;
 	}
 	do{
-		out_printf("Process: %s\t Id: %s\t State: %s\n", node->process->name, node->process->pid, node->process->state);
+		out_printf("process pointer : %d \n",node->process);
+		out_printf("Process: %s\t Id: %d\t State: %d\n", node->process->name, node->process->pid, node->process->state);
 		node = node->next;
 	}while(node != q ->current);
 }

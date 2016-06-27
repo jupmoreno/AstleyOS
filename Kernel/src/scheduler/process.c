@@ -44,11 +44,6 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	
 	r->base= 0x000;
 
-	//int* f = (int*)(r->rip);
-	//f((process_func)r->rdi,0,0);
-	//f(r->rsi,(void*)r->rdi);
-	//(int*)f = (process_func)
-
 	return &(r->gs);
 }
 
@@ -67,7 +62,7 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, void
 		return -1;
 	}*/
 	p->rsp = (uint64_t) set_stack_frame((void*)rsp, func, argc, argv);
-	strcpy(p->name, name);
+	p-> name = name;
 	p->pid = ++pids;
 	p->state = WAITING;
 	p->stackF = orig_rsp;
@@ -75,6 +70,7 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, void
 	//stack_frame *r = (stack_frame*)(&rsp);
 	//process_func f = (process_func)r->rip;
 	//f(0,0);
+
 	return p->pid;
 }
 

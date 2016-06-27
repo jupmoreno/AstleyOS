@@ -119,13 +119,14 @@ int kernel_main(void) {
 	schedulerInit();
 	create_process("imprime a", (process_func)&foo1,0, 0);
 	create_process("imprime b", (process_func)&foo1,0, 0);
+	create_process("imprime c", (process_func)&foo2,0, 0);
 	printProcesses();
 	killProcess(2);
 	printProcesses();
-	
+
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 
-
+	//shell();
 	while(1);
 
 	return 0;
@@ -188,7 +189,7 @@ static void loadIDT(void) {
 void foo1(){
 	out_printf("a");
 	while(1){
-		out_printf("a");
+	//	out_printf("a");
 	}
 }
 

@@ -16,8 +16,8 @@ void schedulerInit(){
 
 Process schedule(){
 	Process p;
-	if(scheduler -> waitingpq -> size >= 1){
-		p = scheduler -> waitingpq -> current -> process;
+	if(scheduler -> waitingpq -> current != NULL){
+		p = scheduler -> waitingpq -> current -> next -> process;
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
 		return p;	
 	}

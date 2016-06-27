@@ -55,7 +55,7 @@
 #define CMD_MD_BIN 		0x00 // 0000 000 0
 #define CMD_MD_BCD 		0x01 // 0000 000 1
 
-#define TICKS_TO_NEXT_PROCESS 10
+#define TICKS_TO_NEXT_PROCESS 1
 
 typedef struct {
 	unsigned int time;
@@ -95,7 +95,6 @@ void pit_init(void) {
 uint64_t pit_trigger(uint64_t stackF) {
 	int i;
 	tick();
-
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time > 0) {
 			timers[i].time--;

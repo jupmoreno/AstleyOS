@@ -5,6 +5,7 @@ static Scheduler scheduler;
 static int schedulerInitiated = 0;
 
 Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q);
+void printProcessesWithSpecifiedQueue(SchedulerLL q);
 
 void schedulerInit(){
 	scheduler = kmalloc(sizeof(struct scheduler));
@@ -15,7 +16,7 @@ void schedulerInit(){
 
 Process schedule(){
 
-	if(scheduler -> waitingpq -> current !=NULL){
+	if(scheduler -> waitingpq -> current != NULL){
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
 		return scheduler -> waitingpq -> current -> process;	
 	}
@@ -29,26 +30,6 @@ SchedulerLL queueInit(){
 	return q;
 }
 
-void printProcesses(){
-	LLnode first = scheduler->waitingpq->current;
-	LLnode current = scheduler->waitingpq->current;
-	
-	out_printf ("Processes that are waiting:\n");
-	do {
-		out_printf("%s: pid %d", current->process->name, current->process->pid);
-		current = current -> next;
-	}while(current != first);
-	
-	current = scheduler->blockedpq->current;
-	first = scheduler->blockedpq->current;
-	
-	out_printf("Processes that are blocked:\n");
-	do {
-		out_printf("%s: pid %d", current->process->name, current->process->pid);
-		current = current -> next;
-	}while(current != first);
-	
-}
 
 int addProcess(Process p, SchedulerLL q){
 	if(p == NULL)
@@ -96,6 +77,7 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	do{
 		if(node->process->pid == pid)
 			found = 1;
+		node = node->next;
 	}while(node != q ->current && !found);
 
 	if(q->size == 1 && found){
@@ -147,6 +129,7 @@ Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q){
 	do{
 		if(node->process->pid == (uint64_t)pid)
 			found = 1;
+		node = node->next;
 	}while(node != q ->current && !found);
 
 	if(found)
@@ -167,4 +150,20 @@ int isWaiting(int pid){
 
 int isBlocked(int pid){
 	return getProcessWithSpecifiedQueue(pid, scheduler->blockedpq) != NULL;
+}
+
+void printProcessesWithSpecifiedQueue(SchedulerLL q){
+	LLnode node = q -> current;
+	if(q->size < 1){
+		return;
+	}
+	do{
+		out_printf("Process: %s\t Id: %s\t State: %s\n", node->process->name, node->process->pid, node->process->state);
+		node = node->next;
+	}while(node != q ->current);
+}
+
+void printProcesses(){
+	printProcessesWithSpecifiedQueue(scheduler->waitingpq);
+	printProcessesWithSpecifiedQueue(scheduler->blockedpq);
 }

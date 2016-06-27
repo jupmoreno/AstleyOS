@@ -96,7 +96,7 @@ void BgaSetBank(unsigned short BankNumber)
 
 void paintPixel(int x, int y, char blue, char green, char red){
     char *videoPointer =  VIDEO_ADDRESS_START;
-    int offset = ((y*WIDTH + x))*BPP_32_FACTOR;
+    int offset = (y*WIDTH + x)*BPP_32_FACTOR;
     videoPointer = videoPointer + offset;
     *videoPointer = blue;
     videoPointer++;

@@ -63,6 +63,8 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, void
 	}*/
 	p->rsp = (uint64_t) set_stack_frame((void*)rsp, func, argc, argv);
 	p-> name = name;
+	if(pids)
+		log("Creando el proceso %s\n", p->name);
 	p->pid = pids++;
 	p->state = WAITING;
 	p->stackF = orig_rsp;
@@ -81,10 +83,12 @@ uint64_t contextSwitch(uint64_t stack){
 		return 0;
 	}
 	p->rsp = stack;
+	p->state = WAITING;
 	p = schedule();
 
 	if(p == NULL)
 		return 0;
+	p->state = RUNNING;
 	return p -> rsp;
 }
 

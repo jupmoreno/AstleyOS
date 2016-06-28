@@ -14,6 +14,7 @@ void sysalloc_free(void * addr);
 void sysvideo_mode(void);
 void syspaint_pixel(int x, int y, char blue, char green, char red);
 void sys_sound(int frequency, double time);
+void sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 
 /**
  * Syscall caller or wrapper
@@ -71,6 +72,14 @@ void syspaint_pixel(int x, int y, char blue, char green, char red){
 
 void sys_sound(int frequency, double time) {
 	_syscall((uint64_t)frequency,(uint64_t) time, 0, 0, 0, 0, _SYSCALL_SOUND);
+}
+
+void sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv) {
+	_syscall((uint64_t)name, func, argc, (uint64_t) argv, 0, 0, _SYSCALL_NEW_PROCESS);
+}
+
+void sys_ps() {
+	_syscall(0, 0, 0, 0, 0, 0, _SYSCALL_PS);
 }
 // void * sysalloc_renew(void * addr, unsigned int size) {
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);

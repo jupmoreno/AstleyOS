@@ -163,9 +163,10 @@ void printProcessesWithSpecifiedQueue(SchedulerLL q){
 	if(q->size < 1){
 		return;
 	}
+	out_printf("\n");
 	do{
 		if(!isDummy(node))
-			out_printf("Process: %s\t Id: %d\t State: %s\n", node->process->name, node->process->pid, states[node->process->state]);
+			out_printf("Name: %s\t Id: %d\t State: %s\n", node->process->name, node->process->pid, states[node->process->state]);
 		node = node->next;
 	}while(node != q ->current);
 }

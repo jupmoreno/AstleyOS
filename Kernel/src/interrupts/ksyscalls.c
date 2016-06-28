@@ -4,6 +4,8 @@
 #include <sysconsole.h>
 #include "video_mode.h"
 #include "sound.h"
+#include "process.h"
+#include "scheduler.h"
 
 extern unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 extern unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);
@@ -20,6 +22,8 @@ syscall_st * syscalls_table[_SYSCALLS_SIZE] = {
 	[_SYSCALL_VIDEO_MODE] = syscall_set_video_mode,
 	[_SYSCALL_PAINT_PIXEL] = syscall_paint_pixel,
 	[_SYSCALL_SOUND] = syscall_sound,
+	[_SYSCALL_NEW_PROCESS] = syscall_new_process,
+	[_SYSCALL_PS] = syscall_ps,
 	[_SYSCALL_ALLOC] = syscall_alloc,
 	// (3) FUTURE SYSCALL HERE !! REMEMBER TO CHANGE _SYSCALLS_LAST !!
 };
@@ -85,7 +89,7 @@ uint64_t syscall_paint_pixel(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t 
 	
 	paintPixel(x, y, blue, green, red);
 
-	return 0;
+	return 1;
 }
 
 uint64_t syscall_sound(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
@@ -94,3 +98,11 @@ uint64_t syscall_sound(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, u
 	return sound_beep(frequency, time);
 }
 
+uint64_t syscall_new_process(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
+	return create_process((char*) rdi, (process_func) rsi, rdx, (void*) r10);
+}
+
+uint64_t syscall_ps(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9) {
+	printProcesses();
+	return 1;
+}

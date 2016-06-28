@@ -10,6 +10,8 @@
 #define MAX_BUFFER_LENGTH 128
 
 int main(void);
+int shell(void);
+extern void sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 
 static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
@@ -18,7 +20,12 @@ static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
 
 
-int main(void) {
+int main(void){
+	sys_new_process("shell", (uint64_t)&shell, 0, 0);
+	return OK;
+}
+
+int shell(void) {
 	static args_t noargs = {NULL, 0};
 	int ret, should_clear;
 	char buffer[MAX_BUFFER_LENGTH];

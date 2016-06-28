@@ -12,7 +12,7 @@ COMMAND_HELP(game);
 
 COMMAND_FUNCTION(game) {
 	sysvideo_mode();
-	//sys_sound(200, 1.1);
+	
 	int i,j;
 	for(i=0; i<200; i++){
 		for (j = 0; j < 200; j++)

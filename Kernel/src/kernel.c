@@ -128,7 +128,7 @@ int kernel_main(void) {
 
 	EntryPoint shell = module_addresses[MODULE_SHELL_INDEX];
 
-	shell();
+//	shell();
 	while(1);
 
 	return 0;
@@ -198,10 +198,10 @@ void foo1(){
 
 void foo2(){
 	int i;
-	while(1){
+	//while(1){
 		for(i=0;i<9999999;i++);
 		out_printf("b");
-	}
+	//}
 }
 
 void foo3(){

@@ -7,7 +7,7 @@
 void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
 int start(process_func func, uint64_t argc, void *argv);
 extern void _startProcess(uint64_t);
-
+extern void _interrupt_20();
 
 static uint64_t pids = 0;
 
@@ -91,5 +91,6 @@ uint64_t contextSwitch(uint64_t stack){
 int start(process_func f, uint64_t argc, void *argv){
 	f(argc, argv);
 	endProcess();
+	_interrupt_20();
 	return 0;
 }

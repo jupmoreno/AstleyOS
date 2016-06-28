@@ -3,7 +3,7 @@
 #include "kalloc.h"
 #include <scheduler.h>
 #include <output.h>
-//ASDFGHJ
+
 void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
 int start(process_func func, uint64_t argc, void *argv);
 extern void _startProcess(uint64_t);
@@ -63,7 +63,7 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, void
 	}*/
 	p->rsp = (uint64_t) set_stack_frame((void*)rsp, func, argc, argv);
 	p-> name = name;
-	p->pid = ++pids;
+	p->pid = pids++;
 	p->state = WAITING;
 	p->stackF = orig_rsp;
 	addProcessWaiting(p);

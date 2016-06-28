@@ -24,7 +24,7 @@ int log(const char * fmt, ...) {
     va_list arg;
 
     va_start(arg, fmt);
-   /* while(fmt[i] != 0) {
+    while(fmt[i] != 0) {
 		if(fmt[i] == '%') {
 			symbol = fmt[++i];
 		    switch(symbol) {
@@ -52,7 +52,7 @@ int log(const char * fmt, ...) {
 		}
 
 		i++;
-	}*/
+	}
 	va_end(arg);
 
 	return i - 1;

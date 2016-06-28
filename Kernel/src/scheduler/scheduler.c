@@ -6,17 +6,22 @@ static int schedulerInitiated = 0;
 
 Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q);
 void printProcessesWithSpecifiedQueue(SchedulerLL q);
+int isDummy(LLnode node);
+int addDummyProcess();
 
 void schedulerInit(){
 	scheduler = kmalloc(sizeof(struct scheduler));
 	scheduler -> waitingpq = queueInit();
 	scheduler -> blockedpq = queueInit();
+	addDummyProcess();
 	schedulerInitiated = 1;
 }
 
 Process schedule(){
 	Process p;
 	if(scheduler -> waitingpq -> current != NULL){
+		if(isDummy(scheduler -> waitingpq -> current -> next))
+			scheduler -> waitingpq -> current = scheduler -> waitingpq -> current -> next;
 		p = scheduler -> waitingpq -> current -> next -> process;
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
 		return p;	
@@ -159,7 +164,8 @@ void printProcessesWithSpecifiedQueue(SchedulerLL q){
 		return;
 	}
 	do{
-		out_printf("Process: %s\t Id: %d\t State: %s\n", node->process->name, node->process->pid, states[node->process->state]);
+		if(!isDummy(node))
+			out_printf("Process: %s\t Id: %d\t State: %s\n", node->process->name, node->process->pid, states[node->process->state]);
 		node = node->next;
 	}while(node != q ->current);
 }
@@ -175,6 +181,8 @@ void endProcess(){
 }
 
 int killProcess(int pid){
+	if(pid < 1)
+		return 0;
 	Process p = removeProcessWaiting(pid);
 	if(p == NULL)
 		p = removeProcessBlocked(pid);
@@ -182,4 +190,12 @@ int killProcess(int pid){
 		return 0;
 	//TODO: free	
 	return 1;
+}
+
+int addDummyProcess(){
+	return create_process("dummy", NULL, 0, 0);
+}
+
+int isDummy(LLnode node){
+	return !(node->process->pid);
 }

@@ -68,7 +68,9 @@ int shell(void) {
 					should_clear = FALSE;
 
 					// Run command & get it's return value
-					ret = command->run(*args);
+					/*pid = */sys_new_process(command->name, (uint64_t) command->run, args->argc, args->argv);
+					//ret = wait_process(pid);
+
 					// If error occurred -> print it
 					if(ERROR_OCCURRED(ret)) {
 						printf("(%d) Humm... That last command didn't end as espected.\n", ret);

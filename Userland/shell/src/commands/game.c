@@ -26,7 +26,7 @@ COMMAND_FUNCTION(game) {
 }
 
 COMMAND_HELP(game) {
-	if(args.argc >= 1) {
+	if(argc >= 1) {
 		printf("<game> Error: too many arguments.\n");
 
 		return ERROR;

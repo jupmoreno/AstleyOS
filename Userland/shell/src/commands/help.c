@@ -8,7 +8,7 @@ COMMAND_HELP(help);
 COMMAND_FUNCTION(help) {
 	int i;
 
-	if(args.argc == 0) {
+	if(argc == 0) {
 		printf("Available commands:\n");
 		for(i = 0; commands[i+1].name != NULL; i++) {
 			printf("%s\t", commands[i].name);
@@ -19,9 +19,11 @@ COMMAND_FUNCTION(help) {
 	}
 
 	for(i = 0; commands[i].name != NULL; i++) {
-		if(!strcmp(args.argv[0], commands[i].name)) {
-			ARGS_FOR_SUBCOMMAND(args);
-			return commands[i].help(args);
+		if(!strcmp(argv[0], commands[i].name)) {
+			argc--; 
+			argv++;
+
+			return commands[i].help(argc, argv);
 		}
 	}
 
@@ -30,8 +32,9 @@ COMMAND_FUNCTION(help) {
 }
 
 COMMAND_HELP(help) {
-	if(args.argc != 0) {
+	if(argc != 0) {
 		printf("<help> Error: too many arguments.\n");
+
 		return ERROR;
 	}
 

@@ -14,8 +14,9 @@ void sysalloc_free(void * addr);
 void sysvideo_mode(void);
 void syspaint_pixel(int x, int y, char blue, char green, char red);
 void sys_sound(int frequency, double time);
-void sys_new_process(const char* name, uint64_t func, uint64_t argc, char* argv[]);
+int sys_new_process(const char* name, uint64_t func, uint64_t argc, char* argv[]);
 void sys_kill_process(int pid);
+void sys_ps();
 
 /**
  * Syscall caller or wrapper
@@ -75,8 +76,8 @@ void sys_sound(int frequency, double time) {
 	_syscall((uint64_t)frequency,(uint64_t) time, 0, 0, 0, 0, _SYSCALL_SOUND);
 }
 
-void sys_new_process(const char* name, uint64_t func, uint64_t argc, char* argv[]) {
-	_syscall((uint64_t)name, func, argc, (uint64_t) argv, 0, 0, _SYSCALL_NEW_PROCESS);
+int sys_new_process(const char* name, uint64_t func, uint64_t argc, char* argv[]) {
+	return (int) _syscall((uint64_t)name, func, argc, (uint64_t) argv, 0, 0, _SYSCALL_NEW_PROCESS);
 }
 
 void sys_ps() {

@@ -11,7 +11,7 @@
 
 int main(void);
 int shell(void);
-extern void sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
+extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 
 static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
@@ -68,7 +68,8 @@ int shell(void) {
 					should_clear = FALSE;
 
 					// Run command & get it's return value
-					/*pid = */sys_new_process(command->name, (uint64_t) command->run, args->argc, args->argv);
+					int pid = sys_new_process(command->name, (uint64_t) command->run, args->argc, args->argv);
+					printf("cree el proceso con el pid %d\n", pid);
 					//ret = wait_process(pid);
 
 					// If error occurred -> print it

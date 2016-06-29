@@ -120,6 +120,7 @@ typedef struct {
 
 extern cr0_t _cr0_read(void);
 extern void _cr0_write(cr0_t cr0);
+extern uint64_t _cr2_read(void);
 extern cr3_t _cr3_read(void);
 extern void _cr3_write(cr3_t cr3);
 
@@ -149,7 +150,8 @@ int paging_init(void) {
 	log("<PAGING> CR0: %h\n", _cr0_read());
 	log("<PAGING> CR3: %h\n", _cr3_read());
 
-	lvl4_table = lvl4t_init(MEGABYTES(ram_amount()) / _MEMORY_PAGE_SIZE);
+	//lvl4_table = lvl4t_init(MEGABYTES(ram_amount()) / _MEMORY_PAGE_SIZE);
+	lvl4_table = lvl4t_init(MEGABYTES((uint64_t) 5120) / _MEMORY_PAGE_SIZE);
 	if(lvl4_table == NULL) {
 		return FALSE;
 	}
@@ -160,7 +162,7 @@ int paging_init(void) {
 }
 
 void pferror_handler(uint64_t code, uint64_t fault_address) {
-	log("-----------------------> ERROR");
+	log("<PAGING> PAGE FAULT (CODE: %h / DIR: %h)\n", code, fault_address);
 }
 
 static lvl4e_st * lvl4t_init(uint64_t pages_total) {

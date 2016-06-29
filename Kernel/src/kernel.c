@@ -135,6 +135,7 @@ int kernel_main(void) {
 }
 
 void kernel_panic(const char * code, const char * desc, const char * source, const int halt) {
+	log("\nKERNEL EXCEPTION!!!\n\n");
 	out_box_top();
 	out_box_line("OOPS! Something went wrong");
 	out_box_line("EXCEPTION CODE: #%s", code);

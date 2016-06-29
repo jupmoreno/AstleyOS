@@ -39,7 +39,7 @@
 #define VBE_DISPI_LFB_ENABLED 0x40
 
 
-#define VIDEO_ADDRESS_START ((char *)0xFD000000)
+#define VIDEO_ADDRESS_START 0xFD000000
 #define RESOLUTION 2359296
 #define VIDEO_RESOLUTION 786432
 #define END_OF_SCREEN ((char*)0xFD000000) + 2359296
@@ -94,10 +94,13 @@ void BgaSetBank(unsigned short BankNumber)
 
 
 
-void paintPixel(int x, int y, char blue, char green, char red){
-    char *videoPointer =  VIDEO_ADDRESS_START;
-    int offset = (y*WIDTH + x)*BPP_32_FACTOR;
-    videoPointer = videoPointer + offset;
+void paintPixel(int x, int y, uint8_t blue, uint8_t green, uint8_t red) {
+    uint8_t * videoPointer =  (uint8_t *) VIDEO_ADDRESS_START;
+	log("1 VIDEO POINTER: %h\n", ((intptr_t) videoPointer) >> 4);
+    int offset = (y * WIDTH + x) * BPP_32_FACTOR;
+	log("2 VIDEO POINTER: %h\n", ((intptr_t) videoPointer) >> 4);
+    videoPointer += offset;
+	log("3 VIDEO POINTER: %h\n", ((intptr_t) videoPointer) >> 4);
     *videoPointer = blue;
     videoPointer++;
     *videoPointer = green;
@@ -108,7 +111,14 @@ void paintPixel(int x, int y, char blue, char green, char red){
 
 
 int SetVideoMode(void){
-   BgaSetVideoMode(WIDTH, HEIGHT, VBE_DISPI_BPP_32, 1,1);
+	BgaSetVideoMode(WIDTH, HEIGHT, VBE_DISPI_BPP_32, 1,1);
+   
+   	int i, j;
+	for(i = 0; i < WIDTH; i++) {
+		for(j = 0; j < HEIGHT; j++) {
+			paintPixel(i, j, 255, 255, 255);
+		}
+	}
    return 0;
 }
 

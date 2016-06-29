@@ -48,8 +48,12 @@ align 16
 ; -----------------------------------------------------------------------------
 _exception_0E:	; Stack Fault
 	pushaq
+	
+	xor rax, rax
+	xor rdi, rdi
+	xor rsi, rsi
 
-	mov eax, [rsp+136] 	; error code
+	mov rax, [rsp+136] 	; error code
 	mov rdi, rax
 	mov rsi, cr2
 	call exception_0E

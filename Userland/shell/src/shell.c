@@ -49,6 +49,9 @@ int shell(void) {
 		if(ERROR_OCCURRED(ret)) {
 			printf("Uups! There was an error reading the command. Try again!\n");
 		} else if(buffer[0]) { // If not empty string, continue
+			
+			
+			
 			// Get command from list
 			command = getCommand(buffer);
 

@@ -13,6 +13,8 @@ COMMAND_HELP(game);
 COMMAND_FUNCTION(game) {
 	sysvideo_mode();
 	
+	while(1); // TODO: REMOVE
+	
 	int i,j;
 	for(i=0; i<200; i++){
 		for (j = 0; j < 200; j++)

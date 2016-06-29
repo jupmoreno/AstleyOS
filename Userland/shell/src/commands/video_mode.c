@@ -12,11 +12,11 @@ COMMAND_FUNCTION(video_mode) {
 }
 
 COMMAND_HELP(video_mode) {
-	if(args.argc >= 1) {
-		printf("<clear> Error: too many arguments.\n");
-
-		return ERROR;
-	}
+	// if(args.argc >= 1) {
+// 		printf("<clear> Error: too many arguments.\n");
+//
+// 		return ERROR;
+// 	}
 
 	printf("Sets terminal in video mode. Ignores arguments.\n");
 

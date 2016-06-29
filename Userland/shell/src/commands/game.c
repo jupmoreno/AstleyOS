@@ -13,15 +13,15 @@ COMMAND_HELP(game);
 COMMAND_FUNCTION(game) {
 	sysvideo_mode();
 	
-	while(1); // TODO: REMOVE
 	
 	int i,j;
 	for(i=0; i<200; i++){
 		for (j = 0; j < 200; j++)
 		{
-			paintPixel(i,j,118,0,236);
+			paintPixel(i,j,100,i,200-j);
 		}
 	}
+	while(1); // TODO: REMOVE
 	//startGame();
 
 	return OK;

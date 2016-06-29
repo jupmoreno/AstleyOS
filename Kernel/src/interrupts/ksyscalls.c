@@ -25,6 +25,7 @@ syscall_st * syscalls_table[_SYSCALLS_SIZE] = {
 	[_SYSCALL_NEW_PROCESS] = syscall_new_process,
 	[_SYSCALL_PS] = syscall_ps,
 	[_SYSCALL_KILL_PROCESS] = syscall_kill_process,
+	[_SYSCALL_BLOCK_PROCESS] = syscall_block_process,
 	[_SYSCALL_ALLOC] = syscall_alloc,
 	// (3) FUTURE SYSCALL HERE !! REMEMBER TO CHANGE _SYSCALLS_LAST !!
 };
@@ -109,4 +110,8 @@ uint64_t syscall_ps(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint
 
 uint64_t syscall_kill_process(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
 	return killProcess(rdi);
+}
+
+uint64_t syscall_block_process(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
+	return blockProcess((int)rdi);
 }

@@ -16,6 +16,7 @@ void syspaint_pixel(int x, int y, char blue, char green, char red);
 void sys_sound(int frequency, double time);
 int sys_new_process(const char* name, uint64_t func, uint64_t argc, char* argv[]);
 void sys_kill_process(int pid);
+int sys_block_process(int pid);
 void sys_ps();
 
 /**
@@ -86,6 +87,10 @@ void sys_ps() {
 
 void sys_kill_process(int pid) {
 	_syscall((uint64_t) pid, 0, 0, 0, 0, 0, _SYSCALL_KILL_PROCESS);
+}
+
+int sys_block_process(int pid) {
+	return _syscall((uint64_t) pid, 0, 0, 0, 0, 0, _SYSCALL_BLOCK_PROCESS);
 }
 // void * sysalloc_renew(void * addr, unsigned int size) {
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);

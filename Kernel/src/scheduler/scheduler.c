@@ -76,7 +76,7 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	LLnode node = q -> current;
 	Process p = NULL;
 	if(q->size < 1){
-		return 0;
+		return NULL;
 	}
 	do{
 		if(node->process->pid == pid)
@@ -89,14 +89,18 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 		p = node -> process; 
 		q->size --;
 		q -> current = NULL;
+		// TODO: free node
 		return p;
 	}
 	if(found){
 		p = node->process;
 		node -> prev -> next = node -> next;
 		node -> next -> prev = node -> prev;
+		q->size --;
+		// TODO: free node
+		return p;
 	}
-	return 0;
+	return NULL;
 }
 
 Process removeProcessWaiting(uint64_t pid){
@@ -199,4 +203,18 @@ int addDummyProcess(){
 
 int isDummy(LLnode node){
 	return !(node->process->pid);
+}
+
+int blockProcess(int pid){
+	Process p = removeProcessWaiting(pid);
+	if(p == NULL)
+		return -1;
+	return addProcessBlocked(p);
+}
+
+int unblockProcess(int pid){
+	Process p = removeProcessBlocked(pid);
+	if(p == NULL)
+		return -1;
+	return addProcessWaiting(p);
 }

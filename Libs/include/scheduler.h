@@ -42,3 +42,5 @@ int isWaiting(int pid);
 int isBlocked(int pid);
 void endProcess();
 int killProcess(int pid);
+int blockProcess(int pid);
+int unblockProcess(int pid);

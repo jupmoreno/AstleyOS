@@ -4,7 +4,7 @@
 #include <scheduler.h>
 #include <output.h>
 
-void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
+void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, char* argv[]); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
 int start(process_func func, uint64_t argc, void *argv);
 extern void _startProcess(uint64_t);
 extern void _interrupt_20();
@@ -12,7 +12,7 @@ extern void _interrupt_20();
 static uint64_t pids = 0;
 
 
-void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * argv){
+void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, char* argv[]){
 
 	stack_frame *r = (stack_frame*) (rsp);
 	
@@ -47,7 +47,7 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, void * ar
 	return &(r->gs);
 }
 
-uint64_t create_process(const char* name, process_func func, uint64_t argc, void* argv){
+uint64_t create_process(const char* name, process_func func, uint64_t argc, char* argv[]){
 	Process p;
 	p = kmalloc(sizeof(struct process));
 	if(p == NULL){

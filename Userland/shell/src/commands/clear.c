@@ -12,7 +12,7 @@ COMMAND_FUNCTION(clear) {
 }
 
 COMMAND_HELP(clear) {
-	if(args.argc >= 1) {
+	if(argc >= 1) {
 		printf("<clear> Error: too many arguments.\n");
 
 		return ERROR;

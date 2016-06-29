@@ -3,7 +3,7 @@
 #include <stdint.h>
 #define STACK_SIZE 0x800000
 
-typedef int (*process_func) (int argc, char *argv);
+typedef int (*process_func) (int argc, char **argv);
 typedef enum state_t{RUNNING, BLOCKED, WAITING, DEAD}state_t;
 
 static const char* states[DEAD + 1] = {"RUNNING", "BLOCKED", "WAITING", "DEAD"};
@@ -60,7 +60,7 @@ typedef struct stack_frame {
 }stack_frame;
 
 uint64_t contextSwitch(uint64_t stackFrame);
-uint64_t create_process(const char* name, process_func func, uint64_t argc, void* argv);
+uint64_t create_process(const char* name, process_func func, uint64_t argc, char* argv[]);
 //void start();
 
 #endif

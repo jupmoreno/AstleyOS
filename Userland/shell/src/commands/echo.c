@@ -5,10 +5,10 @@ COMMAND_FUNCTION(echo);
 COMMAND_HELP(echo);
 
 COMMAND_FUNCTION(echo) {
-	unsigned int i;
+	int i;
 
-	for(i = 0; i < args.argc; i++) {
-		printf("%s ", args.argv[i]);
+	for(i = 0; i < argc; i++) {
+		printf("%s ", argv[i]);
 	}
 	printf("\n");
 
@@ -16,7 +16,7 @@ COMMAND_FUNCTION(echo) {
 }
 
 COMMAND_HELP(echo) {
-	if(args.argc >= 1) {
+	if(argc >= 1) {
 		printf("<echo> Error: too many arguments.\n");
 
 		return ERROR;

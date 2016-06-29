@@ -110,11 +110,11 @@ int kernel_main(void) {
 
 	out_clear();
 
-	sound_beep(100, 0.2);
+	/*sound_beep(100, 0.2);
 	sound_beep(200, 0.2);
 	sound_beep(300, 0.2);
 	sound_beep(400, 0.2);
-	sound_beep(500, 0.2);
+	sound_beep(500, 0.2);*/
 
 
 	schedulerInit();

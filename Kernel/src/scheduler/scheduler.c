@@ -4,6 +4,8 @@
 static Scheduler scheduler;
 static int schedulerInitiated = 0;
 
+extern void _interrupt_20();
+
 Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q);
 void printProcessesWithSpecifiedQueue(SchedulerLL q);
 int isDummy(LLnode node);
@@ -20,7 +22,7 @@ void schedulerInit(){
 Process schedule(){
 	Process p;
 	if(scheduler -> waitingpq -> current != NULL){
-		if(isDummy(scheduler -> waitingpq -> current -> next))
+		if(isDummy(scheduler -> waitingpq -> current -> next) || scheduler -> waitingpq -> current -> next -> process -> state != WAITING)
 			scheduler -> waitingpq -> current = scheduler -> waitingpq -> current -> next;
 		p = scheduler -> waitingpq -> current -> next -> process;
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
@@ -129,6 +131,13 @@ Process getCurrent(SchedulerLL q){
 	return q -> current -> process;
 }
 
+int getCurrentPid(){
+	Process p = getCurrentWaiting();
+	if(p == NULL)
+		return -1;
+	return getCurrentWaiting() -> pid;
+}
+
 Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q){
 	int found = 0;
 	LLnode node = q -> current;
@@ -138,7 +147,8 @@ Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q){
 	do{
 		if(node->process->pid == (uint64_t)pid)
 			found = 1;
-		node = node->next;
+		else
+			node = node->next;
 	}while(node != q ->current && !found);
 
 	if(found)
@@ -167,12 +177,11 @@ void printProcessesWithSpecifiedQueue(SchedulerLL q){
 	if(q->size < 1){
 		return;
 	}
-	out_printf("\n");
 	do{
 		if(!isDummy(node))
-			out_printf("Name: %s\t PID: %d\t State: %s\n", node->process->name, node->process->pid, states[node->process->state]);
+			out_printf("Name: %s\t PID: %d\t State: %s\tFather: %d\n", node->process->name, node->process->pid, states[node->process->state], node->process->father);
 		node = node->next;
-	}while(node != q ->current);
+	}while(node->process->pid != q ->current->process->pid);
 }
 
 void printProcesses(){
@@ -209,6 +218,8 @@ int blockProcess(int pid){
 	Process p = removeProcessWaiting(pid);
 	if(p == NULL)
 		return -1;
+	p->state = BLOCKED;
+	//int ret = addProcessBlocked(p);
 	return addProcessBlocked(p);
 }
 
@@ -216,5 +227,6 @@ int unblockProcess(int pid){
 	Process p = removeProcessBlocked(pid);
 	if(p == NULL)
 		return -1;
+	p->state = WAITING;
 	return addProcessWaiting(p);
 }

@@ -35,6 +35,7 @@ Process getCurrentBlocked();
 int addProcessWaiting(Process p);
 int addProcessBlocked(Process p);
 Process getCurrent(SchedulerLL q);
+int getCurrentPid();
 Process removeProcessWaiting(uint64_t pid);
 Process removeProcessBlocked(uint64_t pid);
 Process getProcess(int pid);

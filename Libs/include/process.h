@@ -12,6 +12,7 @@ typedef struct process{
 	const char* name;
 	uint64_t reserved;
 	uint64_t pid;
+	uint64_t father;
 	uint64_t stackF;
 	uint64_t rsp;
 
@@ -59,8 +60,10 @@ typedef struct stack_frame {
 	
 }stack_frame;
 
+
 uint64_t contextSwitch(uint64_t stackFrame);
 uint64_t create_process(const char* name, process_func func, uint64_t argc, char* argv[]);
+int kwaitpid(int pid);
 //void start();
 
 #endif

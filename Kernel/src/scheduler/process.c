@@ -3,6 +3,7 @@
 #include "kalloc.h"
 #include <scheduler.h>
 #include <output.h>
+#include "waitpidHistory.h"
 
 void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, char* argv[]); //TODO: VER SI RETORNA OTRACOSA PARA UQE LO USO
 int start(process_func func, uint64_t argc, void *argv);
@@ -66,9 +67,14 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 	if(pids)
 		log("Creando el proceso %s\n", p->name);
 	p->pid = pids++;
+	int father = getCurrentPid();
+	if(father == -1)
+		father = 0;
+	p->father = father;
 	p->state = WAITING;
 	p->stackF = orig_rsp;
 	addProcessWaiting(p);
+
 	//stack_frame *r = (stack_frame*)(&rsp);
 	//process_func f = (process_func)r->rip;
 	//f(0,0);
@@ -77,15 +83,17 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 }
 
 uint64_t contextSwitch(uint64_t stack){
+//	out_printf("holi, soy el contextSwitch\n");
 	Process p = getCurrentWaiting();
 	if (p == NULL)
 	{
 		return 0;
 	}
+//	out_printf("Estoy en el proceso %d\n", p->pid);
 	p->rsp = stack;
-	p->state = WAITING;
+	if(p->state != BLOCKED)
+		p->state = WAITING;
 	p = schedule();
-
 	if(p == NULL)
 		return 0;
 	p->state = RUNNING;
@@ -94,7 +102,30 @@ uint64_t contextSwitch(uint64_t stack){
 
 int start(process_func f, uint64_t argc, void *argv){
 	f(argc, argv);
+	unblockProcess(1);
 	endProcess();
 	_interrupt_20();
 	return 0;
 }
+
+int kwaitpid(int pid){
+	//out_printf("werf %d\n", pid);
+	Process child = getProcess(pid);
+	if(child == NULL){
+		out_printf("cai en 1\n");
+		return -1;
+	}
+	Process father = getProcess(child->father);
+	if(father == NULL){
+		out_printf("cai en 2\n");
+		return -1;
+	}
+	if(child->father != father->pid){
+	//	out_printf("el padre del hijo es %d y el padre es %d", child->father, father->pid);
+		return -1;
+	}
+	blockProcess(father->pid);
+
+	return pid;
+}
+

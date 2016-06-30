@@ -13,10 +13,11 @@ int main(void);
 int shell(void);
 extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 
+extern int sys_waitpid(int pid);
+
 static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
-
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
 
 
@@ -74,6 +75,7 @@ int shell(void) {
 					int pid = sys_new_process(command->name, (uint64_t) command->run, args->argc, args->argv);
 					//printf("cree el proceso con el pid %d\n", pid);
 					//ret = wait_process(pid);
+					sys_waitpid(pid);
 
 					// If error occurred -> print it
 					if(ERROR_OCCURRED(ret)) {
@@ -158,6 +160,7 @@ static args_t * getArgs(char * buffer) {
 
 	return &args;
 }
+
 
 // #define _SHELL_ERRORS 5
 // static const char * error_message[_SHELL_ERRORS] = {

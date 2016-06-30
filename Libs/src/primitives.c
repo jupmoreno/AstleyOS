@@ -18,6 +18,7 @@ int sys_new_process(const char* name, uint64_t func, uint64_t argc, char* argv[]
 void sys_kill_process(int pid);
 int sys_block_process(int pid);
 void sys_ps();
+int sys_waitpid(int pid);
 
 /**
  * Syscall caller or wrapper
@@ -91,6 +92,10 @@ void sys_kill_process(int pid) {
 
 int sys_block_process(int pid) {
 	return _syscall((uint64_t) pid, 0, 0, 0, 0, 0, _SYSCALL_BLOCK_PROCESS);
+}
+
+int sys_waitpid(int pid) {
+	return _syscall((uint64_t) pid, 0, 0, 0, 0, 0, _SYSCALL_WAITPID);
 }
 // void * sysalloc_renew(void * addr, unsigned int size) {
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);

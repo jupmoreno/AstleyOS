@@ -20,6 +20,7 @@ syscall_st syscall_new_process;
 syscall_st syscall_ps;
 syscall_st syscall_kill_process;
 syscall_st syscall_block_process;
+syscall_st syscall_waitpid;
 syscall_st syscall_alloc;
 // (2) FUTURE SYSCALL HERE !!
 

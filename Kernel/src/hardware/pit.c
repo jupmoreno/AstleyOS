@@ -107,8 +107,8 @@ uint64_t pit_trigger(uint64_t stackF) {
 	manage_time();
 
 	if(ticks == TICKS_TO_NEXT_PROCESS) {
-		//out_printf("holi, soy el timer tick\n");
 		ticks = 0;
+//		out_printf("holi, soy el timer tick\n");
 		return contextSwitch(stackF);
 	}
 	return 0;

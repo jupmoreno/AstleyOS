@@ -3,7 +3,6 @@
 #include <console.h>
 
 extern void sys_ps(void);
-extern void sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 
 COMMAND_FUNCTION(ps);
 COMMAND_HELP(ps);

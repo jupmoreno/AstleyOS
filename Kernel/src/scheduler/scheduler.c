@@ -5,11 +5,15 @@ static Scheduler scheduler;
 static int schedulerInitiated = 0;
 
 extern void _interrupt_20();
+extern void interrupt_set(void);
+extern void interrupt_clear(void);
 
 Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q);
 void printProcessesWithSpecifiedQueue(SchedulerLL q);
 int isDummy(LLnode node);
 int addDummyProcess();
+
+Process lastProcess = NULL;
 
 void schedulerInit(){
 	scheduler = kmalloc(sizeof(struct scheduler));
@@ -26,6 +30,7 @@ Process schedule(){
 			scheduler -> waitingpq -> current = scheduler -> waitingpq -> current -> next;
 		p = scheduler -> waitingpq -> current -> next -> process;
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
+		lastProcess = p;
 		return p;	
 	}
 	return NULL;
@@ -215,18 +220,29 @@ int isDummy(LLnode node){
 }
 
 int blockProcess(int pid){
+	interrupt_clear();
 	Process p = removeProcessWaiting(pid);
 	if(p == NULL)
 		return -1;
 	p->state = BLOCKED;
-	//int ret = addProcessBlocked(p);
-	return addProcessBlocked(p);
+	int ret = addProcessBlocked(p);
+	interrupt_set();
+	while(isBlocked(pid));
+//	_interrupt_20();
+	return ret;
+//	return addProcessBlocked(p);
 }
 
 int unblockProcess(int pid){
+	interrupt_clear();
 	Process p = removeProcessBlocked(pid);
 	if(p == NULL)
 		return -1;
 	p->state = WAITING;
+	interrupt_set();
 	return addProcessWaiting(p);
+}
+
+Process getLastProcess(){
+	return lastProcess;
 }

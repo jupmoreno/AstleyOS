@@ -30,7 +30,7 @@ void foooo2();
 int main(void){
 		
 	//sys_new_process("hola", (uint64_t) &foooo, 0, 0);
-	sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
+	//sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
 	
 	return OK;
@@ -179,7 +179,7 @@ void foooo(){
 void foooo2(){
 	int pid = sys_getpid();
 	printf("CHAUUUUU\n");
-	sys_read_message(pid);
+//	sys_read_message(pid);
 	while(1);
 }
 

@@ -45,3 +45,4 @@ void endProcess();
 int killProcess(int pid);
 int blockProcess(int pid);
 int unblockProcess(int pid);
+Process getLastProcess();

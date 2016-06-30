@@ -17,6 +17,7 @@
 #include <process.h>
 #include <scheduler.h>
 #include <video_mode.h>
+#include <ipc.h>
 
 
 #define PAGE_SIZE 0x1000
@@ -118,6 +119,7 @@ int kernel_main(void) {
 
 
 	schedulerInit();
+	mqInit();
 /*	create_process("imprime a", (process_func)&foo1,0, 0);
 	create_process("imprime b", (process_func)&foo2,0, 0);
 	create_process("imprime c", (process_func)&foo3,0, 0);

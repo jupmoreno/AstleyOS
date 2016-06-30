@@ -29,8 +29,13 @@ void foooo2();
 
 int main(void){
 		
+<<<<<<< HEAD
 	//sys_new_process("hola", (uint64_t) &foooo, 0, 0);
 	//sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
+=======
+	sys_new_process("hola", (uint64_t) &foooo, 0, 0);
+	sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
+>>>>>>> ad1301233551d03a6d4559429ce23405fea917c3
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
 	
 	return OK;

@@ -1,6 +1,16 @@
 #include <ipc.h>
 #include <messageManager.h>
 #include <stdio.h>
+#include <kalloc.h>
+
+static msg_queue* mq;
+
+
+
+void mqInit(){
+	mq = kmalloc(sizeof (msg_queue));
+	mq -> head = NULL;
+}
 
 //agrega un mensaje enviado por sender a la lista de mensajes de receiver
 void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message){
@@ -18,8 +28,8 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 //devuelve el nodo con la lista de los mensajes de id receiver
 mq_node get_mq(uint64_t receiver){
 	mq_node current = mq->head;
-	
 	if(current == NULL){
+		printf("current es null\n");
 		mq_node first = malloc(sizeof(mqNode));
 		first->id = receiver;
 		first->messages = NULL;
@@ -28,7 +38,7 @@ mq_node get_mq(uint64_t receiver){
 		mq->head = first;
 		return first;
 	}
-	
+	printf("llegue a aca\n");
 	
 	while(current->next != NULL ){
 		if(current->id == receiver){
@@ -134,10 +144,13 @@ void delete_mq(uint64_t receiver){
 
 //lee el proximo mensaje
 read_msg read_next_message(uint64_t receiver){
+
 	mq_node node = get_mq(receiver);
+	 	printf("llego a read_msg pid: %d \n",(int)receiver);
+
 	msg_node message = node->messages;
 	if(message == NULL){
-		printf("llegue aca\n");
+		printf("llegue a aca\n");
 		block(receiver);
 		read_next_message(receiver);
 		return NULL;

@@ -29,8 +29,6 @@ typedef struct msg_queue{
 	mq_node head;
 }msg_queue;
 
-static msg_queue* mq;
-
 typedef struct sys_msg{
 	uint64_t send_id;
 	void* msg;
@@ -47,6 +45,7 @@ msg_node read_message(uint64_t receiver, uint64_t sender);
 msg_node read_messages(uint64_t receiver, uint64_t sender);
 void delete_mq(uint64_t receiver);
 read_msg read_next_message(uint64_t receiver);
+void mqInit();
 
 
 

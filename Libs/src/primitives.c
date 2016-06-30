@@ -19,6 +19,7 @@ void sys_kill_process(int pid);
 int sys_block_process(int pid);
 void sys_ps();
 int sys_waitpid(int pid);
+int sys_getpid();
 
 /**
  * Syscall caller or wrapper
@@ -96,6 +97,10 @@ int sys_block_process(int pid) {
 
 int sys_waitpid(int pid) {
 	return _syscall((uint64_t) pid, 0, 0, 0, 0, 0, _SYSCALL_WAITPID);
+}
+
+int sys_getpid() {
+	return _syscall(0, 0, 0, 0, 0, 0, _SYSCALL_GET_PID);
 }
 // void * sysalloc_renew(void * addr, unsigned int size) {
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);

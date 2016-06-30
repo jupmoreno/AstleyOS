@@ -6,6 +6,7 @@
 #include "sound.h"
 #include "process.h"
 #include "scheduler.h"
+#include <ipc.h>
 
 extern unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 extern unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);
@@ -28,6 +29,7 @@ syscall_st * syscalls_table[_SYSCALLS_SIZE] = {
 	[_SYSCALL_BLOCK_PROCESS] = syscall_block_process,
 	[_SYSCALL_WAITPID] = syscall_waitpid,
 	[_SYSCALL_GET_PID] = syscall_get_pid,
+	[_SYSCALL_READ_MESSAGE] = syscall_read_message,
 	[_SYSCALL_ALLOC] = syscall_alloc,
 	// (3) FUTURE SYSCALL HERE !! REMEMBER TO CHANGE _SYSCALLS_LAST !!
 };
@@ -124,4 +126,8 @@ uint64_t syscall_waitpid(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10,
 
 uint64_t syscall_get_pid(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
 	return (uint64_t) getCurrentPid();
+}
+
+uint64_t syscall_read_message(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
+	return (uint64_t) read_next_message(rdi);
 }

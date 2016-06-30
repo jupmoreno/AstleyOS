@@ -1,4 +1,6 @@
 #include <ipc.h>
+#include <messageManager.h>
+#include <stdio.h>
 
 //agrega un mensaje enviado por sender a la lista de mensajes de receiver
 void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message){
@@ -10,6 +12,7 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 	newMsg->next = NULL;
 	
 	addMessage(receiver, newMsg);
+	unblock(receiver);
 }
 
 //devuelve el nodo con la lista de los mensajes de id receiver
@@ -74,8 +77,8 @@ msg_node read_message(uint64_t receiver, uint64_t sender){
 		}
 		msgs = msgs->next;
 	}
-	//aca bloquear
-	//read_message(receiver, sender);
+	block(receiver);
+	read_message(receiver, sender);
 	return NULL;
 	
 }
@@ -130,11 +133,22 @@ void delete_mq(uint64_t receiver){
 }
 
 //lee el proximo mensaje
-msg_node read_next_message(uint64_t receiver){
+read_msg read_next_message(uint64_t receiver){
 	mq_node node = get_mq(receiver);
-	msg_node msg = node->messages;
+	msg_node message = node->messages;
+	if(message == NULL){
+		printf("llegue aca\n");
+		block(receiver);
+		read_next_message(receiver);
+		return NULL;
+	}
+	read_msg ret = malloc(sizeof(sys_msg));
+	ret->msg = message->msg;
+	ret->size = message ->size;
+	ret->send_id = message->send_id;
+	
 	node->messages = node->messages->next;
-	return msg;
+	return ret;
 }
 
 

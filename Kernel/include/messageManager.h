@@ -1,7 +1,7 @@
 #ifndef _messageManager_H_
 #define _messageManager_H_
 
-#include <kdefine.h>
+#include <define.h>
 
 typedef struct blockedN {
 	uint64_t id;

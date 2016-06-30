@@ -22,7 +22,9 @@ syscall_st syscall_kill_process;
 syscall_st syscall_block_process;
 syscall_st syscall_waitpid;
 syscall_st syscall_get_pid;
+syscall_st syscall_read_message;
 syscall_st syscall_alloc;
+
 // (2) FUTURE SYSCALL HERE !!
 
 extern syscall_st * syscalls_table[_SYSCALLS_SIZE];

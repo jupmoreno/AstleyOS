@@ -5,6 +5,7 @@
 #include <memory.h>
 #include <numbers.h>
 #include <strings.h>
+#include <ipc.h>
 
 
 #define MAX_BUFFER_LENGTH 128
@@ -15,14 +16,23 @@ extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void*
 
 extern int sys_waitpid(int pid);
 
+extern int sys_getpid();
+extern read_msg sys_read_message(uint64_t pid);
+
 static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
+void foooo();
+void foooo2();
 
 
 int main(void){
-	sys_new_process("shell", (uint64_t)&shell, 0, 0);
+		
+	//sys_new_process("hola", (uint64_t) &foooo, 0, 0);
+	sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
+	sys_new_process("shell", (uint64_t) &shell, 0, 0);
+	
 	return OK;
 }
 
@@ -159,6 +169,19 @@ static args_t * getArgs(char * buffer) {
 	return &args;
 }
 
+void foooo(){
+	printf("HOLAAAA\n");
+	while(1){
+		printf	("a");
+	}
+}
+
+void foooo2(){
+	int pid = sys_getpid();
+	printf("CHAUUUUU\n");
+	sys_read_message(pid);
+	while(1);
+}
 
 // #define _SHELL_ERRORS 5
 // static const char * error_message[_SHELL_ERRORS] = {

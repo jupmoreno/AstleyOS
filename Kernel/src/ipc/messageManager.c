@@ -11,7 +11,7 @@
 #include <messageManager.h>
 
 static blockedNode blist;
-
+extern void _interrupt_20();
 
  void block(uint64_t id){
  	blockedNode node = kmalloc(sizeof (struct blockedN));
@@ -24,6 +24,7 @@ static blockedNode blist;
  	node -> next = blist;
  	blist = node;
  	blockProcess(id);
+	_interrupt_20();
  }
 
  void unblock(uint64_t id){

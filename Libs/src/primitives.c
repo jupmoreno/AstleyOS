@@ -3,6 +3,8 @@
 #include <sysconsole.h>
 #include <sysalloc.h>
 
+#include <ipc.h> //TODO esto no deberia estar en kernel ojo revisar
+
 unsigned int sysread(char * buffer, unsigned int length);
 unsigned int syswrite(char * string, unsigned int length);
 int systerminal_select(int index);
@@ -20,6 +22,9 @@ int sys_block_process(int pid);
 void sys_ps();
 int sys_waitpid(int pid);
 int sys_getpid();
+read_msg sys_read_message(uint64_t pid);
+
+
 
 /**
  * Syscall caller or wrapper
@@ -102,6 +107,12 @@ int sys_waitpid(int pid) {
 int sys_getpid() {
 	return _syscall(0, 0, 0, 0, 0, 0, _SYSCALL_GET_PID);
 }
+
+read_msg sys_read_message(uint64_t pid){
+	return (read_msg)_syscall(pid, 0, 0, 0, 0, 0, _SYSCALL_READ_MESSAGE);
+}
+
+
 // void * sysalloc_renew(void * addr, unsigned int size) {
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);
 // }

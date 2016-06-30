@@ -37,5 +37,6 @@ void print_messages(uint64_t receiver);
 msg_node read_message(uint64_t receiver, uint64_t sender);
 msg_node read_messages(uint64_t receiver, uint64_t sender);
 void delete_mq(uint64_t receiver);
+msg_node read_next_message(uint64_t receiver);
 
 #endif

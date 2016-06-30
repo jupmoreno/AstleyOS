@@ -62,35 +62,25 @@ void addMessage(uint64_t receiver, msg_node message){
 
 }
 
-//imprime todos los mensajes de un id dado
-// void print_messages(uint64_t receiver){
-// 	mq_node node = get_mq(receiver);
-// 	msg_node msg = node->messages;
-// 	if(msg == NULL){
-// 		printf("ES NULL\n");
-// 	}
-// 	printf("receiver %llu\n", receiver);
-// 	while(msg != NULL){
-// 		printf("sender: %llu\n", msg->send_id);
-// 		msg = msg->next;
-// 	}
-// }
-
-//devuelve el primer mensaje de la cola de mensajes de receiver enviado por sender
+//devuelve el primer mensaje de la cola de mensajes de receiver enviado por sender y lo saco de la cola
 msg_node read_message(uint64_t receiver, uint64_t sender){
 	mq_node node = get_mq(receiver);
 	msg_node msgs= node ->messages;
 	while(msgs != NULL){
 		if(msgs->send_id == sender){
-			return msgs;
+			msg_node aux = msgs;
+			msgs = msgs->next;
+			return aux;
 		}
 		msgs = msgs->next;
 	}
+	//aca bloquear
+	//read_message(receiver, sender);
 	return NULL;
 	
 }
 
-//devuelve todos los mensajes de receiver enviados por sender
+//devuelve todos los mensajes de receiver enviados por sender y no los saco
 msg_node read_messages(uint64_t receiver, uint64_t sender){
 	mq_node node = get_mq(receiver);
 	msg_node msgs = node -> messages;
@@ -137,6 +127,14 @@ void delete_mq(uint64_t receiver){
 			return;
 		}
 	}
+}
+
+//lee el proximo mensaje
+msg_node read_next_message(uint64_t receiver){
+	mq_node node = get_mq(receiver);
+	msg_node msg = node->messages;
+	node->messages = node->messages->next;
+	return msg;
 }
 
 

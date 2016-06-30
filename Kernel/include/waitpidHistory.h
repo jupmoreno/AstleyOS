@@ -10,7 +10,8 @@ typedef struct waitpidHistory{
 
 typedef struct waitpidHistory* WaitpidHistory;
 
-
+void addWaitpidHistory(int father, int child);
+void removeWaitpidHistory(int child);
 
 
 #endif

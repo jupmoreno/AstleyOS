@@ -102,7 +102,8 @@ uint64_t contextSwitch(uint64_t stack){
 
 int start(process_func f, uint64_t argc, void *argv){
 	f(argc, argv);
-	unblockProcess(1);
+//	unblockProcess(1);
+	removeWaitpidHistory(getCurrentPid());
 	endProcess();
 	_interrupt_20();
 	return 0;
@@ -124,6 +125,7 @@ int kwaitpid(int pid){
 	//	out_printf("el padre del hijo es %d y el padre es %d", child->father, father->pid);
 		return -1;
 	}
+	addWaitpidHistory(child->father, child->pid);
 	blockProcess(father->pid);
 
 	return pid;

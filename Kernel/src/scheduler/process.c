@@ -19,8 +19,8 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, char* arg
 	
 	r->gs = 0x001;
 	r->fs = 0x002;
-	r->r15= 0x003;
-	r->r14= 0x004;
+//	r->r15= 0x003;
+//	r->r14= 0x004;
 	r->r13= 0x005;	
 	r->r12= 0x006;
 	r->r11= 0x007;

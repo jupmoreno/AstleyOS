@@ -19,8 +19,8 @@ void* set_stack_frame(uint64_t *rsp, process_func func, uint64_t argc, char* arg
 	
 	r->gs = 0x001;
 	r->fs = 0x002;
-	//r->r15= 0x003;
-	//r->r14= 0x004;
+//	r->r15= 0x003;
+//	r->r14= 0x004;
 	r->r13= 0x005;	
 	r->r12= 0x006;
 	r->r11= 0x007;
@@ -55,6 +55,10 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 		return -1;
 	}
 	uint64_t rsp = (uint64_t) kmalloc(STACK_SIZE);
+	if(rsp == 0){
+		kfree(p);
+		return -1;
+	}
 	uint64_t orig_rsp = rsp;
 	rsp += STACK_SIZE - 1 - sizeof(struct stack_frame);
 
@@ -73,8 +77,8 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 	p->father = father;
 	p->state = WAITING;
 	p->stackF = orig_rsp;
+	p->reserved = STACK_SIZE;
 	addProcessWaiting(p);
-
 	//stack_frame *r = (stack_frame*)(&rsp);
 	//process_func f = (process_func)r->rip;
 	//f(0,0);
@@ -102,7 +106,6 @@ uint64_t contextSwitch(uint64_t stack){
 
 int start(process_func f, uint64_t argc, void *argv){
 	f(argc, argv);
-//	unblockProcess(1);
 	removeWaitpidHistory(getCurrentPid());
 	endProcess();
 	_interrupt_20();

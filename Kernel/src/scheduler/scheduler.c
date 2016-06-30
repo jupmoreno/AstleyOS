@@ -83,8 +83,8 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	do{
 		if(node->process->pid == pid)
 			found = 1;
-			if(!found)
-				node = node->next;
+		if(!found)
+			node = node->next;
 	}while(node != q ->current && !found);
 
 	if(q->size == 1 && found){

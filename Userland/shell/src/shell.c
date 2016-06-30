@@ -23,19 +23,10 @@ static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
-void foooo();
-void foooo2();
 
 
 int main(void){
-		
-<<<<<<< HEAD
-	//sys_new_process("hola", (uint64_t) &foooo, 0, 0);
-	//sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
-=======
-	sys_new_process("hola", (uint64_t) &foooo, 0, 0);
-	sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
->>>>>>> ad1301233551d03a6d4559429ce23405fea917c3
+
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
 	
 	return OK;
@@ -174,19 +165,6 @@ static args_t * getArgs(char * buffer) {
 	return &args;
 }
 
-void foooo(){
-	printf("HOLAAAA\n");
-	while(1){
-		printf	("a");
-	}
-}
-
-void foooo2(){
-	int pid = sys_getpid();
-	printf("CHAUUUUU\n");
-//	sys_read_message(pid);
-	while(1);
-}
 
 // #define _SHELL_ERRORS 5
 // static const char * error_message[_SHELL_ERRORS] = {

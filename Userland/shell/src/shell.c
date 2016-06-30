@@ -73,8 +73,6 @@ int shell(void) {
 
 					// Run command & get it's return value
 					int pid = sys_new_process(command->name, (uint64_t) command->run, args->argc, args->argv);
-					//printf("cree el proceso con el pid %d\n", pid);
-					//ret = wait_process(pid);
 					sys_waitpid(pid);
 
 					// If error occurred -> print it

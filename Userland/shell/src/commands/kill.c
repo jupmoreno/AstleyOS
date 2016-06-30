@@ -11,9 +11,10 @@ COMMAND_FUNCTION(kill);
 COMMAND_HELP(kill);
 
 COMMAND_FUNCTION(kill) {
-
-	int pid = numstr(argv[0]);
-	sys_kill_process(pid);
+	if(argc > 0){
+		int pid = numstr(argv[0]);
+		sys_kill_process(pid);		
+	}
 
 	return OK;
 }

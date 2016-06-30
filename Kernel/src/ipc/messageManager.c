@@ -8,12 +8,14 @@
 #include <heap.h>
 #include <process.h>
 #include <scheduler.h>
+#include <output.h>
 #include <messageManager.h>
 
 static blockedNode blist;
 extern void _interrupt_20();
 
  void block(uint64_t id){
+ 	out_printf("llego a block");
  	blockedNode node = kmalloc(sizeof (struct blockedN));
  	node -> id = id;
  	if(blist == NULL){
@@ -24,7 +26,8 @@ extern void _interrupt_20();
  	node -> next = blist;
  	blist = node;
  	blockProcess(id);
-	_interrupt_20();
+	//_interrupt_20();
+	while (1);
  }
 
  void unblock(uint64_t id){

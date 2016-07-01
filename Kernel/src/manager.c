@@ -117,9 +117,17 @@ void * manage_alloc(int op, ...) {
 	return addr;
 }
 
+char readCharCurry(void){
+	while(!canReadCurry());
+	return keyboard_read();
+
+}
+
 static unsigned int manage_read_stdin(char * buffer, unsigned int length) {
 	unsigned int i = 0;
 
+	if(!key_print_enabled)
+		return readCharCurry();
 	while(!keyboard_canRead());
 
 	while(i < length && keyboard_canRead()) {

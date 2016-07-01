@@ -16,6 +16,7 @@ static int buffer_lastReturn = KEYBOARD_BUFFER_SIZE - 1;
 static int key_pressed[KEYS_PRESSABLES] = {FALSE, FALSE, FALSE, FALSE};
 static int key_on[KEYS_ONOFF] = {FALSE, TRUE, FALSE};
 
+static int currykeys = 0;
 static int waitingESC = FALSE;
 static int enters = 0;
 
@@ -66,6 +67,7 @@ int keyboard_set(int keyboard) {
 
 int keyboard_write(key_st * key) {
 	int nextOfNextInsert = BUFFER_NEXT(buffer_nextInsert);
+	currykeys ++;
 	/*
 	 * Asks this way because, when writing the expected '\n' key,
 	 * there will be (buffer_nextInsert = nextOfNextInsert) == buffer_lastReturned.
@@ -77,7 +79,7 @@ int keyboard_write(key_st * key) {
 	if(nextOfNextInsert == buffer_lastReturn) {
 		if(key->value != '\n') {
 			return _ERROR_KEYBOARD_BUFFER_FULL;	
-		}	
+		}
 	}
 
 	if(key->type != _KEY_TYPE_PRINTABLE) {
@@ -112,7 +114,7 @@ char keyboard_read(void) { // TODO: Unsigned?
 	if(character == '\n') { 
 		enters--;
 	}
-
+	currykeys --;
 	return character;
 }
 
@@ -129,6 +131,7 @@ int keyboard_delete(void) {
 
 	if(keyboard_buffer[prevInsert].value != '\n') {
 		buffer_nextInsert = prevInsert;
+		currykeys--;
 		return OK;
 	}
 
@@ -178,6 +181,10 @@ static key_st key_process(unsigned char scancode) {
 	}
 
 	return key;
+}
+
+char canReadCurry(void){
+	return currykeys;
 }
 
 static int key_toggle(unsigned char scancode, int press) {

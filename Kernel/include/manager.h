@@ -12,5 +12,6 @@ enum terminal_ops {
 
 void disable_key_print();
 void enable_key_print();
+char readCharCurry(void);
 
 #endif

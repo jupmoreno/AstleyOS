@@ -32,6 +32,7 @@ void draw_text(const char* text, int length, point start, int size, color c);
 //Keeping original put_pixel for coords because I'm lazy.
 void put_pixel(unsigned int x, unsigned int y, color c);
 void draw_point(point p, unsigned int thickness, color c);
+void clear_screen();
 //Variables
 /*unsigned long VideoX, VideoY, VideoBPP, VideoMemSize;
 char* VideoMemory;
@@ -57,5 +58,8 @@ extern color pink;
 extern color purple;
 
 extern int libDraw_text_character_spacing;
+
+#define WIDTH 1024
+#define HEIGHT 768
 
 #endif

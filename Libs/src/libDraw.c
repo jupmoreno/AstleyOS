@@ -98,3 +98,12 @@ void draw_text(const char* text, int length, point start, int size, color c)
 	  draw_char(*(text+i), toPoint(start.x+i*7*size*libDraw_text_character_spacing, start.y), size, c);
 	}
 }
+
+void clear_screen(){
+	int i,j;
+	for(i = 0; i < WIDTH; i++){
+		for(j = 0; j < 768; j++){
+			put_pixel(i,j,orange);
+		}
+	}
+}

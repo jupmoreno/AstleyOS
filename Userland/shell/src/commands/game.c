@@ -1,10 +1,11 @@
 #include <commands.h>
 #include <stdio.h>
 #include <console.h>
+#include <libDraw.h>
 
 extern void sysvideo_mode(void);
-extern void syspaint_pixel(int x, int y, int blue, int green, int red);
-void paintPixel(int x, int y, int blue, int green, int red);
+extern void syspaint_pixel(int x, int y, int blue_c, int green_c, int red_c);
+void paintPixel(int x, int y, int blue_c, int green_c, int red_c);
 extern void sys_sound(int frequency, double time);
 
 COMMAND_FUNCTION(game);
@@ -16,11 +17,14 @@ COMMAND_FUNCTION(game) {
 	
 	int i,j,c;
 	i = 0;
+	char d;
 	while(1){
 		c = scanc();
-		for(j=0;j<700;j++)
+		clear_screen();
+		draw_schar((char)c,toPoint(100,100),aqua);
+		/*for(j=0;j<700;j++)
 			paintPixel(i,j,j,i,200);
-		i++;
+		i++;*/
 	}
 	/*for(i=0; i<200; i++){
 		for (j = 0; j < 200; j++)
@@ -47,6 +51,6 @@ COMMAND_HELP(game) {
 	return OK;
 }
 
-void paintPixel(int x, int y, int blue, int green, int red){
-	syspaint_pixel(x,y,blue,green,red);	
+void paintPixel(int x, int y, int blue_c, int green_c, int red_c){
+	syspaint_pixel(x,y,blue_c,green_c,red_c);	
 }

@@ -10,4 +10,7 @@ enum terminal_ops {
 	_TERMINAL_OPERATION_CURSOR
 };
 
+void disable_key_print();
+void enable_key_print();
+
 #endif

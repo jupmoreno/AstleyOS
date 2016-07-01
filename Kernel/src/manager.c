@@ -184,3 +184,11 @@ static int manage_terminal_color(int operation, style_st color) {
 static int manage_terminal_cursor(cursor_st cursor) {
 	return out_cursor(cursor);
 }
+
+void disable_key_print(){
+	key_print_enabled = FALSE;
+}
+
+void enable_key_print(){
+	key_print_enabled = TRUE;
+}

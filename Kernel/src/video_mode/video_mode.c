@@ -1,5 +1,6 @@
 #include "ports.h"
 #include "video_mode.h"
+#include "manager.h"
 
 #define VBE_DISPI_INDEX_ID 0
 #define VBE_DISPI_INDEX_XRES 1
@@ -111,14 +112,8 @@ void paintPixel(int x, int y, uint8_t blue, uint8_t green, uint8_t red) {
 
 
 int SetVideoMode(void){
+    disable_key_print();
 	BgaSetVideoMode(WIDTH, HEIGHT, VBE_DISPI_BPP_32, 1,1);
-   
-   /*	int i, j;
-	for(i = 0; i < WIDTH; i++) {
-		for(j = 0; j < HEIGHT; j++) {
-			paintPixel(i, j, 255, 255, 255);
-		}
-	}*/
    return 0;
 }
 

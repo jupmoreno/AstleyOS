@@ -155,7 +155,8 @@ read_msg read_next_message(uint64_t receiver){
 		printf("NO LE IMPORTO NADA AL BLOCK PROCESS\n");
 		//return NULL;
 	}
-	read_msg ret = malloc(sizeof(sys_msg));
+	message = node->messages;
+	read_msg ret = malloc(sizeof(struct sys_msg));
 	ret->msg = message->msg;
 	ret->size = message ->size;
 	ret->send_id = message->send_id;

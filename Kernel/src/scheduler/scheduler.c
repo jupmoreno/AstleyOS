@@ -70,8 +70,8 @@ int addProcess(Process p, SchedulerLL q){
 	q -> current -> prev = node;
 	q->size++;
 	interrupt_set();
-	out_printf("agrego un proceso, los procesos waiting son\n");
-	printProcessesWithSpecifiedQueue(scheduler->waitingpq);
+	//out_printf("agrego un proceso, los procesos waiting son\n");
+	//printProcessesWithSpecifiedQueue(scheduler->waitingpq);
 	return 1; 
 }
 
@@ -250,7 +250,7 @@ int blockProcess(int pid){
 	int ret = addProcessBlocked(p);
 	interrupt_set();
 	//printProcesses()
-	out_printf("PID: %d, GET CURRENT PID: %d\n", pid, getCurrentPid());
+	//out_printf("PID: %d, GET CURRENT PID: %d\n", pid, getCurrentPid());
 	while(isBlocked(getCurrentPid()));//{
 // 		out_printf("a");
 // 	}

@@ -37,9 +37,9 @@ int main(void){
 }
 
 int shell(void) {
-	pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
+	//pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
 	
-	sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
+	//sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
 	//printf("PID DE ESCRIBIR: %d\n", pid2);
 	//sys_ps();
 	static args_t noargs = {NULL, 0};

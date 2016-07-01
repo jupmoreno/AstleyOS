@@ -24,6 +24,7 @@ static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
+<<<<<<< HEAD
 static int pid2;
 
 void foooo();
@@ -34,7 +35,7 @@ int main(void){
 	sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
 		
 	pid2 = sys_new_process("hola", (uint64_t) &foooo, 0, 0);
-	
+
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
 	
 	sys_ps();
@@ -173,6 +174,7 @@ static args_t * getArgs(char * buffer) {
 
 	return &args;
 }
+
 
 void foooo(){
 	printf("entro a foo1\n");

@@ -19,10 +19,11 @@ void sys_sound(int frequency, double time);
 int sys_new_process(const char* name, uint64_t func, uint64_t argc, char* argv[]);
 void sys_kill_process(int pid);
 int sys_block_process(int pid);
-void sys_ps();
+void sys_ps(void);
 int sys_waitpid(int pid);
-int sys_getpid();
+int sys_getpid(void);
 read_msg sys_read_message(uint64_t pid);
+void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
 
 
 
@@ -110,6 +111,10 @@ int sys_getpid() {
 
 read_msg sys_read_message(uint64_t pid){
 	return (read_msg)_syscall(pid, 0, 0, 0, 0, 0, _SYSCALL_READ_MESSAGE);
+}
+
+void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message){
+	_syscall(sender, receiver, size, (uint64_t)message, 0, 0, _SYSCALL_SEND_MESSAGE);
 }
 
 

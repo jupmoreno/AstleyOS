@@ -45,7 +45,7 @@ msg_node read_message(uint64_t receiver, uint64_t sender);
 msg_node read_messages(uint64_t receiver, uint64_t sender);
 void delete_mq(uint64_t receiver);
 read_msg read_next_message(uint64_t receiver);
-void mqInit();
+void mqInit(void);
 
 
 

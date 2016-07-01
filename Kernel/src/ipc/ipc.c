@@ -2,10 +2,9 @@
 #include <messageManager.h>
 #include <stdio.h>
 #include <kalloc.h>
+#include <scheduler.h>
 
 static msg_queue* mq;
-
-
 
 void mqInit(){
 	mq = kmalloc(sizeof (msg_queue));
@@ -20,8 +19,9 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 	newMsg->msg = message;
 	newMsg->size = size;
 	newMsg->next = NULL;
-	
+	printf("adentro de new_message el sender es %d\n", sender);
 	addMessage(receiver, newMsg);
+	printf("quiero desbloquear al proceso bien\n");
 	unblock(receiver);
 }
 
@@ -29,7 +29,6 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 mq_node get_mq(uint64_t receiver){
 	mq_node current = mq->head;
 	if(current == NULL){
-		printf("current es null\n");
 		mq_node first = malloc(sizeof(mqNode));
 		first->id = receiver;
 		first->messages = NULL;
@@ -38,7 +37,6 @@ mq_node get_mq(uint64_t receiver){
 		mq->head = first;
 		return first;
 	}
-	printf("llegue a aca\n");
 	
 	while(current->next != NULL ){
 		if(current->id == receiver){
@@ -146,23 +144,20 @@ void delete_mq(uint64_t receiver){
 read_msg read_next_message(uint64_t receiver){
 
 	mq_node node = get_mq(receiver);
-	 	printf("llego a read_msg pid: %d \n",(int)receiver);
 
 	msg_node message = node->messages;
 	if(message == NULL){
-		printf("llegue a aca\n");
-		block(receiver);
-		read_next_message(receiver);
-		return NULL;
+		printf("no hay ningun mensaje todavia, bloqueo el proceso %i\n", receiver);
+		blockProcess(receiver);
+		printProcesses();
+		printf("NO LE IMPORTO NADA AL BLOCK PROCESS\n");
+		//return NULL;
 	}
 	read_msg ret = malloc(sizeof(sys_msg));
 	ret->msg = message->msg;
 	ret->size = message ->size;
 	ret->send_id = message->send_id;
-	
+	printf("adentro del read_next_message el sender es %d\n", ret->send_id);
 	node->messages = node->messages->next;
 	return ret;
 }
-
-
-

@@ -15,24 +15,29 @@ int shell(void);
 extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 
 extern int sys_waitpid(int pid);
+extern void sys_ps(void);
 
 extern int sys_getpid();
 extern read_msg sys_read_message(uint64_t pid);
-
+extern void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
 static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
+static int pid2;
+
 void foooo();
 void foooo2();
 
 
 int main(void){
-		
-	sys_new_process("hola", (uint64_t) &foooo, 0, 0);
 	sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
+		
+	pid2 = sys_new_process("hola", (uint64_t) &foooo, 0, 0);
+	
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
 	
+	sys_ps();
 	return OK;
 }
 
@@ -170,17 +175,20 @@ static args_t * getArgs(char * buffer) {
 }
 
 void foooo(){
-	printf("HOLAAAA\n");
-	while(1){
-		printf	("a");
-	}
+	printf("entro a foo1\n");
+	int pid = sys_getpid();
+	sys_send_message(pid, pid2, 0, NULL);
+	printf("el pid de foo es: %d\n", pid);
+
 }
 
 void foooo2(){
+	printf("entro a foo2\n");
 	int pid = sys_getpid();
-	printf("CHAUUUUU\n");
-	sys_read_message(pid);
-	while(1);
+	//sys_ps();
+	read_msg mensj = sys_read_message(pid);
+	//sys_ps();
+	printf("el sender es %d\n", mensj->send_id);
 }
 
 // #define _SHELL_ERRORS 5

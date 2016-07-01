@@ -31,20 +31,17 @@ void escribo_mensaje();
 
 
 int main(void){
-	
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
-	
-	sys_ps();
 	while(1);
 	return OK;
 }
 
 int shell(void) {
-	sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
-		
-	pid2 = sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
-	printf("PID DE FOOO1: %d\n", pid2);
-	sys_ps();
+	pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
+	
+	sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
+	//printf("PID DE ESCRIBIR: %d\n", pid2);
+	//sys_ps();
 	static args_t noargs = {NULL, 0};
 	int ret, should_clear;
 	char buffer[MAX_BUFFER_LENGTH];
@@ -178,20 +175,21 @@ static args_t * getArgs(char * buffer) {
 }
 
  
-void escribo_mensaje(){ //PID 2
-	printf("entro a ESCRIBIR\n");
+void escribo_mensaje(){ //PID 3
+	//printf("entro a ESCRIBIR\n");
 	int pid = sys_getpid();
+	printf("PID DE ESCRIBIR: %d, PID DE LEER: %d\n", pid, pid2);
 	sys_send_message(pid, pid2, 0, NULL);
 	printf("el pid de ESCRIBIR es: %d\n", pid);
-	//sys_ps();
+	sys_ps();
 
 }
 
-void leo_mensaje(){ //PID 1
+void leo_mensaje(){ //PID 2
 	printf("entro a leer\n");
 	int pid = sys_getpid();
-	sys_ps();
-	printf("PID DE LEER ES: %d\n", pid);
+	//sys_ps();
+	//printf("PID DE LEER ES: %d\n", pid);
 	read_msg mensj = sys_read_message(pid);
 	//sys_ps();
 	printf("el sender es %d\n", mensj->send_id);

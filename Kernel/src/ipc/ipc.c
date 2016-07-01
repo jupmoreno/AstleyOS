@@ -21,9 +21,9 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 	newMsg->next = NULL;
 	printf("adentro de new_message el sender es %d\n", sender);
 	addMessage(receiver, newMsg);
-	printf("quiero desbloquear al proceso bien\n");
+	printf("quiero desbloquear al proceso bien %d\n", receiver);
 	unblockProcess(receiver);
-	printProcesses();
+	//printProcesses();
 	
 }
 
@@ -151,7 +151,7 @@ read_msg read_next_message(uint64_t receiver){
 	if(message == NULL){
 		printf("no hay ningun mensaje todavia, bloqueo el proceso %i\n", receiver);
 		blockProcess(receiver);
-		printProcesses();
+		//printProcesses();
 		printf("NO LE IMPORTO NADA AL BLOCK PROCESS\n");
 		//return NULL;
 	}

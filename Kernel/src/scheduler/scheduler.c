@@ -45,6 +45,7 @@ SchedulerLL queueInit(){
 
 
 int addProcess(Process p, SchedulerLL q){
+	
 	if(p == NULL)
 		return ERROR;
 	if(q == NULL)
@@ -69,6 +70,8 @@ int addProcess(Process p, SchedulerLL q){
 	q -> current -> prev = node;
 	q->size++;
 	interrupt_set();
+	out_printf("agrego un proceso, los procesos waiting son\n");
+	printProcessesWithSpecifiedQueue(scheduler->waitingpq);
 	return 1; 
 }
 
@@ -142,10 +145,10 @@ Process getCurrent(SchedulerLL q){
 }
 
 int getCurrentPid(){
-	Process p = getCurrentWaiting();
+	Process p = getLastProcess();
 	if(p == NULL)
 		return -1;
-	return getCurrentWaiting() -> pid;
+	return p -> pid;
 }
 
 Process getProcessWithSpecifiedQueue(int pid, SchedulerLL q){
@@ -246,8 +249,9 @@ int blockProcess(int pid){
 	p->state = BLOCKED;
 	int ret = addProcessBlocked(p);
 	interrupt_set();
-	//printProcesses();
-	while(isBlocked(pid));//{
+	//printProcesses()
+	out_printf("PID: %d, GET CURRENT PID: %d\n", pid, getCurrentPid());
+	while(isBlocked(getCurrentPid()));//{
 // 		out_printf("a");
 // 	}
 //	_interrupt_20();

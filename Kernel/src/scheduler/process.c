@@ -92,6 +92,10 @@ uint64_t contextSwitch(uint64_t stack){
 	Process p = getLastProcess();
 	if (p == NULL)
 	{
+		p = getCurrentWaiting();
+	}
+if (p == NULL)
+	{
 		return 0;
 	}
 //	out_printf("Estoy en el proceso %d\n", p->pid);

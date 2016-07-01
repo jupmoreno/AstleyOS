@@ -88,12 +88,8 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 
 uint64_t contextSwitch(uint64_t stack){
 	
-	Process p = getCurrentWaiting();
-	//Process p = getLastProcess();
-	// if (p == NULL)
-	// {
-	// 	p = getLastProcess();
-	// }
+	//Process p = getCurrentWaiting();
+	Process p = getLastProcess();
 	if (p == NULL)
 	{
 		return 0;

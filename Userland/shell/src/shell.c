@@ -40,6 +40,7 @@ int main(void){
 }
 
 int shell(void) {
+	printf("holaaa\n");
 	sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
 		
 	pid2 = sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);

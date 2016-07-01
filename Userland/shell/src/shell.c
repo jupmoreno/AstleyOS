@@ -26,22 +26,25 @@ static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
 static int pid2;
 
-void foooo();
-void foooo2();
+void leo_mensaje();
+void escribo_mensaje();
 
 
 int main(void){
-	sys_new_process("chau", (uint64_t) &foooo2, 0, 0);
-		
-	pid2 = sys_new_process("hola", (uint64_t) &foooo, 0, 0);
-
+	
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
 	
 	sys_ps();
+	while(1);
 	return OK;
 }
 
 int shell(void) {
+	sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
+		
+	pid2 = sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
+	printf("PID DE FOOO1: %d\n", pid2);
+	sys_ps();
 	static args_t noargs = {NULL, 0};
 	int ret, should_clear;
 	char buffer[MAX_BUFFER_LENGTH];
@@ -174,19 +177,21 @@ static args_t * getArgs(char * buffer) {
 	return &args;
 }
 
-
-void foooo(){
-	printf("entro a foo1\n");
+ 
+void escribo_mensaje(){ //PID 2
+	printf("entro a ESCRIBIR\n");
 	int pid = sys_getpid();
 	sys_send_message(pid, pid2, 0, NULL);
-	printf("el pid de foo es: %d\n", pid);
+	printf("el pid de ESCRIBIR es: %d\n", pid);
+	//sys_ps();
 
 }
 
-void foooo2(){
-	printf("entro a foo2\n");
+void leo_mensaje(){ //PID 1
+	printf("entro a leer\n");
 	int pid = sys_getpid();
 	sys_ps();
+	printf("PID DE LEER ES: %d\n", pid);
 	read_msg mensj = sys_read_message(pid);
 	//sys_ps();
 	printf("el sender es %d\n", mensj->send_id);

@@ -26,11 +26,11 @@ void schedulerInit(){
 Process schedule(){
 	Process p;
 	if(scheduler -> waitingpq -> current != NULL){
-		if(isDummy(scheduler -> waitingpq -> current -> next) || scheduler -> waitingpq -> current -> next -> process -> state != WAITING)
+		if(isDummy(scheduler -> waitingpq -> current -> next))
 			scheduler -> waitingpq -> current = scheduler -> waitingpq -> current -> next;
 		p = scheduler -> waitingpq -> current -> next -> process;
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
-		lastProcess = p;
+		lastProcess = p; //TODO VER SI USAR
 		return p;	
 	}
 	return NULL;
@@ -52,13 +52,14 @@ int addProcess(Process p, SchedulerLL q){
 	LLnode node = kmalloc(sizeof(struct llnode));
 	if(node == NULL)
 		return ERROR; //error
-
+	interrupt_clear();
 	if(q->size == 0){
 		q -> current = node;
 		node -> process = p;
 		node -> next = node;
 		node -> prev = node;
 		q -> size++;
+		interrupt_set();
 		return 1;
 	}
 	node->process = p;
@@ -67,6 +68,7 @@ int addProcess(Process p, SchedulerLL q){
 	node -> next = q -> current;
 	q -> current -> prev = node;
 	q->size++;
+	interrupt_set();
 	return 1; 
 }
 
@@ -88,9 +90,9 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	do{
 		if(node->process->pid == pid)
 			found = 1;
-		if(!found)
+		else
 			node = node->next;
-	}while(node != q ->current && !found);
+	}while(node->process->pid != q ->current->process->pid && !found);
 
 	if(q->size == 1 && found){
 		p = node -> process; 
@@ -102,7 +104,7 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	if(found){
 		p = node->process;
 		if( p->pid == q->current->process->pid){
-			q->current = node->next;
+			q->current = q->current->next;
 		}
 		node -> prev -> next = node -> next;
 		node -> next -> prev = node -> prev;
@@ -184,7 +186,7 @@ void printProcessesWithSpecifiedQueue(SchedulerLL q){
 	LLnode node = q -> current;
 	while(node != NULL && node->process->pid == 0)
 		node = node->next;
-	char* pState;
+	//char* pState;
 	if(q->size < 1){
 		return;
 	}
@@ -212,12 +214,17 @@ void endProcess(){
 int killProcess(int pid){
 	if(pid < 1)
 		return 0;
+	interrupt_clear();
 	Process p = removeProcessWaiting(pid);
-	if(p == NULL)
+	if(p == NULL){
 		p = removeProcessBlocked(pid);
-	if(p == NULL)
+	}
+	if(p == NULL){
+		p = removeProcessBlocked(pid);
+		interrupt_set();
 		return 0;
-	//TODO: free	
+	}//TODO: free	
+	interrupt_set();
 	return 1;
 }
 
@@ -232,13 +239,17 @@ int isDummy(LLnode node){
 int blockProcess(int pid){
 	interrupt_clear();
 	Process p = removeProcessWaiting(pid);
-	if(p == NULL)
+	if(p == NULL){
+		interrupt_set();
 		return -1;
+	}
 	p->state = BLOCKED;
 	int ret = addProcessBlocked(p);
 	interrupt_set();
-	printProcesses();
-	while(isBlocked(pid));
+	//printProcesses();
+	while(isBlocked(pid));//{
+// 		out_printf("a");
+// 	}
 //	_interrupt_20();
 	
 	return ret;
@@ -248,8 +259,10 @@ int blockProcess(int pid){
 int unblockProcess(int pid){
 	interrupt_clear();
 	Process p = removeProcessBlocked(pid);
-	if(p == NULL)
+	if(p == NULL){
+		interrupt_set();
 		return -1;
+	}
 	p->state = WAITING;
 	interrupt_set();
 	return addProcessWaiting(p);

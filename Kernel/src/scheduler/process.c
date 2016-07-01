@@ -87,13 +87,13 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 }
 
 uint64_t contextSwitch(uint64_t stack){
-//	out_printf("holi, soy el contextSwitch\n");
+	
 	Process p = getCurrentWaiting();
-//	Process p = getLastProcess();
-	if (p == NULL)
-	{
-		p = getLastProcess();
-	}
+	//Process p = getLastProcess();
+	// if (p == NULL)
+	// {
+	// 	p = getLastProcess();
+	// }
 	if (p == NULL)
 	{
 		return 0;
@@ -103,9 +103,12 @@ uint64_t contextSwitch(uint64_t stack){
 	if(p->state != BLOCKED)
 		p->state = WAITING;
 	p = schedule();
+	
 	if(p == NULL)
 		return 0;
 	p->state = RUNNING;
+	//out_printf("EL P QUE CORRE ES %d\n",p->pid);
+	//printProcesses();
 	return p -> rsp;
 }
 

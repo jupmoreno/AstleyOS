@@ -23,6 +23,7 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 	addMessage(receiver, newMsg);
 	printf("quiero desbloquear al proceso bien\n");
 	unblockProcess(receiver);
+	printProcesses();
 	
 }
 

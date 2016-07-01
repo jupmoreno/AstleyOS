@@ -33,6 +33,9 @@ void draw_text(const char* text, int length, point start, int size, color c);
 void put_pixel(unsigned int x, unsigned int y, color c);
 void draw_point(point p, unsigned int thickness, color c);
 void clear_screen();
+void draw_line(point s, point e, color c);
+void draw_frect(point p, unsigned int l, unsigned int w, color c);
+void draw_fcircle(point center, int radius, color c);
 //Variables
 /*unsigned long VideoX, VideoY, VideoBPP, VideoMemSize;
 char* VideoMemory;

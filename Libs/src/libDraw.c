@@ -12,6 +12,7 @@
 #include "libDraw.h"
 //#include <stdarg.h>
 #include "font.h"
+#include "numbers.h"
 
 extern void syspaint_pixel(int x, int y, char blue, char green, char red);
 
@@ -103,7 +104,78 @@ void clear_screen(){
 	int i,j;
 	for(i = 0; i < WIDTH; i++){
 		for(j = 0; j < 768; j++){
-			put_pixel(i,j,orange);
+			put_pixel(i,j,black);
 		}
 	}
+}
+
+void draw_line(point s, point e, color c) {
+    /*if(s.x=e.x) {
+      int i=0;
+      int d = abs(s.y-e.y);
+      for(; i<d; i++) {
+	put_pixel(s.x,s.y+i,c);
+      }
+      return;
+    }
+    if(s.y=e.y) {
+      int i=0;
+      int d = abs(s.x-e.x);
+      for(; i<d; i++) {
+	put_pixel(s.x+i,s.y,c);
+      }
+      return;
+    }*/
+    int x = s.x;
+    int y = s.y;
+    int x2 = e.x;
+    int y2 = e.y;
+    int w = x2 - x;
+    int h = y2 - y;
+    int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0, i = 0;
+    if (w<0) dx1 = -1; else if (w>0) dx1 = 1;
+    if (h<0) dy1 = -1; else if (h>0) dy1 = 1;
+    if (w<0) dx2 = -1; else if (w>0) dx2 = 1;
+    int longest = abs(w);
+    int shortest = abs(h);
+    if (!(longest>shortest)) {
+        longest = abs(h);
+        shortest = abs(w);
+        if (h<0) dy2 = -1; else if (h>0) dy2 = 1;
+        dx2 = 0 ;
+    }
+    int numerator = longest >> 1;
+    for (i=0;i<=longest;i++) {
+	put_pixel(x,y,c);
+        numerator += shortest;
+        if (!(numerator<longest)) {
+            numerator -= longest;
+            x += dx1;
+            y += dy1;
+        } else {
+            x += dx2;
+            y += dy2;
+        }
+    }
+}
+
+void draw_frect(point p, unsigned int l, unsigned int w, color c){
+	unsigned int i, j;
+	for(i=0; i<l; i++)
+	{
+		for(j=0; j<w; j++)
+		{
+			put_pixel(p.x+i, p.y+j, c);
+		}
+	}
+}
+
+//Found from http://stackoverflow.com/a/1237519
+//Adapted for BareMetal-OS by ohnx
+void draw_fcircle(point center, int radius, color c){
+	int x, y;
+	for(y=-radius; y<=radius; y++)
+	    for(x=-radius; x<=radius; x++)
+	        if(x*x+y*y <= radius*radius)
+	            put_pixel(center.x+x, center.y+y, c);
 }

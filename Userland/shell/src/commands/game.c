@@ -18,6 +18,8 @@ COMMAND_FUNCTION(game) {
 	int i,j,c;
 	i = 0;
 	char d;
+	draw_frect(toPoint(100,100), 200, 567, brightgreen);
+	draw_fcircle(toPoint(400,250), 40, gold);
 	while(1){
 		c = scanc();
 		clear_screen();

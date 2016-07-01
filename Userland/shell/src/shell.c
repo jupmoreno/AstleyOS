@@ -24,7 +24,6 @@ static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
-<<<<<<< HEAD
 static int pid2;
 
 void foooo();
@@ -187,7 +186,7 @@ void foooo(){
 void foooo2(){
 	printf("entro a foo2\n");
 	int pid = sys_getpid();
-	//sys_ps();
+	sys_ps();
 	read_msg mensj = sys_read_message(pid);
 	//sys_ps();
 	printf("el sender es %d\n", mensj->send_id);

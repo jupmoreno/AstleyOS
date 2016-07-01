@@ -11,6 +11,8 @@
 #include <output.h>
 #include <messageManager.h>
 
+//SACAR ESTO NO SIRVE, SOLO CON USAR BLOCKED Y UNBLOCKED DE BARTO ESTAMOS
+
 static blockedNode blist;
 extern void _interrupt_20();
 

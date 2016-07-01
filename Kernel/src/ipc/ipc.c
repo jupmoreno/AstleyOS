@@ -22,7 +22,8 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 	printf("adentro de new_message el sender es %d\n", sender);
 	addMessage(receiver, newMsg);
 	printf("quiero desbloquear al proceso bien\n");
-	unblock(receiver);
+	unblockProcess(receiver);
+	
 }
 
 //devuelve el nodo con la lista de los mensajes de id receiver

@@ -101,6 +101,9 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	}
 	if(found){
 		p = node->process;
+		if( p->pid == q->current->process->pid){
+			q->current = node->next;
+		}
 		node -> prev -> next = node -> next;
 		node -> next -> prev = node -> prev;
 		q->size --;
@@ -179,20 +182,26 @@ int isBlocked(int pid){
 void printProcessesWithSpecifiedQueue(SchedulerLL q){
 	
 	LLnode node = q -> current;
+	while(node != NULL && node->process->pid == 0)
+		node = node->next;
 	char* pState;
 	if(q->size < 1){
 		return;
 	}
 	do{
-		if(!isDummy(node))
+		if(!isDummy(node)){
 			out_printf("Name: %s\t PID: %d\t State: %s\tFather: %d\tReserved: %h\n", node->process->name, node->process->pid, states[node->process->state], node->process->father, node->process->reserved);
+			out_printf("el current es %d\n", q ->current->process->pid);
+		}
 		node = node->next;
 	}while(node->process->pid != q ->current->process->pid);
 }
 
 void printProcesses(){
+	interrupt_clear();
 	printProcessesWithSpecifiedQueue(scheduler->waitingpq);
 	printProcessesWithSpecifiedQueue(scheduler->blockedpq);
+	interrupt_set();
 }
 
 void endProcess(){
@@ -228,8 +237,10 @@ int blockProcess(int pid){
 	p->state = BLOCKED;
 	int ret = addProcessBlocked(p);
 	interrupt_set();
+	printProcesses();
 	while(isBlocked(pid));
 //	_interrupt_20();
+	
 	return ret;
 //	return addProcessBlocked(p);
 }

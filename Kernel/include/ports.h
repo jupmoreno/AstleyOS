@@ -17,4 +17,6 @@ void _port_write_word(uint16_t port, uint16_t data);
 uint8_t _port_read_byte(uint16_t port);
 uint16_t _port_read_word(uint16_t port);
 
+void _song_note(uint32_t frec, uint32_t length);
+
 #endif

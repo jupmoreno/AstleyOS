@@ -24,6 +24,7 @@ syscall_st syscall_waitpid;
 syscall_st syscall_get_pid;
 syscall_st syscall_read_message;
 syscall_st syscall_send_message;
+syscall_st syscall_play_note;
 syscall_st syscall_alloc;
 
 // (2) FUTURE SYSCALL HERE !!

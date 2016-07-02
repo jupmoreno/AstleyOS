@@ -2,13 +2,16 @@
 #include <ports.h>
 #include <pit.h>
 #include "output.h"
+#include <define.h>
+#include <stdio.h>
+#include <kalloc.h>
+
 typedef struct {
 	unsigned int frequency;
 	int time;
 } beep_st;
 
-static void sound_play(unsigned int frequency);
-static void sound_stop(void);
+
 
 uint64_t sound_beep(unsigned int frequency, double time) {
 	char a = (char) time;
@@ -17,6 +20,7 @@ uint64_t sound_beep(unsigned int frequency, double time) {
 
 	pit_wait(time); // TODO: pit_later(time)
 	sound_stop();
+	out_printf("toque una nota\n");
 	return 0;
 }
 

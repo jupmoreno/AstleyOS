@@ -17,7 +17,9 @@ extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void*
 extern int sys_waitpid(int pid);
 extern void sys_ps(void);
 
-extern int sys_getpid();
+extern void sys_play_note(uint32_t frec, uint32_t length);
+
+extern int sys_getpid(void);
 extern read_msg sys_read_message(uint64_t pid);
 extern void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
 static int parseCommand(char * buffer, int size);
@@ -26,8 +28,13 @@ static args_t * getArgs(char * buffer);
 #define COMMAND_MAX_ARGS 10 // TODO: Temporal fix! Needs malloc to remove
 static int pid2;
 
+void rick_ast(void);
 void leo_mensaje();
 void escribo_mensaje();
+
+static uint32_t notes[26] = {11492, 10847, 9121, 8609, 8126, 7670, 7239, 6833, 6449, 6087, 5743, 5423, 5119, 4831, 4560, 4304, 4063, 3834, 3619, 3416, 3224, 3043, 2873, 2711, 2559, 2416};
+
+
 
 
 int main(void){
@@ -37,8 +44,9 @@ int main(void){
 }
 
 int shell(void) {
-	//pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
 	
+	//pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
+	rick_ast();
 	//sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
 	//printf("PID DE ESCRIBIR: %d\n", pid2);
 	//sys_ps();
@@ -194,6 +202,27 @@ void leo_mensaje(){ //PID 2
 	//sys_ps();
 	printf("el sender es %d\n", mensj->send_id);
 }
+
+
+void rick_ast(void){
+	int i=0, j=0;
+	while(j<10){
+		uint32_t tempo = 400;
+		const char* songsDirections1 = "D1K1P1S1P1K1G1K1D1K1P1S1P1K1G1K1F1L1P1R1P1L1G1I1F1K1O1R1O1K1A1K1B1L1P1S1P1L1G1L1D1K1P1S1P1K1A1K1B1J1P1V1P1J1G1J1B1J1P1U4E1L1Q1U1Q1L1I1L1E1K1Q1U1T30";
+		const char* songsDirections = "K1M1P1M1T2T3R5K1M1P1M1R3R3P6K1M1P1M1P4R2O4M2K4R4P50";
+		while(songsDirections[i] != '0'){
+			uint32_t notePos = songsDirections[i] - 'A';
+			uint32_t note = notes[notePos];
+			uint8_t len = songsDirections[i+1] - '0';
+			uint32_t aux = tempo * len;
+			sys_play_note(note, aux);
+			i+=2;
+		} 
+		j++;
+	}
+}
+
+
 
 // #define _SHELL_ERRORS 5
 // static const char * error_message[_SHELL_ERRORS] = {

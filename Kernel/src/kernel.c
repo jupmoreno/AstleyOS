@@ -19,7 +19,6 @@
 #include <video_mode.h>
 #include <ipc.h>
 
-
 #define PAGE_SIZE 0x1000
 
 #define MODULE_SHELL_INDEX 0
@@ -111,15 +110,18 @@ int kernel_main(void) {
 
 	out_clear();
 
-	/*sound_beep(100, 0.2);
-	sound_beep(200, 0.2);
-	sound_beep(300, 0.2);
-	sound_beep(400, 0.2);
-	sound_beep(500, 0.2);*/
+	// sound_beep(100, 0.2);
+// 	sound_beep(200, 0.2);
+// 	sound_beep(300, 0.2);
+// 	sound_beep(400, 0.2);
+// 	sound_beep(500, 0.2);
+
 
 
 	schedulerInit();
 	mqInit();
+	
+	
 /*	create_process("imprime a", (process_func)&foo1,0, 0);
 	create_process("imprime b", (process_func)&foo2,0, 0);
 	create_process("imprime c", (process_func)&foo3,0, 0);

@@ -8,7 +8,7 @@
 
 typedef enum locker_state{NOTHING, FOOD, SNAKE}locker_state;
 typedef enum direction{UP, DOWN, RIGHT, LEFT}direction;
-
+typedef enum game_state{PLAYING, GAME_OVER}game_state;
 
 struct snakeListNode{
 	struct snakeListNode * next;
@@ -25,9 +25,11 @@ struct snake_t{
 
 typedef struct snake_t * Snake_t; 
 
+void startGame();
 void snakeInit();
 void addSnakeNode(int fil, int col);
 SnakeListNode removeSnakeNode();
 void printSnake();
+void moveSnake();
 
 void paint_locker(int fil, int col, color c);

@@ -2,13 +2,33 @@
 #include "libDraw.h"
 #include "alloc.h"
 
+extern void sys_sleep(uint32_t seconds);
+
 locker_state board[BOARD_FILS][BOARD_COLS];
 Snake_t snake = NULL;
+game_state gameState = PLAYING;
+direction actualDirection = RIGHT;
+
+int eating = FALSE;
 
 
 void paint_locker(int fil, int col, color c){
 	point p = toPoint(SQUARE_LENGTH * col, (SQUARE_LENGTH * fil) + 64);
 	draw_frect(p, SQUARE_LENGTH, SQUARE_LENGTH, c);
+}
+
+
+void startGame(){
+	snakeInit();
+	addSnakeNode(10,10);
+	addSnakeNode(10,11);
+	addSnakeNode(10,12);
+	printSnake();
+	while(gameState == PLAYING){
+		sys_sleep(1);
+		moveSnake();
+	}
+
 }
 
 void snakeInit(){
@@ -68,4 +88,41 @@ void printSnake(){
 		paint_locker(node->fil, node->col, limegreen);
 		node = node->next;
 	}
+}
+
+void moveSnake(){
+	if(!eating){
+		SnakeListNode node = removeSnakeNode();
+		if(node == NULL)
+			return;
+		paint_locker(node->fil, node->col, black);
+		free(node);
+	}else{
+		eating = FALSE;
+	}
+
+	int newFil = snake->head->fil;
+	int newCol = snake->head->col;
+
+	if(actualDirection == UP){
+		newFil--;
+	}else if(actualDirection == DOWN){
+		newFil++;
+	}else if(actualDirection == RIGHT){
+		newCol++;
+	}else{
+		newCol--;
+	}
+
+	if(newCol < 0 || newCol >= BOARD_COLS || newFil < 0 || newFil >= BOARD_FILS){
+		gameState = GAME_OVER;
+		return;
+	}
+	if(board[newFil][newCol] != NOTHING){
+		gameState = GAME_OVER;
+		return;
+	}
+
+	addSnakeNode(newFil, newCol);
+	paint_locker(newFil, newCol, limegreen);
 }

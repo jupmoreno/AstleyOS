@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <console.h>
 #include <libDraw.h>
+#include <snake.h>
 
 extern void sysvideo_mode(void);
 extern void syspaint_pixel(int x, int y, int blue_c, int green_c, int red_c);
@@ -18,7 +19,9 @@ COMMAND_FUNCTION(game) {
 	int i,j,c;
 	i = 0;
 	char d;
-	draw_fcircle(toPoint(400,400), 300, pink);
+	draw_line(toPoint(0,64-1), toPoint(1024-1,64-1), yellow);
+	paint_locker(0, 0, orange);
+/*	draw_fcircle(toPoint(400,400), 300, pink);
 	draw_fcircle(toPoint(300,200), 25, cyan);
 	draw_fcircle(toPoint(500,200), 25, cyan);
 	draw_frect(toPoint(300,450), 225, 20, cyan);
@@ -26,10 +29,10 @@ COMMAND_FUNCTION(game) {
 		c = scanc();
 		clear_screen();
 		draw_schar((char)c,toPoint(100,100),aqua);
-		/*for(j=0;j<700;j++)
+		*//*for(j=0;j<700;j++)
 			paintPixel(i,j,j,i,200);
-		i++;*/
-	}
+		i++;
+	}*/
 	/*for(i=0; i<200; i++){
 		for (j = 0; j < 200; j++)
 		{

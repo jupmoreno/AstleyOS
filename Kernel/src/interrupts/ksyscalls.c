@@ -8,6 +8,7 @@
 #include "scheduler.h"
 #include <ipc.h>
 #include <ports.h>
+#include <pit.h>
 
 extern unsigned int manage_read(unsigned int fd, char * buffer, unsigned int length);
 extern unsigned int manage_write(unsigned int fd, const char * string, unsigned int length);

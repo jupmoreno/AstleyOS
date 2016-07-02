@@ -31,5 +31,8 @@ void addSnakeNode(int fil, int col);
 SnakeListNode removeSnakeNode();
 void printSnake();
 void moveSnake();
+void printFood(int fil, int col);
+point getFruit();
+void newFruit();
 
 void paint_locker(int fil, int col, color c);

@@ -17,6 +17,7 @@ extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void*
 extern int sys_waitpid(int pid);
 extern void sys_ps(void);
 extern void sys_sleep(uint32_t seconds);
+extern int sys_rand(int between1, int between2);
 
 
 extern int sys_getpid(void);
@@ -44,7 +45,6 @@ int main(void){
 }
 
 int shell(void) {
-	
 	
 	//sys_new_process("rick", (uint64_t) &rick_ast, 0, 0);
 	//pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);

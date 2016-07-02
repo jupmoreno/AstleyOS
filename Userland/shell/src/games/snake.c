@@ -3,12 +3,13 @@
 #include "alloc.h"
 
 extern void sys_sleep(uint32_t seconds);
+extern int sys_rand(int first, int last);
 
 locker_state board[BOARD_FILS][BOARD_COLS];
 Snake_t snake = NULL;
 game_state gameState = PLAYING;
 direction actualDirection = RIGHT;
-
+int blankLockers = BOARD_FILS * BOARD_COLS;
 int eating = FALSE;
 
 
@@ -23,7 +24,10 @@ void startGame(){
 	addSnakeNode(10,10);
 	addSnakeNode(10,11);
 	addSnakeNode(10,12);
+
 	printSnake();
+	newFruit();
+	
 	while(gameState == PLAYING){
 		sys_sleep(1);
 		moveSnake();
@@ -57,11 +61,13 @@ void addSnakeNode(int fil, int col){
 		snake->head = node;
 		snake->tail = node;
 		board[fil][col] = SNAKE;
+		blankLockers--;
 		return;
 	}
 	snake->head->next = node;
 	snake->head = node;
 	board[fil][col] = SNAKE;
+	blankLockers--;
 	return;
 }
 
@@ -77,6 +83,7 @@ SnakeListNode removeSnakeNode(){
 		snake->head = NULL;
 	}
 	board[ret->fil][ret->col] = NOTHING;
+	blankLockers++;
 	return ret;
 }
 
@@ -88,6 +95,12 @@ void printSnake(){
 		paint_locker(node->fil, node->col, limegreen);
 		node = node->next;
 	}
+}
+
+void printFood(int fil, int col){
+	int x = (SQUARE_LENGTH * col) + 16;
+	int y = (SQUARE_LENGTH * fil) + 64 +16;
+	draw_fcircle(toPoint(x,y), 10, orange);
 }
 
 void moveSnake(){
@@ -118,11 +131,52 @@ void moveSnake(){
 		gameState = GAME_OVER;
 		return;
 	}
-	if(board[newFil][newCol] != NOTHING){
+	if(board[newFil][newCol] == SNAKE){
 		gameState = GAME_OVER;
 		return;
 	}
 
+	int gonnaEat = FALSE;
+	if(board[newFil][newCol] == FOOD){
+		eating = TRUE;
+		gonnaEat = TRUE;
+	}
+
 	addSnakeNode(newFil, newCol);
 	paint_locker(newFil, newCol, limegreen);
+	
+	if(gonnaEat){	
+		newFruit();
+	}
 }
+
+void newFruit(){
+	point fruitPoint = getFruit();
+	printFood(fruitPoint.y, fruitPoint.x);
+}
+
+point getFruit(){
+	int rand = sys_rand(0, blankLockers);
+	if(rand == 0){
+		paint_locker(20,4,white);
+	}
+	int i,j;
+	int fruitFil, fruitCol;
+	point p;
+
+	for(i = 0; i < BOARD_FILS && rand >= 0; i++){
+		for(j = 0; j < BOARD_COLS && rand >= 0; j++){
+			if(board[i][j] == NOTHING){
+				if(rand == 0)
+					p = toPoint(j,i);
+				rand--;
+			}
+		}
+	}
+	
+	return p;
+}
+
+
+
+

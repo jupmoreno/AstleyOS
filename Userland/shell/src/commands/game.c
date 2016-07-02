@@ -20,14 +20,15 @@ COMMAND_FUNCTION(game) {
 	i = 0;
 	char d;
 	draw_line(toPoint(0,64-1), toPoint(1024-1,64-1), yellow);
+	startGame();
 //	paint_locker(0, 0, orange);
-	snakeInit();
+/*	snakeInit();
 	addSnakeNode(0,0);
 	addSnakeNode(0,1);
 	addSnakeNode(0,2);
 	addSnakeNode(1,2);
-	removeSnakeNode();
-	printSnake();
+	removeSnakeNode();*/
+//	printSnake();
 
 /*	draw_fcircle(toPoint(400,400), 300, pink);
 	draw_fcircle(toPoint(300,200), 25, cyan);

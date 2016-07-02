@@ -35,6 +35,7 @@ void printFood(int fil, int col);
 point getFruit();
 void newFruit();
 void raiseScore();
+void prevGame(void);
 
 void paint_locker(int fil, int col, color c);
 void setGameFrame();

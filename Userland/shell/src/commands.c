@@ -21,6 +21,7 @@ COMMAND_DECLARE(clear);
 COMMAND_DECLARE(game);
 COMMAND_DECLARE(ps);
 COMMAND_DECLARE(kill);
+COMMAND_DECLARE(songs);
 
 command_t commands[] = {
 	COMMAND(help),
@@ -28,6 +29,7 @@ command_t commands[] = {
 	COMMAND(clear),
 	COMMAND(game),
 	COMMAND(ps),
+	COMMAND(songs),
 	COMMAND(kill),
 	// FUTURE COMMAND HERE !!
 	{ NULL, NULL, NULL}

@@ -199,9 +199,10 @@ void printScore(color c){
 }
 
 void prevGame(){
-		draw_text("WELCOME TO: ",13, toPoint(600,300), 3, c);
-		draw_text("SUPER EPIC AWESOME RICK-ASTLEY ADVENTURE:",42, toPoint(275,500), 3, c);
-		draw_text("RICK ASNAKE",strlen(s), toPoint(600,700), 3, c);
+		draw_text("WELCOME TO: ",13, toPoint(300,100), 2, red);
+		draw_text("SUPER    EPIC    AWESOME",24, toPoint(130,250), 2, red);
+		draw_text("RICK    ASTLEY    ADVENTURE:",28, toPoint(130,400), 2, red);
+		draw_text("RICK ASNAKE",12, toPoint(300,550), 2, red);
 		sys_sleep(5);
 		clear_screen();
 }

@@ -85,3 +85,9 @@ unsigned int numnextPow2(unsigned int x) {
 
     return x + 1;
 }
+
+int abs(int num){
+    if(num >= 0)
+        return num;
+    return -num;
+}

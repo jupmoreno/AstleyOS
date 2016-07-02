@@ -42,4 +42,5 @@ int numisPow2(unsigned int x);
  */
 unsigned int numnextPow2(unsigned int x);
 
+int abs(int num);
 #endif

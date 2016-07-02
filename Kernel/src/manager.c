@@ -117,9 +117,20 @@ void * manage_alloc(int op, ...) {
 	return addr;
 }
 
+unsigned int readCharCurry(void){
+	while(!canReadCurry());
+	return keyboard_read();
+
+}
+
 static unsigned int manage_read_stdin(char * buffer, unsigned int length) {
 	unsigned int i = 0;
 
+	if(!key_print_enabled){
+		//return (int)readCharCurry();
+		buffer[i++] = readCharCurry();
+		return i;
+	}
 	while(!keyboard_canRead());
 
 	while(i < length && keyboard_canRead()) {
@@ -183,4 +194,12 @@ static int manage_terminal_color(int operation, style_st color) {
 
 static int manage_terminal_cursor(cursor_st cursor) {
 	return out_cursor(cursor);
+}
+
+void disable_key_print(){
+	key_print_enabled = FALSE;
+}
+
+void enable_key_print(){
+	key_print_enabled = TRUE;
 }

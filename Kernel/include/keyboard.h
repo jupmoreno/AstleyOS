@@ -38,7 +38,7 @@ int keyboard_set(int keyboard);
 int keyboard_write(key_st * key);
 int keyboard_canRead(void);
 char keyboard_read(void);
-
 int keyboard_delete(void);
+char canReadCurry(void);
 
 #endif

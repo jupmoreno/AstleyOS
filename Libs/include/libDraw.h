@@ -32,6 +32,10 @@ void draw_text(const char* text, int length, point start, int size, color c);
 //Keeping original put_pixel for coords because I'm lazy.
 void put_pixel(unsigned int x, unsigned int y, color c);
 void draw_point(point p, unsigned int thickness, color c);
+void clear_screen();
+void draw_line(point s, point e, color c);
+void draw_frect(point p, unsigned int l, unsigned int w, color c);
+void draw_fcircle(point center, int radius, color c);
 //Variables
 /*unsigned long VideoX, VideoY, VideoBPP, VideoMemSize;
 char* VideoMemory;
@@ -57,5 +61,8 @@ extern color pink;
 extern color purple;
 
 extern int libDraw_text_character_spacing;
+
+#define WIDTH 1024
+#define HEIGHT 768
 
 #endif

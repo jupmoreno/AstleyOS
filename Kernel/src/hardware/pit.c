@@ -84,7 +84,9 @@ void pit_init(void) {
 
 	time = 55;
 }
-
+uint64_t getRand(void){
+	return rand;
+}
 // void pit_set(unsigned int miliseconds) { // TODO:
 
 // }

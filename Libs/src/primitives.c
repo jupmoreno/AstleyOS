@@ -26,6 +26,7 @@ read_msg sys_read_message(uint64_t pid);
 void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
 void sys_play_note(uint32_t frec, uint32_t length);
 void sys_sleep(uint32_t seconds);
+int sys_rand(int between1, int between2);
 
 
 /**
@@ -127,4 +128,17 @@ void sys_play_note(uint32_t frec, uint32_t length){
 // }
 void sys_sleep(uint32_t seconds){
 	_syscall(seconds, 0, 0, 0, 0, 0, _SYSCALL_SLEEP);
+}
+int sys_rand(int between1, int between2){
+	if(between1 > between2){
+		return -1;
+	}
+	if(between2 == 0){
+		return 0;
+	}
+	if(between2 == between1){
+		return between2;
+	}
+	int rand = _syscall(0, 0, 0, 0, 0, 0, 0);
+	return (rand % (between2-between1)) + between1;
 }

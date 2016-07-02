@@ -1,7 +1,7 @@
 #include "snake.h"
 #include "libDraw.h"
 
-int board[22][32];
+int board[BOARD_FILS][BOARD_COLS];
 
 
 void paint_locker(int fil, int col, color c){

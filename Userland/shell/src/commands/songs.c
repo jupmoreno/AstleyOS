@@ -39,8 +39,10 @@ COMMAND_HELP(songs) {
 		return ERROR;
 	}
 
-	printf("Plays Song.\n");
-	printf("Usage: 'songs'\n");
+	printf("Put the song number you would like to play.\n");
+	printf("\t1. Never Gonna Give You Up - Rick Astley\n");
+	printf("\t2. Because - The Beatles\n");
+	printf("Usage: 'songs X' being X the song number\n");
 
 	return OK;
 }

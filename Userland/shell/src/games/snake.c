@@ -22,6 +22,7 @@ void paint_locker(int fil, int col, color c){
 
 
 void startGame(){
+	prevGame();
 	setGameFrame();
 	snakeInit();
 	addSnakeNode(10,10);
@@ -197,4 +198,10 @@ void printScore(color c){
 	draw_text(s,strlen(s), toPoint(275,25), 3, c);
 }
 
-
+void prevGame(){
+		draw_text("WELCOME TO: ",13, toPoint(600,300), 3, c);
+		draw_text("SUPER EPIC AWESOME RICK-ASTLEY ADVENTURE:",42, toPoint(275,500), 3, c);
+		draw_text("RICK ASNAKE",strlen(s), toPoint(600,700), 3, c);
+		sys_sleep(5);
+		clear_screen();
+}

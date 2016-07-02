@@ -1,6 +1,7 @@
 #include "snake.h"
 #include "libDraw.h"
 #include "alloc.h"
+#include "strings.h"
 
 extern void sys_sleep(uint32_t seconds);
 extern int sys_rand(int first, int last);
@@ -12,6 +13,7 @@ direction actualDirection = RIGHT;
 int blankLockers = BOARD_FILS * BOARD_COLS;
 int eating = FALSE;
 
+int score = 0;
 
 void paint_locker(int fil, int col, color c){
 	point p = toPoint(SQUARE_LENGTH * col, (SQUARE_LENGTH * fil) + 64);
@@ -20,6 +22,7 @@ void paint_locker(int fil, int col, color c){
 
 
 void startGame(){
+	setGameFrame();
 	snakeInit();
 	addSnakeNode(10,10);
 	addSnakeNode(10,11);
@@ -140,11 +143,12 @@ void moveSnake(){
 	if(board[newFil][newCol] == FOOD){
 		eating = TRUE;
 		gonnaEat = TRUE;
+		raiseScore();
 	}
 
 	addSnakeNode(newFil, newCol);
 	paint_locker(newFil, newCol, limegreen);
-	
+
 	if(gonnaEat){	
 		newFruit();
 	}
@@ -157,9 +161,6 @@ void newFruit(){
 
 point getFruit(){
 	int rand = sys_rand(0, blankLockers);
-	if(rand == 0){
-		paint_locker(20,4,white);
-	}
 	int i,j;
 	int fruitFil, fruitCol;
 	point p;
@@ -177,6 +178,22 @@ point getFruit(){
 	return p;
 }
 
+void raiseScore(){
+	printScore(black);
+	score += 100;
+	printScore(cyan);
+}
 
+void setGameFrame(){
+	draw_line(toPoint(0,64-1), toPoint(1024-1,64-1), white);
+	draw_text("score:",6, toPoint(10,25), 3, cyan);
+	printScore(cyan);
+}
+
+void printScore(color c){
+	char string[10];
+	char * s = strnum(score,10, string);
+	draw_text(s,strlen(s), toPoint(275,25), 3, c);
+}
 
 

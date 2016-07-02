@@ -16,10 +16,9 @@ COMMAND_FUNCTION(game) {
 	sysvideo_mode();
 	
 	
-	int i,j,c;
+/*	int i,j,c;
 	i = 0;
-	char d;
-	draw_line(toPoint(0,64-1), toPoint(1024-1,64-1), yellow);
+	char d;*/
 	startGame();
 //	paint_locker(0, 0, orange);
 /*	snakeInit();

@@ -34,5 +34,8 @@ void moveSnake();
 void printFood(int fil, int col);
 point getFruit();
 void newFruit();
+void raiseScore();
 
 void paint_locker(int fil, int col, color c);
+void setGameFrame();
+void printScore(color c);

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <console.h>
 #include <songs.h>
+#include <string.h>
 
 void play_song(char * songDirections);
 
@@ -18,52 +19,23 @@ COMMAND_FUNCTION(songs);
 COMMAND_HELP(songs);
 
 COMMAND_FUNCTION(songs) {
-	printf("Select the number of the song you would like to play:\n");
-	printf("\t1. Never Gonna Give You Up - Rick Astley\n");
-	printf("\t2. Because - The Beatles\n");
-	char c;
-	int valid = 0;
-	while(valid == 0){
-		while((c = scanc()) != '\n'){
-			printf("%c", c);
-			if(c == '1'){
-				// printf("\n\n ............................... .......,-~~'''''''~~--,,_\n",0xFF);
-				// printf(" ..................................,-~''-,:::::::::::::::::::''-,\n",0xFF);
-				// printf(" .............................,~''::::::::',::::::: :::::::::::::|',\n",0xFF);
-				// printf(" .............................|::::::,-~'''___''''~~--~''':}\n",0xFF);
-				// printf(" .............................'|:::::|: : : : : : : : : : : : : : :|\n",0xFF);
-				// printf(" .............................|:::::|: : :-~~---: : : -----: |\n",0xFF);
-				// printf(" ...NEVER GONNA GIVE U UP....(_''~-': : : :o: : :|: :o: : : :|\n",0xFF);
-				// printf(" ............................'''~-,|: : : : : : ~---': : : :,'--\n",0xFF);
-				// printf(" .................................|,: : : : : :-~~--: : ::/ ----- \n",0xFF);
-				// printf(" ............................,-''\':\\: :'~,,_: : : : : _,-'\n",0xFF);
-				// printf(" ......................__,-';;;;;\\:''-,: : : :'~---~''/|\n",0xFF);
-				// printf(" .............__,-~'';;;;;;/;;;;;;;\\: :\\: : :____/: :',__\n",0xFF);
-				// printf(" .,-~~~''''_;;;;;;;;;;;;;;;;;;;;;;;;;',. .''-,:|:::::::|. . |;;;;''-,__\n",0xFF);
-				valid = 1;
-				play_song(RICK);
-			}else if(c == '2'){
-				// printf("   ////\\     //||\\     //\\|\\      ///||\\\n",0xFF);
-				// printf(" /`O-O'     ` @ @\\     //o o//       a a\n",0xFF);
-				// printf("    ]          >        ) | (         _)\n",0xFF);
-				// printf("    -          -          -           ~\n",0xFF);
-				// printf("  John        Paul      George      Ringo\n",0xFF);
-				valid = 1;
-				play_song(BECAUSE);
-			}else{
-				printf("Enter a valid song number.\n");
-			}
-		}
+	if(argc == 0 || argc >= 2){
+		printf("Please enter a valid song number\n$>");
+		return ERROR;
+		
 	}
 	
-	
+	if(strcmp(argv[0], "1") == 0){
+		play_song(RICK);
+	}else if(strcmp(argv[0], "2") == 0){
+		play_song(BECAUSE);
+	}
 	return OK;
 }
 
 COMMAND_HELP(songs) {
 	if(argc >= 1) {
 		printf("<ps> Error: too many arguments.\n");
-
 		return ERROR;
 	}
 

@@ -45,7 +45,7 @@ static void sound_play(unsigned int frequency) {
 	}
 }
 
-static void sound_stop(void) {
+void sound_stop(void) {
 	uint8_t tmp;
 
 	tmp = _port_read_byte(0x61) & 0xFC;

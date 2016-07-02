@@ -1,5 +1,7 @@
 #include <scheduler.h>
 #include <output.h>
+#include <string.h>
+#include <sound.h>
 
 static Scheduler scheduler;
 static int schedulerInitiated = 0;
@@ -218,6 +220,9 @@ int killProcess(int pid){
 		return 0;
 	interrupt_clear();
 	Process p = removeProcessWaiting(pid);
+	if(strcmp(p->name, "songs") == 0){
+		sound_stop();
+	}
 	if(p == NULL){
 		p = removeProcessBlocked(pid);
 	}

@@ -55,7 +55,6 @@
 #define CMD_MD_BIN 		0x00 // 0000 000 0
 #define CMD_MD_BCD 		0x01 // 0000 000 1
 
-#define rand = 0;
 #define TICKS_TO_NEXT_PROCESS 1
 
 typedef struct {
@@ -70,6 +69,7 @@ static unsigned int time;
 
 static int * pit_sleep_asign(double seconds);
 
+static int rand = 0;
 extern void manage_time(void);
 
 static int ticks = 0;

@@ -156,6 +156,7 @@ void moveSnake(){
 
 void newFruit(){
 	point fruitPoint = getFruit();
+	board[fruitPoint.y][fruitPoint.x] = FOOD;
 	printFood(fruitPoint.y, fruitPoint.x);
 }
 
@@ -181,7 +182,7 @@ point getFruit(){
 void raiseScore(){
 	printScore(black);
 	score += 100;
-	printScore(cyan);
+	printScore(red);
 }
 
 void setGameFrame(){

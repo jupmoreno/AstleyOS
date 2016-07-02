@@ -16,7 +16,7 @@ extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void*
 
 extern int sys_waitpid(int pid);
 extern void sys_ps(void);
-
+extern void sys_sleep(uint32_t seconds);
 
 
 extern int sys_getpid(void);
@@ -57,7 +57,6 @@ int shell(void) {
 	char buffer[MAX_BUFFER_LENGTH];
 	args_t * args;
 	command_t * command;
-
 	// Shell cycle
 	while(TRUE) {
 		// Print prompt

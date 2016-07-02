@@ -25,6 +25,7 @@ int sys_getpid(void);
 read_msg sys_read_message(uint64_t pid);
 void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
 void sys_play_note(uint32_t frec, uint32_t length);
+void sys_sleep(uint32_t seconds);
 
 
 /**
@@ -125,5 +126,5 @@ void sys_play_note(uint32_t frec, uint32_t length){
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);
 // }
 void sys_sleep(uint32_t seconds){
-	_syscall(frec, 0, 0, 0, 0, 0, _SYSCALL_SLEEP);
+	_syscall(seconds, 0, 0, 0, 0, 0, _SYSCALL_SLEEP);
 }

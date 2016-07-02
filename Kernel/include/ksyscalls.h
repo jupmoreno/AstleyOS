@@ -26,6 +26,7 @@ syscall_st syscall_read_message;
 syscall_st syscall_send_message;
 syscall_st syscall_play_note;
 syscall_st syscall_alloc;
+syscall_st syscall_sleep;
 
 // (2) FUTURE SYSCALL HERE !!
 

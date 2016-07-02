@@ -124,3 +124,6 @@ void sys_play_note(uint32_t frec, uint32_t length){
 // void * sysalloc_renew(void * addr, unsigned int size) {
 // 	return (void *) _syscall(_ALLOC_RENEW, (uint64_t) addr, size, 0, 0, 0, _SYSCALL_ALLOC);
 // }
+void sys_sleep(uint32_t seconds){
+	_syscall(frec, 0, 0, 0, 0, 0, _SYSCALL_SLEEP);
+}

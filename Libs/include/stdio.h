@@ -23,4 +23,6 @@ int vprintf(const char * fmt, va_list arg);
 
 int yesno(const char msg[], ...);
 
+void milisecSleep(int milisec);
+
 #endif

@@ -85,6 +85,7 @@ void startGame(){
 			clear_screen();
 			gameState = PLAYING;
 		}
+		free(mensj);
 	}
 }
 }

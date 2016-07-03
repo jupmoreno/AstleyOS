@@ -149,7 +149,8 @@ uint64_t syscall_play_note(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r1
 	return 1;
 }
 uint64_t syscall_sleep(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
-	pit_wait((double)rdi);
+	double milisec = (double)rdi;
+	pit_wait(milisec/1000);
 	return 1;
 }
 uint64_t syscall_rand(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){

@@ -6,7 +6,6 @@
 #include <ipc.h>
 #include "strings.h"
 
-extern void sys_sleep(uint32_t seconds);
 extern int sys_getpid(void);
 extern int sys_has_message(uint64_t pid);
 extern read_msg sys_read_message(uint64_t pid);
@@ -59,7 +58,7 @@ void startGame(){
 			free(mensj);
 		}
 		
-		sys_sleep(1);
+		milisecSleep(250);
 		moveSnake();
 	}
 
@@ -230,6 +229,6 @@ void prevGame(){
 		draw_text("SUPER    EPIC    AWESOME",24, toPoint(130,250), 2, red);
 		draw_text("RICK    ASTLEY    ADVENTURE:",28, toPoint(130,400), 2, red);
 		draw_text("RICK ASNAKE",12, toPoint(300,550), 2, red);
-		sys_sleep(5);
+		milisecSleep(1000);
 		clear_screen();
 }

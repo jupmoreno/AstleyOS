@@ -8,6 +8,7 @@ static char convert_buffer[CONVERT_BUFFER_SIZE] = {0}; // TODO: Cambiar cuando p
 
 extern unsigned int sysread(char * buffer, unsigned int length);
 extern unsigned int syswrite(char * string, unsigned int length);
+extern void sys_sleep(uint32_t milisec);
 
 static int matches(char c, const char chars[], int charc);
 
@@ -214,4 +215,8 @@ static int matches(char c, const char chars[], int charc) {
 	}
 
 	return FALSE;
+}
+
+void milisecSleep(int milisec){
+	sys_sleep(milisec);
 }

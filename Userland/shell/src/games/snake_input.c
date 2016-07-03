@@ -14,6 +14,7 @@ void snake_input(){
 	uint64_t mypid = sys_getpid();
 	read_msg mensj = sys_read_message(mypid);
 	uint64_t game_pid = (uint64_t) mensj->msg;
+	free(mensj);
 	char c;
 	while((c = scanc()) != 'x'){
 		if(c == 'w' || c == 'a' || c == 's' || c == 'd'){

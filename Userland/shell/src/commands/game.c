@@ -6,6 +6,7 @@
 #include <snake_input.h>
 #include <ipc.h>
 #include <songs.h>
+#include <strings.h>
 
 
 extern void sysvideo_mode(void);
@@ -23,13 +24,16 @@ COMMAND_HELP(game);
 COMMAND_FUNCTION(game) {
 	sysvideo_mode();
 	//playRick();
-	
 	uint64_t game_pid = sys_new_process("snake", (uint64_t) &startGame, 0, 0);
 	uint64_t control_pid = sys_new_process("snake_input", (uint64_t) &snake_input, 0, 0);
 	
 	//le mando el pid del juego al proceso que controla las teclas
 	sys_send_message(game_pid, control_pid, 1, (void*)game_pid);
 	
+	if(argc > 0){
+		if(strcmp("mute",argv[0]) == 0)
+			return OK;
+	}
 	sys_new_process("game_music", (uint64_t) &playRick, 0, 0);
 
 	return OK;
@@ -42,7 +46,7 @@ COMMAND_HELP(game) {
 		return ERROR;
 	}
 
-	printf("Runs the snake game. Ignores arguments.\n");
+	printf("Runs the snake game while listening to music God Rick Astley's Never Gonna Give You Up.\nTo play mute, first argument should be mute\n");
 	printf("Usage: 'game'\n");
 
 	return OK;

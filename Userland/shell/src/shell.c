@@ -22,6 +22,7 @@ extern void sys_sleep(uint32_t seconds);
 extern int sys_getpid(void);
 extern read_msg sys_read_message(uint64_t pid);
 extern void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
+extern int sys_has_message(uint64_t pid);
 static int parseCommand(char * buffer, int size);
 static command_t * getCommand(const char * cmd);
 static args_t * getArgs(char * buffer);
@@ -32,11 +33,6 @@ static int pid2;
 void leo_mensaje();
 void escribo_mensaje();
 
-
-
-
-
-
 int main(void){
 	sys_new_process("shell", (uint64_t) &shell, 0, 0);
 	while(1);
@@ -45,13 +41,10 @@ int main(void){
 
 int shell(void) {
 	
-	
-	//sys_new_process("rick", (uint64_t) &rick_ast, 0, 0);
 	//pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
 
 	//sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
-	//printf("PID DE ESCRIBIR: %d\n", pid2);
-	//sys_ps();
+	
 	static args_t noargs = {NULL, 0};
 	int ret, should_clear;
 	char buffer[MAX_BUFFER_LENGTH];
@@ -190,21 +183,21 @@ static args_t * getArgs(char * buffer) {
 void escribo_mensaje(){ //PID 3
 	//printf("entro a ESCRIBIR\n");
 	int pid = sys_getpid();
-	printf("PID DE ESCRIBIR: %d, PID DE LEER: %d\n", pid, pid2);
 	sys_send_message(pid, pid2, 0, NULL);
-	printf("el pid de ESCRIBIR es: %d\n", pid);
+	printf("ME DEBERIA DAR UNO %d\n", sys_has_message(pid2));
 	sys_ps();
 
 }
 
 void leo_mensaje(){ //PID 2
-	printf("entro a leer\n");
 	int pid = sys_getpid();
 	//sys_ps();
 	//printf("PID DE LEER ES: %d\n", pid);
 	read_msg mensj = sys_read_message(pid);
-	//sys_ps();
-	printf("el sender es %d\n", mensj->send_id);
+	printf("ACA ME DEBERIA DAR CERO %d\n", sys_has_message(pid2));
+	printf("IDEM %d\n", sys_has_message(pid));
+	
+	printf("pid estatico: %d y pid de getpid: %d\n", pid2, pid);
 }
 
 

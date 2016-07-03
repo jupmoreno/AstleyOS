@@ -1,8 +1,14 @@
 #include "snake.h"
 #include "libDraw.h"
 #include "alloc.h"
+#include <songs.h>
+#include <stdio.h>
+#include <ipc.h>
 
 extern void sys_sleep(uint32_t seconds);
+extern int sys_getpid(void);
+extern int sys_has_message(uint64_t pid);
+extern read_msg sys_read_message(uint64_t pid);
 
 locker_state board[BOARD_FILS][BOARD_COLS];
 Snake_t snake = NULL;
@@ -24,7 +30,27 @@ void startGame(){
 	addSnakeNode(10,11);
 	addSnakeNode(10,12);
 	printSnake();
+	uint64_t pid = sys_getpid();
 	while(gameState == PLAYING){
+		if(sys_has_message(pid)){
+			read_msg mensj = sys_read_message(pid);
+			char* cp = (char*)mensj->msg;
+			char c = *cp;
+			if(c == 'a'){
+				if(actualDirection != RIGHT)
+					actualDirection = LEFT;
+			}else if(c == 's'){
+				if(actualDirection != UP)
+					actualDirection = DOWN;
+			}else if(c == 'd'){
+				if(actualDirection != LEFT)
+					actualDirection = RIGHT;
+			}else if(c == 'w'){
+				if(actualDirection != DOWN)
+					actualDirection = UP;
+			}
+		}
+		
 		sys_sleep(1);
 		moveSnake();
 	}
@@ -91,6 +117,7 @@ void printSnake(){
 }
 
 void moveSnake(){
+	
 	if(!eating){
 		SnakeListNode node = removeSnakeNode();
 		if(node == NULL)

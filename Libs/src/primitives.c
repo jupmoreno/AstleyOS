@@ -24,6 +24,7 @@ int sys_waitpid(int pid);
 int sys_getpid(void);
 read_msg sys_read_message(uint64_t pid);
 void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
+int sys_has_message(uint64_t pid);
 void sys_play_note(uint32_t frec, uint32_t length);
 void sys_sleep(uint32_t seconds);
 int sys_rand(int between1, int between2);
@@ -117,6 +118,10 @@ read_msg sys_read_message(uint64_t pid){
 
 void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message){
 	_syscall(sender, receiver, size, (uint64_t)message, 0, 0, _SYSCALL_SEND_MESSAGE);
+}
+
+int sys_has_message(uint64_t pid){
+	return _syscall(pid, 0, 0, 0, 0, 0, _SYSCALL_HAS_MESSAGE);
 }
 
 void sys_play_note(uint32_t frec, uint32_t length){

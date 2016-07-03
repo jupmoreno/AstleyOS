@@ -33,6 +33,7 @@ syscall_st * syscalls_table[_SYSCALLS_SIZE] = {
 	[_SYSCALL_GET_PID] = syscall_get_pid,
 	[_SYSCALL_READ_MESSAGE] = syscall_read_message,
 	[_SYSCALL_SEND_MESSAGE] = syscall_send_message,
+	[_SYSCALL_HAS_MESSAGE] = syscall_has_message,
 	[_SYSCALL_PLAY_NOTE] = syscall_play_note,
 	[_SYSCALL_SLEEP] = syscall_sleep,
 	[_SYSCALL_RAND] = syscall_rand,
@@ -154,4 +155,11 @@ uint64_t syscall_sleep(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, u
 uint64_t syscall_rand(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
 	return getRand();
 }
+
+uint64_t syscall_has_message(uint64_t rdi, uint64_t rsi, uint64_t rdx, uint64_t r10, uint64_t r8, uint64_t r9){
+	return has_message(rdi);
+}
+
+
+
 

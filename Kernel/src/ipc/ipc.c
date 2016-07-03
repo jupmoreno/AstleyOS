@@ -4,6 +4,8 @@
 #include <kalloc.h>
 #include <scheduler.h>
 
+
+
 static msg_queue* mq;
 
 void mqInit(){
@@ -19,9 +21,7 @@ void new_message(uint64_t sender, uint64_t receiver, uint64_t size, void* messag
 	newMsg->msg = message;
 	newMsg->size = size;
 	newMsg->next = NULL;
-	printf("adentro de new_message el sender es %d\n", sender);
 	addMessage(receiver, newMsg);
-	printf("quiero desbloquear al proceso bien %d\n", receiver);
 	unblockProcess(receiver);
 	//printProcesses();
 	
@@ -149,18 +149,19 @@ read_msg read_next_message(uint64_t receiver){
 
 	msg_node message = node->messages;
 	if(message == NULL){
-		printf("no hay ningun mensaje todavia, bloqueo el proceso %i\n", receiver);
 		blockProcess(receiver);
-		//printProcesses();
-		printf("NO LE IMPORTO NADA AL BLOCK PROCESS\n");
-		//return NULL;
 	}
 	message = node->messages;
 	read_msg ret = malloc(sizeof(struct sys_msg));
 	ret->msg = message->msg;
 	ret->size = message ->size;
 	ret->send_id = message->send_id;
-	printf("adentro del read_next_message el sender es %d\n", ret->send_id);
 	node->messages = node->messages->next;
 	return ret;
+}
+
+//devuelve uno si tiene mensajes y 0 sino
+int has_message(uint64_t pid){
+	mq_node node = get_mq(pid);
+	return node->messages == NULL ? 0 : 1;
 }

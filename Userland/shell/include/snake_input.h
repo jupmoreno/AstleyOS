@@ -1,0 +1,1 @@
+void snake_input(void);

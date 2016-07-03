@@ -40,7 +40,10 @@ void startGame(){
 		}
 		score = 0;
 		newHighScore = FALSE;
+		eating = FALSE;
+
 		setGameFrame();
+		
 		snakeInit();
 		addSnakeNode(10,10);
 		addSnakeNode(10,11);
@@ -73,21 +76,21 @@ void startGame(){
 		
 		milisecSleep(250);
 		moveSnake();
-	}
-	gameOverScreen();
-	freeSnake();
-	cleanBoard();
-	while(gameState == GAME_OVER){
-		read_msg mensj = sys_read_message(pid);
-		char* cp = (char*)mensj->msg;
-		char c = *cp;
-		if(c == '\n'){
-			clear_screen();
-			gameState = PLAYING;
 		}
-		free(mensj);
+		gameOverScreen();
+		freeSnake();
+		cleanBoard();
+		while(gameState == GAME_OVER){
+			read_msg mensj = sys_read_message(pid);
+			char* cp = (char*)mensj->msg;
+			char c = *cp;
+			if(c == '\n'){
+				clear_screen();
+				gameState = PLAYING;
+			}
+			free(mensj);
+		}
 	}
-}
 }
 
 void snakeInit(){

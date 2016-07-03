@@ -62,10 +62,7 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 	uint64_t orig_rsp = rsp;
 	rsp += STACK_SIZE - 1 - sizeof(struct stack_frame);
 
-	//p->stackF = (uint64_t) kmalloc(sizeof(struct stack_frame));
-/*	if(rsp == 0 || p->stackF == 0){
-		return -1;
-	}*/
+	
 	p->rsp = (uint64_t) set_stack_frame((void*)rsp, func, argc, argv);
 	p-> name = name;
 	if(pids)
@@ -79,10 +76,6 @@ uint64_t create_process(const char* name, process_func func, uint64_t argc, char
 	p->stackF = orig_rsp;
 	p->reserved = STACK_SIZE;
 	addProcessWaiting(p);
-	//stack_frame *r = (stack_frame*)(&rsp);
-	//process_func f = (process_func)r->rip;
-	//f(0,0);
-
 	return p->pid;
 }
 
@@ -98,7 +91,7 @@ if (p == NULL)
 	{
 		return 0;
 	}
-//	out_printf("Estoy en el proceso %d\n", p->pid);
+
 	p->rsp = stack;
 	if(p->state != BLOCKED)
 		p->state = WAITING;
@@ -107,8 +100,7 @@ if (p == NULL)
 	if(p == NULL)
 		return 0;
 	p->state = RUNNING;
-	//out_printf("EL P QUE CORRE ES %d\n",p->pid);
-	//printProcesses();
+	
 	return p -> rsp;
 }
 
@@ -121,7 +113,7 @@ int start(process_func f, uint64_t argc, void *argv){
 }
 
 int kwaitpid(int pid){
-	//out_printf("werf %d\n", pid);
+	
 	Process child = getProcess(pid);
 	if(child == NULL){
 		out_printf("cai en 1\n");
@@ -133,7 +125,6 @@ int kwaitpid(int pid){
 		return -1;
 	}
 	if(child->father != father->pid){
-	//	out_printf("el padre del hijo es %d y el padre es %d", child->father, father->pid);
 		return -1;
 	}
 	addWaitpidHistory(child->father, child->pid);

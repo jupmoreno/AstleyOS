@@ -32,7 +32,7 @@ Process schedule(){
 			scheduler -> waitingpq -> current = scheduler -> waitingpq -> current -> next;
 		p = scheduler -> waitingpq -> current -> next -> process;
 		scheduler -> waitingpq -> current = scheduler -> waitingpq-> current -> next;
-		lastProcess = p; //TODO VER SI USAR
+		lastProcess = p;
 		return p;	
 	}
 	return NULL;
@@ -54,7 +54,7 @@ int addProcess(Process p, SchedulerLL q){
 		return ERROR;
 	LLnode node = kmalloc(sizeof(struct llnode));
 	if(node == NULL)
-		return ERROR; //error
+		return ERROR;
 	interrupt_clear();
 	if(q->size == 0){
 		q -> current = node;
@@ -194,7 +194,7 @@ void printProcessesWithSpecifiedQueue(SchedulerLL q){
 	LLnode node = q -> current;
 	while(node != NULL && node->process->pid == 0)
 		node = node->next;
-	//char* pState;
+	
 	if(q->size < 1){
 		return;
 	}

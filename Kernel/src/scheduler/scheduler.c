@@ -72,8 +72,6 @@ int addProcess(Process p, SchedulerLL q){
 	q -> current -> prev = node;
 	q->size++;
 	interrupt_set();
-	//out_printf("agrego un proceso, los procesos waiting son\n");
-	//printProcessesWithSpecifiedQueue(scheduler->waitingpq);
 	return 1; 
 }
 
@@ -227,7 +225,6 @@ int killProcess(int pid){
 	Process p = removeProcessWaiting(pid);
 	if(p == NULL){
 		p = removeProcessBlocked(pid);
-		out_printf("no esiste\n");
 		interrupt_set();
 		return 0;
 	}//TODO: free
@@ -257,15 +254,9 @@ int blockProcess(int pid){
 	p->state = BLOCKED;
 	int ret = addProcessBlocked(p);
 	interrupt_set();
-	//printProcesses()
-	//out_printf("PID: %d, GET CURRENT PID: %d\n", pid, getCurrentPid());
-	while(isBlocked(getCurrentPid()));//{
-// 		out_printf("a");
-// 	}
-//	_interrupt_20();
-	
+	while(isBlocked(getCurrentPid()));
+
 	return ret;
-//	return addProcessBlocked(p);
 }
 
 int unblockProcess(int pid){

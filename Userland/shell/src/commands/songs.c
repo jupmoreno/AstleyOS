@@ -43,7 +43,7 @@ COMMAND_HELP(songs) {
 void play_song(char* songsDirections){
 	int i=0, j=0;
 	while(j<10){
-		uint32_t tempo = 400;
+		uint32_t tempo = 200;
 		while(songsDirections[i] != '0'){
 			uint32_t notePos = songsDirections[i] - 'A';
 			uint32_t note = notes[notePos];

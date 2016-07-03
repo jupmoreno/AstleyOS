@@ -26,8 +26,6 @@ COMMAND_FUNCTION(game) {
 	char d;
 	draw_line(toPoint(0,64-1), toPoint(1024-1,64-1), yellow);
 	
-	
-	
 	uint64_t game_pid = sys_new_process("snake", (uint64_t) &startGame, 0, 0);
 	uint64_t control_pid = sys_new_process("snake_input", (uint64_t) &snake_input, 0, 0);
 	

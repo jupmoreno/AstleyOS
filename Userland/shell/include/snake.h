@@ -31,5 +31,12 @@ void addSnakeNode(int fil, int col);
 SnakeListNode removeSnakeNode();
 void printSnake();
 void moveSnake();
+void printFood(int fil, int col);
+point getFruit();
+void newFruit();
+void raiseScore();
+void prevGame(void);
 
 void paint_locker(int fil, int col, color c);
+void setGameFrame();
+void printScore(color c);

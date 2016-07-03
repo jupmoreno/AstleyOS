@@ -69,7 +69,7 @@ static unsigned int time;
 
 static int * pit_sleep_asign(double seconds);
 
-static int rand = 0;
+static int randTick = 0;
 extern void manage_time(void);
 
 static int ticks = 0;
@@ -85,7 +85,7 @@ void pit_init(void) {
 	time = 55;
 }
 uint64_t getRand(void){
-	return rand;
+	return randTick;
 }
 // void pit_set(unsigned int miliseconds) { // TODO:
 
@@ -97,7 +97,6 @@ uint64_t getRand(void){
 
 uint64_t pit_trigger(uint64_t stackF) {
 	int i;
-	rand ++;
 	tick();
 	for(i = 0; i < TIMERS; i++) {
 		if(timers[i].time > 0) {
@@ -147,5 +146,6 @@ static int * pit_sleep_asign(double seconds) {
 }
 
 void tick(){
+	randTick ++;
 	ticks++;
 }

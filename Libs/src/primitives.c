@@ -2,6 +2,7 @@
 #include <sysio.h>
 #include <sysconsole.h>
 #include <sysalloc.h>
+#include <stdio.h>
 
 #include <ipc.h> //TODO esto no deberia estar en kernel ojo revisar
 
@@ -144,6 +145,6 @@ int sys_rand(int between1, int between2){
 	if(between2 == between1){
 		return between2;
 	}
-	int rand = _syscall(0, 0, 0, 0, 0, 0, 0);
+	int rand = _syscall(0, 0, 0, 0, 0, 0,  _SYSCALL_RAND);
 	return (rand % (between2-between1)) + between1;
 }

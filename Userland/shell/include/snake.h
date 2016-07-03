@@ -37,8 +37,11 @@ point getFruit(void);
 void newFruit(void);
 void raiseScore(void);
 void prevGame(void);
+void freeSnake(void);
+void cleanBoard(void);
+
 
 void paint_locker(int fil, int col, color c);
 void setGameFrame(void);
 void printScore(color c);
-void gameOverScreen(uint64_t pid);
+void gameOverScreen(void);

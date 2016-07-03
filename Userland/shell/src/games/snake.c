@@ -32,43 +32,61 @@ void paint_locker(int fil, int col, color c){
 void startGame(){
 	
 	prevGame();
-
-	newHighScore = FALSE;
-	setGameFrame();
-	snakeInit();
-	addSnakeNode(10,10);
-	addSnakeNode(10,11);
-	addSnakeNode(10,12);
-
-	printSnake();
+	cleanBoard();
 	uint64_t pid = sys_getpid();
-	newFruit();
-	while(gameState == PLAYING){
-		if(sys_has_message(pid)){
-			read_msg mensj = sys_read_message(pid);
-			char* cp = (char*)mensj->msg;
-			char c = *cp;
-			if(c == 'a'){
-				if(actualDirection != RIGHT)
-					actualDirection = LEFT;
-			}else if(c == 's'){
-				if(actualDirection != UP)
-					actualDirection = DOWN;
-			}else if(c == 'd'){
-				if(actualDirection != LEFT)
-					actualDirection = RIGHT;
-			}else if(c == 'w'){
-				if(actualDirection != DOWN)
-					actualDirection = UP;
-			}
-			free(mensj);
+	while(1){
+		while(sys_has_message(pid)){
+			sys_read_message(pid);
+		}
+		score = 0;
+		newHighScore = FALSE;
+		setGameFrame();
+		snakeInit();
+		addSnakeNode(10,10);
+		addSnakeNode(10,11);
+		addSnakeNode(10,12);
+
+		printSnake();
+	
+		newFruit();
+		actualDirection = RIGHT;
+		while(gameState == PLAYING){
+			if(sys_has_message(pid)){
+				read_msg mensj = sys_read_message(pid);
+				char* cp = (char*)mensj->msg;
+				char c = *cp;
+				if(c == 'a'){
+					if(actualDirection != RIGHT)
+						actualDirection = LEFT;
+				}else if(c == 's'){
+					if(actualDirection != UP)
+						actualDirection = DOWN;
+				}else if(c == 'd'){
+					if(actualDirection != LEFT)
+						actualDirection = RIGHT;
+				}else if(c == 'w'){
+					if(actualDirection != DOWN)
+						actualDirection = UP;
+				}
+				free(mensj);
 		}
 		
 		milisecSleep(250);
 		moveSnake();
 	}
-	gameOverScreen(pid);
-
+	gameOverScreen();
+	freeSnake();
+	cleanBoard();
+	while(gameState == GAME_OVER){
+		read_msg mensj = sys_read_message(pid);
+		char* cp = (char*)mensj->msg;
+		char c = *cp;
+		if(c == '\n'){
+			clear_screen();
+			gameState = PLAYING;
+		}
+	}
+}
 }
 
 void snakeInit(){
@@ -244,7 +262,7 @@ void prevGame(){
 		clear_screen();
 }
 
-void gameOverScreen(uint64_t pid){
+void gameOverScreen(){
 	clear_screen();
 	if(newHighScore == TRUE){
 		draw_text("Congratulations", 16, toPoint(200,100), 3, gold);
@@ -252,15 +270,33 @@ void gameOverScreen(uint64_t pid){
 	}
 	draw_text("GAME OVER", 10, toPoint(130,300), 6, red);
 	draw_text("Press enter to play again.", 27, toPoint(170,500), 2, red);
-	if(sys_has_message(pid)){
-		read_msg mensj = sys_read_message(pid);
-		char* cp = (char*)mensj->msg;
-		char c = *cp;
-		if(c == 'r'){
-			free(mensj);
-			startGame();
-		}
-		
-	}
 
 }
+
+void freeSnake(){
+	SnakeListNode node = removeSnakeNode();
+	while(node != NULL){
+		free(node);
+		node = removeSnakeNode();
+	}
+}
+
+void cleanBoard(){
+	int i=0, j=0;
+	for(i = 0; i<BOARD_FILS; i++){
+		for(j=0; j<BOARD_FILS; j++){
+			board[i][j] = NOTHING;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -20,6 +20,8 @@ int blankLockers = BOARD_FILS * BOARD_COLS;
 int eating = FALSE;
 
 int score = 0;
+int highScore = 0;
+int newHighScore = FALSE;
 
 void paint_locker(int fil, int col, color c){
 	point p = toPoint(SQUARE_LENGTH * col, (SQUARE_LENGTH * fil) + 64);
@@ -30,6 +32,8 @@ void paint_locker(int fil, int col, color c){
 void startGame(){
 	
 	prevGame();
+
+	newHighScore = FALSE;
 	setGameFrame();
 	snakeInit();
 	addSnakeNode(10,10);
@@ -63,6 +67,7 @@ void startGame(){
 		milisecSleep(250);
 		moveSnake();
 	}
+	gameOverScreen();
 
 }
 
@@ -212,6 +217,10 @@ void raiseScore(){
 	printScore(black);
 	score += 100;
 	printScore(red);
+	if(score > highScore){
+		highScore = score;
+		newHighScore = TRUE;
+	}
 }
 
 void setGameFrame(){
@@ -227,10 +236,21 @@ void printScore(color c){
 }
 
 void prevGame(){
-		draw_text("WELCOME TO: ",13, toPoint(300,100), 2, red);
-		draw_text("SUPER    EPIC    AWESOME",24, toPoint(130,250), 2, red);
-		draw_text("RICK    ASTLEY    ADVENTURE:",28, toPoint(130,400), 2, red);
-		draw_text("RICK ASNAKE",12, toPoint(300,550), 2, red);
+		draw_text("WELCOME TO: ",13, toPoint(300,100), 2, limegreen);
+		draw_text("SUPER    EPIC    AWESOME",24, toPoint(130,250), 2, limegreen);
+		draw_text("RICK    ASTLEY    ADVENTURE:",28, toPoint(130,400), 2, limegreen);
+		draw_text("RICK ASNAKE",12, toPoint(300,550), 2, limegreen);
 		milisecSleep(1000);
 		clear_screen();
+}
+
+void gameOverScreen(){
+	clear_screen();
+	if(newHighScore == TRUE){
+		draw_text("Congratulations", 16, toPoint(200,100), 3, gold);
+		draw_text("New high score!!!", 18, toPoint(170,180), 3, gold);
+	}
+	draw_text("GAME OVER", 10, toPoint(130,300), 6, red);
+	draw_text("Press enter to play again.", 27, toPoint(170,500), 2, red);
+	while(1);
 }

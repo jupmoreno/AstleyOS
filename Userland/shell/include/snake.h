@@ -40,3 +40,4 @@ void prevGame(void);
 void paint_locker(int fil, int col, color c);
 void setGameFrame();
 void printScore(color c);
+void gameOverScreen();

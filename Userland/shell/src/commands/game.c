@@ -16,6 +16,7 @@ extern void sys_sound(int frequency, double time);
 extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 extern void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);
 extern read_msg sys_read_message(uint64_t pid);
+extern int sys_waitpid(int pid);
 void playRick(void);
 
 COMMAND_FUNCTION(game);
@@ -31,11 +32,13 @@ COMMAND_FUNCTION(game) {
 	sys_send_message(game_pid, control_pid, 1, (void*)game_pid);
 	
 	if(argc > 0){
-		if(strcmp("mute",argv[0]) == 0)
+		if(strcmp("mute",argv[0]) == 0){
+			sys_waitpid(game_pid);
 			return OK;
+		}
 	}
 	sys_new_process("game_music", (uint64_t) &playRick, 0, 0);
-
+	sys_waitpid(game_pid);
 	return OK;
 }
 

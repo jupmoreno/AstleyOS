@@ -3,6 +3,9 @@
  * libDraw library source file
  * libDraw is a library for BareMetal-OS to draw things.
  * Written by ohnx.
+ *
+ * https://github.com/ohnx/libDraw
+ *
  */
 //#include <stdio.h>
 //#include <stdlib.h>

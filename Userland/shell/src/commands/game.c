@@ -29,6 +29,7 @@ COMMAND_FUNCTION(game) {
 	//le mando el pid del juego al proceso que controla las teclas
 	sys_send_message(game_pid, control_pid, 1, (void*)game_pid);
 	
+	//sys_new_process("game_music", (uint64_t)&play_song, 1, (void*)RICK);
 
 	while(1); // TODO: REMOVE
 
@@ -50,4 +51,8 @@ COMMAND_HELP(game) {
 
 void paintPixel(int x, int y, int blue_c, int green_c, int red_c){
 	syspaint_pixel(x,y,blue_c,green_c,red_c);	
+}
+
+void playRick(){
+	play_song(RICK);
 }

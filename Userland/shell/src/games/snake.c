@@ -1,15 +1,16 @@
 #include "snake.h"
 #include "libDraw.h"
 #include "alloc.h"
-#include <songs.h>
 #include <stdio.h>
 #include <ipc.h>
 #include "strings.h"
+#include <songs.h>
 
 extern int sys_getpid(void);
 extern int sys_has_message(uint64_t pid);
 extern read_msg sys_read_message(uint64_t pid);
 extern int sys_rand(int first, int last);
+extern int sys_new_process(const char* name, uint64_t func, uint64_t argc, void* argv);
 
 locker_state board[BOARD_FILS][BOARD_COLS];
 Snake_t snake = NULL;
@@ -27,6 +28,7 @@ void paint_locker(int fil, int col, color c){
 
 
 void startGame(){
+	
 	prevGame();
 	setGameFrame();
 	snakeInit();

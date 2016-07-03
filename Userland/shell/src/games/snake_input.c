@@ -1,10 +1,8 @@
 #include <ipc.h>
 #include <snake_input.h>
 #include <stdio.h>
-#include <songs.h>
 
 extern int sys_getpid(void);
-
 
 extern read_msg sys_read_message(uint64_t pid);
 extern void sys_send_message(uint64_t sender, uint64_t receiver, uint64_t size, void* message);

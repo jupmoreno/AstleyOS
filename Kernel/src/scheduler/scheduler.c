@@ -225,19 +225,15 @@ int killProcess(int pid){
 		return 0;
 	interrupt_clear();
 	Process p = removeProcessWaiting(pid);
-	if(strcmp(p->name, "songs") == 0){
-		sound_stop();
-	}
 	if(p == NULL){
 		p = removeProcessBlocked(pid);
-		kfree(p);
-	}
-	if(p == NULL){
-		p = removeProcessBlocked(pid);
-		kfree(p);
+		out_printf("no esiste\n");
 		interrupt_set();
 		return 0;
 	}//TODO: free
+	if(strcmp(p->name, "songs") == 0){
+		sound_stop();
+	}
 	kfree(p);
 	interrupt_set();
 	return 1;

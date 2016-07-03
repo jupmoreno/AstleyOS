@@ -225,12 +225,15 @@ int killProcess(int pid){
 	}
 	if(p == NULL){
 		p = removeProcessBlocked(pid);
+		kfree(p);
 	}
 	if(p == NULL){
 		p = removeProcessBlocked(pid);
+		kfree(p);
 		interrupt_set();
 		return 0;
-	}//TODO: free	
+	}//TODO: free
+	kfree(p);
 	interrupt_set();
 	return 1;
 }

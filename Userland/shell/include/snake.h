@@ -1,4 +1,5 @@
 #include "libDraw.h"
+#include <define.h>
 
 #define WIDTH 1024
 #define HEIGHT 768
@@ -25,19 +26,19 @@ struct snake_t{
 
 typedef struct snake_t * Snake_t; 
 
-void startGame();
-void snakeInit();
+void startGame(void);
+void snakeInit(void);
 void addSnakeNode(int fil, int col);
 SnakeListNode removeSnakeNode();
-void printSnake();
-void moveSnake();
+void printSnake(void);
+void moveSnake(void);
 void printFood(int fil, int col);
-point getFruit();
-void newFruit();
-void raiseScore();
+point getFruit(void);
+void newFruit(void);
+void raiseScore(void);
 void prevGame(void);
 
 void paint_locker(int fil, int col, color c);
-void setGameFrame();
+void setGameFrame(void);
 void printScore(color c);
-void gameOverScreen();
+void gameOverScreen(uint64_t pid);

@@ -67,7 +67,7 @@ void startGame(){
 		milisecSleep(250);
 		moveSnake();
 	}
-	gameOverScreen();
+	gameOverScreen(pid);
 
 }
 
@@ -244,7 +244,7 @@ void prevGame(){
 		clear_screen();
 }
 
-void gameOverScreen(){
+void gameOverScreen(uint64_t pid){
 	clear_screen();
 	if(newHighScore == TRUE){
 		draw_text("Congratulations", 16, toPoint(200,100), 3, gold);
@@ -252,5 +252,15 @@ void gameOverScreen(){
 	}
 	draw_text("GAME OVER", 10, toPoint(130,300), 6, red);
 	draw_text("Press enter to play again.", 27, toPoint(170,500), 2, red);
-	while(1);
+	if(sys_has_message(pid)){
+		read_msg mensj = sys_read_message(pid);
+		char* cp = (char*)mensj->msg;
+		char c = *cp;
+		if(c == 'r'){
+			free(mensj);
+			startGame();
+		}
+		
+	}
+
 }

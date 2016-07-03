@@ -30,10 +30,7 @@ COMMAND_FUNCTION(game) {
 	//le mando el pid del juego al proceso que controla las teclas
 	sys_send_message(game_pid, control_pid, 1, (void*)game_pid);
 	
-	
 	//sys_new_process("game_music", (uint64_t) &playRick, 0, 0);
-
-	while(1); // TODO: REMOVE
 
 	return OK;
 }

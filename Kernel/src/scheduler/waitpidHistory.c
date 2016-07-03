@@ -18,7 +18,7 @@ void addWaitpidHistory(int father, int child){
 }
 
 void removeWaitpidHistory(int child){
-removeWaitpidHistoryRec(child, wh);
+	removeWaitpidHistoryRec(child, wh);
 }
 
 WaitpidHistory removeWaitpidHistoryRec(int child, WaitpidHistory actual){

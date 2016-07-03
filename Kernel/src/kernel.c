@@ -38,10 +38,6 @@ int kernel_main(void);
 
 static void loadIDT(void);
 
-void foo1();
-void foo2();
-void foo3();
-
 static void * module_addresses[] = {
 	(void *) MODULE_SHELL_ADDRESS // Shell address
 };
@@ -116,12 +112,9 @@ int kernel_main(void) {
 // 	sound_beep(400, 0.2);
 // 	sound_beep(500, 0.2);
 
-
-
 	schedulerInit();
 	mqInit();
-	
-	
+		
 /*	create_process("imprime a", (process_func)&foo1,0, 0);
 	create_process("imprime b", (process_func)&foo2,0, 0);
 	create_process("imprime c", (process_func)&foo3,0, 0);
@@ -191,28 +184,4 @@ static void loadIDT(void) {
 	_IDT_ENTRY_INTERRUPT(80, _IDT_ACCESS_INT);
 	out_printf("[Done]\n");
 	// ^^ Interrupts ^^
-}
-
-void foo1(){
-	int i;
-	while(1){
-		for(i=0;i<9999999;i++);
-		out_printf("a");
-	}
-}
-
-void foo2(){
-	int i;
-	//while(1){
-		for(i=0;i<9999999;i++);
-		out_printf("b");
-	//}
-}
-
-void foo3(){
-	int i;
-	while(1){
-		for(i=0;i<9999999;i++);
-		out_printf("c");
-	}
 }

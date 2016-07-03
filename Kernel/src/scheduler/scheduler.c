@@ -88,7 +88,10 @@ int addProcessBlocked(Process p){
 Process removeProcess(uint64_t pid, SchedulerLL q){
 	int found = 0;
 	LLnode node = q -> current;
-	Process p = NULL;
+	Process p = kmalloc(sizeof(struct process));
+	if(p == NULL){
+		return NULL;
+	}
 	if(q->size < 1){
 		return NULL;
 	}
@@ -100,10 +103,11 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 	}while(node->process->pid != q ->current->process->pid && !found);
 
 	if(q->size == 1 && found){
-		p = node -> process; 
+	//	memcpy(p, node->process, sizeof(struct process));
+		p = node->process;
 		q->size --;
 		q -> current = NULL;
-		// TODO: free node
+		//kfree(node);
 		return p;
 	}
 	if(found){
@@ -113,8 +117,9 @@ Process removeProcess(uint64_t pid, SchedulerLL q){
 		}
 		node -> prev -> next = node -> next;
 		node -> next -> prev = node -> prev;
+		//memcpy(p, node->process, sizeof(struct process));
 		q->size --;
-		// TODO: free node
+		//kfree(node);
 		return p;
 	}
 	return NULL;

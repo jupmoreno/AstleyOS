@@ -41,9 +41,6 @@ int main(void){
 }
 
 int shell(void) {
-	//pid2 = sys_new_process("leo", (uint64_t) &leo_mensaje, 0, 0);
-
-	//sys_new_process("escribo", (uint64_t) &escribo_mensaje, 0, 0);
 	
 	static args_t noargs = {NULL, 0};
 	int ret, should_clear;
@@ -178,29 +175,6 @@ static args_t * getArgs(char * buffer) {
 
 	return &args;
 }
-
- 
-void escribo_mensaje(){ //PID 3
-	//printf("entro a ESCRIBIR\n");
-	int pid = sys_getpid();
-	sys_send_message(pid, pid2, 0, NULL);
-	printf("ME DEBERIA DAR UNO %d\n", sys_has_message(pid2));
-	sys_ps();
-
-}
-
-void leo_mensaje(){ //PID 2
-	int pid = sys_getpid();
-	//sys_ps();
-	//printf("PID DE LEER ES: %d\n", pid);
-	read_msg mensj = sys_read_message(pid);
-	printf("ACA ME DEBERIA DAR CERO %d\n", sys_has_message(pid2));
-	printf("IDEM %d\n", sys_has_message(pid));
-	
-	printf("pid estatico: %d y pid de getpid: %d\n", pid2, pid);
-}
-
-
 
 
 

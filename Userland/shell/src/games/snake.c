@@ -56,6 +56,7 @@ void startGame(){
 				if(actualDirection != DOWN)
 					actualDirection = UP;
 			}
+			free(mensj);
 		}
 		
 		sys_sleep(1);

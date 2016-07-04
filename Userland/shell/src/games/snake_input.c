@@ -16,8 +16,16 @@ void snake_input(){
 	char c;
 	while(1){
 		c = scanc();
-		if(c == 'w' || c == 'a' || c == 's' || c == 'd' || c == '\n'){
-			sys_send_message(mypid, (uint64_t)game_pid, 1, (void*)&c);
+		if(c == 'w'){
+			sys_send_message(mypid, (uint64_t)game_pid, 1, (void*)"w");
+		}else if(c == 'a'){
+			sys_send_message(mypid, (uint64_t)game_pid, 1, (void*)"a");
+		}else if(c == 's'){
+			sys_send_message(mypid, (uint64_t)game_pid, 1, (void*)"s");
+		}else if(c == 'd'){
+			sys_send_message(mypid, (uint64_t)game_pid, 1, (void*)"d");
+		}else if(c == '\n'){
+			sys_send_message(mypid, (uint64_t)game_pid, 1, (void*)"\n");
 		}
 	}
 }

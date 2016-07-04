@@ -4,8 +4,6 @@
 #include <kalloc.h>
 #include <scheduler.h>
 
-
-
 static msg_queue* mq;
 
 void mqInit(){
@@ -120,7 +118,6 @@ msg_node read_messages(uint64_t receiver, uint64_t sender){
 		}
 		msgs = msgs->next;
 	}
-	
 	return queue_first;
 }
 

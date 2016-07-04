@@ -1,11 +1,11 @@
-# Scylla
-[![Build Status](https://travis-ci.com/jpmrno/Scylla.svg?token=rrzVPFKtpAUUPF2Pp1UE&branch=master)](https://travis-ci.com/jpmrno/Scylla)
+# AstleyOS
+[![Build Status](https://travis-ci.com/jpmrno/AstleyOS.svg?token=rrzVPFKtpAUUPF2Pp1UE&branch=master)](https://travis-ci.com/jpmrno/AstleyOS)
 
 > This project was made for our Operating Systems subject at ITBA University (Buenos Aires, Argentina).
 
-Scylla is based on [x64BareBones](https://bitbucket.org/RowDaBoat/x64barebones/) which is a basic setup to develop operating systems for the Intel 64 bits architecture and a provider of an entry point for a C kernel and the possibility to load extra binary modules separated from the main kernel.
+AstleyOS is based on [x64BareBones](https://bitbucket.org/RowDaBoat/x64barebones/) which is a basic setup to develop operating systems for the Intel 64 bits architecture and a provider of an entry point for a C kernel and the possibility to load extra binary modules separated from the main kernel.
 
-It uses a [modification](https://github.com/jpmrno/Scylla/wiki/Pure64:-Modifications) of the [Pure64](https://github.com/ReturnInfinity/Pure64) boot loader to boot up the basic system. The modification enables to load a greater payload than the restrictive 26k that the original allows.
+It uses a [modification](https://github.com/jpmrno/AstleyOS/wiki/Pure64:-Modifications) of the [Pure64](https://github.com/ReturnInfinity/Pure64) boot loader to boot up the basic system. The modification enables to load a greater payload than the restrictive 26k that the original allows.
 
 ## Requisites
 
@@ -54,10 +54,13 @@ If you want to just build the project, run `make build` then use `make run` to r
 
 ## Credits
 
-- Scylla β (project's structure & kernel modifications):
+- AstleyOS β:
+	- Author: Natalia Navas
+	- Author: Francisco Bartolome
+	- Author: Julian Rodriguez Nicastro
 	- Author: Juan Moreno
-
-- Scylla α (kernel implementation):
+	
+- AstleyOS α (kernel implementation):
 	- Author: [Matías Comercio](https://github.com/MatiasComercioITBA)
 	- Author: Juan Moreno
 
